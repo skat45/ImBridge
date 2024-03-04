@@ -8,47 +8,55 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.dz.bmstu_trade.R
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
-        NavigationItem(stringResource(R.string.home_label), ImageVector.vectorResource(id = R.drawable.ic_home_filled_24), Routes.HOME.value),
-        NavigationItem(stringResource(R.string.gallery_label), ImageVector.vectorResource(id = R.drawable.ic_gallery_24), Routes.GALLERY.value),
-        NavigationItem(stringResource(R.string.settings_label), ImageVector.vectorResource(id = R.drawable.ic_settings_24), Routes.SETTINGS.value)
+        NavigationItem(
+            stringResource(R.string.home_label),
+            ImageVector.vectorResource(id = R.drawable.ic_home_filled_24),
+            Routes.HOME.value
+        ),
+        NavigationItem(
+            stringResource(R.string.gallery_label),
+            ImageVector.vectorResource(id = R.drawable.ic_gallery_24),
+            Routes.GALLERY.value
+        ),
+        NavigationItem(
+            stringResource(R.string.settings_label),
+            ImageVector.vectorResource(id = R.drawable.ic_settings_24),
+            Routes.SETTINGS.value
+        )
     )
 
-    var selectedItem by remember { mutableStateOf<String>("home") }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
 
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.primary,
     ) {
-
         items.forEach { item ->
             NavigationBarItem(
                 icon = { Icon(item.icon, contentDescription = null) },
-                label = { if (selectedItem == item.route) Text(item.title) },
-                selected = selectedItem == item.route,
+                label = { Text(item.title) },
+                selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
                 onClick = {
-                    if (selectedItem != item.route) {
-                        navController.navigate(item.route) {
-                            launchSingleTop = true
-                            restoreState = true
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
+                    navController.navigate(item.route) {
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
                         }
                     }
-                    selectedItem = item.route
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -63,4 +71,4 @@ fun BottomNavigationBar(navController: NavHostController) {
     }
 }
 
-data class NavigationItem(val title: String, val icon: ImageVector, val route:String)
+data class NavigationItem(val title: String, val icon: ImageVector, val route: String)

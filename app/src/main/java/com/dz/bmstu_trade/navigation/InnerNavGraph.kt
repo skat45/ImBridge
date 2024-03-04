@@ -18,15 +18,15 @@ import com.dz.bmstu_trade.ui.settings.SettingsScreen
 // Есть вопросики к канвасу и экранам подключения, пока что оставил их здесь, но судя по нашему дизайну
 // в фигме, они должны быть во внешнем графе
 @Composable
-fun MainNavHost(navController: NavHostController, innerPadding: PaddingValues){
+fun MainNavHost(navController: NavHostController, innerPadding: PaddingValues) {
     NavHost(navController, startDestination = Routes.HOME.value, Modifier.padding(innerPadding)) {
         // Я думаю, что будет удобно если у каждой вкладки будет своя изолированная навигация, поэтому использовал
         // для этого nested Navigation. Но если вдруг что, нетрудно вытащить экраны из вложенных графов
-        navigation(startDestination = Routes.HOME_ROOT.value, route = Routes.HOME.value){
+        navigation(startDestination = Routes.HOME_ROOT.value, route = Routes.HOME.value) {
             composable(Routes.HOME_ROOT.value) { HomeScreen(navController) }
             composable(Routes.DEV_MAN_CONNECT.value) { DeviceManualConnectScreen(navController) }
         }
-        navigation(startDestination = Routes.SETTINGS_ROOT.value, route = Routes.SETTINGS.value){
+        navigation(startDestination = Routes.SETTINGS_ROOT.value, route = Routes.SETTINGS.value) {
             composable(Routes.SETTINGS_ROOT.value) { SettingsScreen(navController) }
         }
         // Для этих вложенную навигацию пока не создавал так как они под вопросом

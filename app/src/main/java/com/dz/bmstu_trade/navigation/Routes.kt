@@ -1,7 +1,7 @@
 package com.dz.bmstu_trade.navigation
 
 // Для хранения айдишников экранов из графа
-enum class Routes(val value:String) {
+enum class Routes(val value: String) {
     GALLERY("gallery"),
     HOME("home"),
     SETTINGS("settings"),

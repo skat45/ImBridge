@@ -18,7 +18,9 @@ import androidx.navigation.NavHostController
 @Composable
 fun SignInScreen(navController: NavHostController) {
     Column(
-        modifier = Modifier.padding(16.dp).fillMaxSize(),
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -27,10 +29,11 @@ fun SignInScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { navController.navigate("main"){
-                            popUpTo("signIn") { inclusive = true }
-                        }
-                      },
+            onClick = {
+                navController.navigate("main") {
+                    popUpTo("signIn") { inclusive = true }
+                }
+            },
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Text(text = "Вход")
