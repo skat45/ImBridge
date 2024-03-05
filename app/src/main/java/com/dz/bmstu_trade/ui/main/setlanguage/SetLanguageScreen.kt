@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.devicemanualconnect
+package com.dz.bmstu_trade.ui.main.setlanguage
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,12 +12,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
-fun DeviceManualConnectScreen(navController: NavHostController) {
+fun SettingsLanguage(navController: NavHostController) {
     Column (
         modifier = Modifier.padding(16.dp).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Text(text = "Device manual connect Screen")
+        Text(text = "Set language Screen")
     }
 }

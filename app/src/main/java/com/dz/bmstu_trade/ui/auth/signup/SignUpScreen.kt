@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.setlanguage
+package com.dz.bmstu_trade.ui.auth.signup
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,12 +12,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
-fun GalleryScreen(navController: NavHostController) {
+fun SignUpScreen(navController: NavHostController) {
     Column (
         modifier = Modifier.padding(16.dp).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Text(text = "Set language Screen")
+        Text(text = "Sign Up Screen")
     }
 }

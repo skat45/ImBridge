@@ -6,6 +6,8 @@ enum class Routes(val value: String) {
     HOME("home"),
     SETTINGS("settings"),
     SETTINGS_ROOT("settings/root"),
+    SETTINGS_LANGUAGE("settings/setLanguage"),
+    AUTH("auth"),
     SIGN_IN("signIn"),
     SIGN_UP("signUp"),
     DEV_MAN_CONNECT("home/deviceManual"),

@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.signin
+package com.dz.bmstu_trade.ui.auth.signin
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
-fun SignInScreen(navController: NavHostController) {
+fun SignInScreen(navController: NavHostController, onSignIn: () -> Unit) {
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -30,9 +30,7 @@ fun SignInScreen(navController: NavHostController) {
 
         Button(
             onClick = {
-                navController.navigate("main") {
-                    popUpTo("signIn") { inclusive = true }
-                }
+                onSignIn()
             },
             modifier = Modifier.padding(top = 16.dp)
         ) {
