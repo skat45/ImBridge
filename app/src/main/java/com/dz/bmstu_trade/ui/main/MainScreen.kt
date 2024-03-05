@@ -8,14 +8,13 @@ import androidx.navigation.compose.rememberNavController
 import com.dz.bmstu_trade.navigation.BottomNavigationBar
 import com.dz.bmstu_trade.navigation.MainNavHost
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(outerNavController: NavHostController) {
+fun MainScreen(outerNavHostController: NavHostController) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ) {innerPadding ->
-        MainNavHost(navController, innerPadding)
+        MainNavHost(outerNavHostController, navController, innerPadding)
     }
 }

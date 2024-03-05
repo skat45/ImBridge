@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.gallery
+package com.dz.bmstu_trade.ui.main.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,12 +12,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
-fun GalleryScreen(navController: NavHostController) {
+fun SettingsScreen(navController: NavHostController) {
     Column (
         modifier = Modifier.padding(16.dp).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Text(text = "Gallery Screen")
+        Text(text = "Settings Screen")
     }
 }

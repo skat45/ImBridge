@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.home
+package com.dz.bmstu_trade.ui.main.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
