@@ -22,29 +22,41 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import com.dz.bmstu_trade.addDeviceViewModels.AddDeviceViewModel
+import com.dz.bmstu_trade.addDeviceViewModels.WiFiPasswordInputViewModel
 import com.dz.bmstu_trade.R
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeviceManualConnectScreen(
-    navController: NavHostController? = null,
-    viewModel: AddDeviceViewModel = remember { AddDeviceViewModel() }
+fun EnterWiFiPasswordScreen(
+    viewModel: WiFiPasswordInputViewModel = remember { WiFiPasswordInputViewModel() }
 ) {
-    val codeFieldState by viewModel.code.collectAsState()
+    val passwordFieldState by viewModel.state.collectAsState()
+
+    val passwordIcon = if (passwordFieldState.shown) {
+        painterResource(R.drawable.password_shown)
+    }
+    else {
+        painterResource(R.drawable.password_not_shown)
+    }
+
+    val passwordIsShown = if (passwordFieldState.shown) {
+        VisualTransformation.None}
+    else {
+        PasswordVisualTransformation()
+    }
 
     Column (
         modifier = Modifier
             .fillMaxSize()
     ) {
         TopAppBar(
-            title = { Text(text = stringResource(R.string.manual_connection_top_bar_title)) },
+            title = { Text(text = stringResource(R.string.choose_wi_fi_top_bar_title)) },
             colors = TopAppBarDefaults.smallTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.onSurface,
@@ -69,24 +81,24 @@ fun DeviceManualConnectScreen(
             contentAlignment = Alignment.Center
         ) {
             Column {
-                Text(text = stringResource(R.string.code_location_label))
+                Text(text = stringResource(R.string.connect_to_label) + " " + passwordFieldState.ssid)
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                    value = codeFieldState.value,
-                    onValueChange = { viewModel.onCodeUpdated(it) },
-                    isError = codeFieldState.errorCode != null,
-                    label = { Text(text = stringResource(R.string.input_device_code_label))}
+                    value = passwordFieldState.password,
+                    onValueChange = { viewModel.onPasswordUpdated(it) },
+                    label = { Text(text = stringResource(R.string.password_label)) },
+                    trailingIcon = {
+                        IconButton(onClick = { viewModel.onShownUpdated() }) {
+                            Icon(
+                                painter = passwordIcon,
+                                contentDescription = stringResource(R.string.show_password_icon_description)
+                            )
+                        }
+                    },
+                    visualTransformation = passwordIsShown
                 )
-                if (codeFieldState.errorCode == 1) {
-                    Text(
-                        text = stringResource(R.string.too_long_device_code_error),
-                        modifier = Modifier
-                            .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                        color = Color.Red,
-                    )
-                }
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -102,6 +114,6 @@ fun DeviceManualConnectScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun ManualConnectionPreview() {
-    DeviceManualConnectScreen()
+fun EnterWiFiPasswordPreview() {
+    EnterWiFiPasswordScreen()
 }

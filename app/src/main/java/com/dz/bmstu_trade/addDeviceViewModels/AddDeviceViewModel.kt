@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.AddDevice
+package com.dz.bmstu_trade.addDeviceViewModels
 
 
 import androidx.lifecycle.ViewModel

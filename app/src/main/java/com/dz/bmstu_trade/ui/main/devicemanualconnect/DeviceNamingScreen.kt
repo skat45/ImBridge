@@ -26,25 +26,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import com.dz.bmstu_trade.addDeviceViewModels.AddDeviceViewModel
+import com.dz.bmstu_trade.addDeviceViewModels.NameDeviceViewModel
 import com.dz.bmstu_trade.R
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeviceManualConnectScreen(
-    navController: NavHostController? = null,
-    viewModel: AddDeviceViewModel = remember { AddDeviceViewModel() }
+fun DeviceNamingScreen(
+    viewModel: NameDeviceViewModel = remember { NameDeviceViewModel() }
 ) {
-    val codeFieldState by viewModel.code.collectAsState()
+    val nameFieldState by viewModel.name.collectAsState()
 
     Column (
         modifier = Modifier
             .fillMaxSize()
     ) {
         TopAppBar(
-            title = { Text(text = stringResource(R.string.manual_connection_top_bar_title)) },
+            title = { Text(text = stringResource(R.string.naming_top_bar_title)) },
             colors = TopAppBarDefaults.smallTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.onSurface,
@@ -69,19 +66,19 @@ fun DeviceManualConnectScreen(
             contentAlignment = Alignment.Center
         ) {
             Column {
-                Text(text = stringResource(R.string.code_location_label))
+                Text(text = stringResource(R.string.naming_rules_label))
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                    value = codeFieldState.value,
-                    onValueChange = { viewModel.onCodeUpdated(it) },
-                    isError = codeFieldState.errorCode != null,
-                    label = { Text(text = stringResource(R.string.input_device_code_label))}
+                    value = nameFieldState.value,
+                    onValueChange = { viewModel.onNameUpdated(it) },
+                    isError = nameFieldState.error != null,
+                    label = { Text(text = stringResource(R.string.device_name_label)) }
                 )
-                if (codeFieldState.errorCode == 1) {
+                if (nameFieldState.error != null) {
                     Text(
-                        text = stringResource(R.string.too_long_device_code_error),
+                        text = nameFieldState.error.orEmpty(),
                         modifier = Modifier
                             .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
                         color = Color.Red,
@@ -93,15 +90,16 @@ fun DeviceManualConnectScreen(
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
                     onClick = { /* TODO */ }
                 ) {
-                    Text(text = stringResource(id = R.string.connect_by_code_button_title))
+                    Text(text = stringResource(id = R.string.apply_label))
                 }
             }
         }
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
-fun ManualConnectionPreview() {
-    DeviceManualConnectScreen()
+fun DeviceNamingPreview() {
+    DeviceNamingScreen()
 }
