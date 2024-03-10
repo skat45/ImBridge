@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.main.devicemanualconnect
+package com.dz.bmstu_trade.ui.main.connect
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,14 +22,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import com.dz.bmstu_trade.addDeviceViewModels.AddDeviceViewModel
+import com.dz.bmstu_trade.ui.main.connect.deviceCodeVM.AddDeviceViewModel
 import com.dz.bmstu_trade.R
-import com.dz.bmstu_trade.addDeviceViewModels.TextFieldState
+import com.dz.bmstu_trade.ui.main.connect.deviceCodeVM.TextFieldState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +53,7 @@ fun DeviceManualConnectScreen(
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null
+                        contentDescription = stringResource(R.string.arrow_back_icon_description)
                     )
                 }
             }
@@ -81,25 +80,21 @@ fun DeviceManualConnectScreen(
                             && codeFieldState.error != TextFieldState.Error.TOO_SHORT,
                     label = { Text(text = stringResource(R.string.input_device_code_label))}
                 )
-                when {
-                    codeFieldState.error != null -> {
-                        Text(
-                            text = stringResource(R.string.invalid_len_device_code_error),
-                            modifier = Modifier
-                                .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                            color = when (codeFieldState.error) {
-                                TextFieldState.Error.TOO_LARGE -> {
-                                    MaterialTheme.colorScheme.error
-                                }
-                                TextFieldState.Error.TOO_SHORT -> {
-                                    MaterialTheme.colorScheme.inverseSurface
-                                }
-                                else -> MaterialTheme.colorScheme.onSurface
-                            },
-                        )
-                    }
-
-                    else -> {}
+                if (codeFieldState.error != null) {
+                    Text(
+                        text = stringResource(TextFieldState.Error.TOO_LARGE.messageResId),
+                        modifier = Modifier
+                            .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
+                        color = when (codeFieldState.error) {
+                            TextFieldState.Error.TOO_LARGE -> {
+                                MaterialTheme.colorScheme.error
+                            }
+                            TextFieldState.Error.TOO_SHORT -> {
+                                MaterialTheme.colorScheme.inverseSurface
+                            }
+                            else -> MaterialTheme.colorScheme.onSurface
+                        },
+                    )
                 }
                 Button(
                     enabled = run { codeFieldState.error == null },

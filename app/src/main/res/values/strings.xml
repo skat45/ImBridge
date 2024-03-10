@@ -25,6 +25,7 @@
 
 
 
+    <string name="arrow_back_icon_description">Кнопка вернуться на предыдущий экран</string>
     <string name="show_password_icon_description">Show/hide password</string>
     <string name="wi_fi_icon_description">Иконка Wi-Fi</string>
 </resources>

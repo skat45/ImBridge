@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.main.devicemanualconnect
+package com.dz.bmstu_trade.ui.main.connect
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -34,8 +33,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dz.bmstu_trade.R
-import com.dz.bmstu_trade.addDeviceViewModels.WiFiNetwork
-import com.dz.bmstu_trade.addDeviceViewModels.WiFiPickerViewModel
+import com.dz.bmstu_trade.ui.main.connect.wiFiPickerVM.WiFiPickerViewModel
+import com.dz.bmstu_trade.data.model.WiFiNetwork
 import com.germainkevin.collapsingtopbar.CollapsingTopBar
 import com.germainkevin.collapsingtopbar.CollapsingTopBarDefaults
 import com.germainkevin.collapsingtopbar.rememberCollapsingTopBarScrollBehavior
@@ -54,7 +53,7 @@ fun DeviceChooseWiFiNetworkScreen(
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.arrow_back_icon_description),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -115,13 +114,11 @@ fun WiFiItem(network: WiFiNetwork) {
             .padding(horizontal = dimensionResource(R.dimen.wi_fi_network_space)),
     ) {
         Icon(
-            painter = run {
-                if (network.protected) {
-                    painterResource(R.drawable.protected_wi_fi)
-                }
-                else {
-                    painterResource(R.drawable.not_protected_wi_fi)
-                }
+            painter = if (network.protected) {
+                painterResource(R.drawable.protected_wi_fi)
+            }
+            else {
+                painterResource(R.drawable.not_protected_wi_fi)
             },
             contentDescription = stringResource(R.string.wi_fi_icon_description),
             tint = MaterialTheme.colorScheme.onSurfaceVariant,

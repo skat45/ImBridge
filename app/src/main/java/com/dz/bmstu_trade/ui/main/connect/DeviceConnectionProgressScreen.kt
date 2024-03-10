@@ -1,11 +1,9 @@
-package com.dz.bmstu_trade.ui.main.devicemanualconnect
+package com.dz.bmstu_trade.ui.main.connect
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -20,13 +18,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.dz.bmstu_trade.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +41,7 @@ fun ConnectionProgressScreen() {
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.arrow_back_icon_description),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -67,7 +62,7 @@ fun ConnectionProgressScreen() {
                 )
                 Text(
                     text = stringResource(R.string.connection_progress_label),
-                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
                         .padding(top = dimensionResource(R.dimen.spinner_description_label_padding)),
                     textAlign = TextAlign.Center

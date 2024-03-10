@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.addDeviceViewModels
+package com.dz.bmstu_trade.ui.main.connect.wiFiPasswordVM
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
@@ -40,7 +40,7 @@ data class PasswordFieldState(
     val password: String,
     val shown: Boolean = false,
     val ssid: String,
-    val error: PasswordFieldState.Error? = Error.TOO_SHORT,
+    val error: Error? = Error.TOO_SHORT,
 ) {
     enum class Error(
         @StringRes

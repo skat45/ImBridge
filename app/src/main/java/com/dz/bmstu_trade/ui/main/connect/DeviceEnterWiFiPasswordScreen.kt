@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.main.devicemanualconnect
+package com.dz.bmstu_trade.ui.main.connect
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,10 +30,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import com.dz.bmstu_trade.addDeviceViewModels.WiFiPasswordInputViewModel
 import com.dz.bmstu_trade.R
-import com.dz.bmstu_trade.addDeviceViewModels.PasswordFieldState
-import com.dz.bmstu_trade.addDeviceViewModels.TextFieldState
+import com.dz.bmstu_trade.ui.main.connect.wiFiPasswordVM.PasswordFieldState
+import com.dz.bmstu_trade.ui.main.connect.wiFiPasswordVM.WiFiPasswordInputViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +58,7 @@ fun EnterWiFiPasswordScreen(
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null
+                        contentDescription = stringResource(R.string.arrow_back_icon_description)
                     )
                 }
             }
@@ -78,7 +76,7 @@ fun EnterWiFiPasswordScreen(
             Column {
                 Text(
                     text = stringResource(R.string.connect_to_label) + " " + passwordFieldState.ssid,
-                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 OutlinedTextField(
@@ -94,51 +92,41 @@ fun EnterWiFiPasswordScreen(
                     trailingIcon = {
                         IconButton(onClick = { viewModel.onShownUpdated() }) {
                             Icon(
-                                painter = run {
-                                    if (passwordFieldState.shown) {
-                                        painterResource(R.drawable.password_shown)
-                                    }
-                                    else {
-                                        painterResource(R.drawable.password_not_shown)
-                                    }
-                                },
+                                painter = if (passwordFieldState.shown) painterResource(R.drawable.password_shown)
+                                else painterResource(R.drawable.password_not_shown),
                                 contentDescription = stringResource(R.string.show_password_icon_description)
                             )
                         }
                     },
-                    visualTransformation = run {
-                        if (passwordFieldState.shown) {
-                            VisualTransformation.None}
-                        else {
-                            PasswordVisualTransformation()
-                        }
-                    }
+                    visualTransformation = if (passwordFieldState.shown) VisualTransformation.None
+                    else PasswordVisualTransformation()
                 )
+
                 when {
                     passwordFieldState.error == PasswordFieldState.Error.TOO_LONG -> {
                         Text(
-                            text = stringResource(R.string.too_long_wi_fi_password  ),
+                            text = stringResource(PasswordFieldState.Error.TOO_LONG.messageResId),
                             modifier = Modifier
                                 .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
                             color = MaterialTheme.colorScheme.error,
-                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                            style = MaterialTheme.typography.labelMedium,
                         )
                     }
 
                     passwordFieldState.error == PasswordFieldState.Error.TOO_SHORT -> {
                         Text(
-                            text = stringResource(R.string.too_short_wi_fi_password),
+                            text = stringResource(PasswordFieldState.Error.TOO_SHORT.messageResId),
                             modifier = Modifier
                                 .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
                             color = MaterialTheme.colorScheme.inverseSurface,
-                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                            style = MaterialTheme.typography.labelMedium,
                         )
                     }
 
                     else -> {}
                 }
                 Button(
-                    enabled = run { passwordFieldState.error == null },
+                    enabled = passwordFieldState.error == null,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),

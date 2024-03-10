@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.main.devicemanualconnect
+package com.dz.bmstu_trade.ui.main.connect
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,9 +26,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.dz.bmstu_trade.addDeviceViewModels.NameDeviceViewModel
+import com.dz.bmstu_trade.ui.main.connect.deviceNamingVM.NameDeviceViewModel
 import com.dz.bmstu_trade.R
-import com.dz.bmstu_trade.addDeviceViewModels.NameFieldState
+import com.dz.bmstu_trade.ui.main.connect.deviceNamingVM.NameFieldState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +51,7 @@ fun DeviceNamingScreen(
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null
+                        contentDescription = stringResource(R.string.arrow_back_icon_description),
                     )
                 }
             }
@@ -77,15 +77,16 @@ fun DeviceNamingScreen(
                     isError = nameFieldState.error != null,
                     label = { Text(text = stringResource(R.string.device_name_label)) }
                 )
-                when (nameFieldState.error) {
-                    NameFieldState.Error.TOO_LONG -> Text(
-                        text = stringResource(R.string.too_long_device_name_error),
+
+                if (nameFieldState.error == NameFieldState.Error.TOO_LONG) {
+                    Text(
+                        text = stringResource(NameFieldState.Error.TOO_LONG.messageResId),
                         modifier = Modifier
                             .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                        color = Color.Red,
+                        color = MaterialTheme.colorScheme.error,
                     )
-                    else -> {}
                 }
+
                 Button(
                     enabled = nameFieldState.error == null,
                     modifier = Modifier

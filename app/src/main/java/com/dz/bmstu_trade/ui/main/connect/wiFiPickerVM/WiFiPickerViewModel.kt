@@ -1,6 +1,7 @@
-package com.dz.bmstu_trade.addDeviceViewModels
+package com.dz.bmstu_trade.ui.main.connect.wiFiPickerVM
 
 import androidx.lifecycle.ViewModel
+import com.dz.bmstu_trade.data.model.WiFiNetwork
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -20,8 +21,3 @@ class WiFiPickerViewModel : ViewModel() {
 
     // TODO Надо прифигаить обновление списка сетей вай фай
 }
-
-data class WiFiNetwork (
-    val ssid: String,
-    val protected: Boolean
-)
