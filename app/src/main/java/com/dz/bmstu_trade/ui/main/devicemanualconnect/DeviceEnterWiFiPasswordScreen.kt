@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -22,14 +23,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.dz.bmstu_trade.addDeviceViewModels.WiFiPasswordInputViewModel
 import com.dz.bmstu_trade.R
+import com.dz.bmstu_trade.addDeviceViewModels.PasswordFieldState
+import com.dz.bmstu_trade.addDeviceViewModels.TextFieldState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,26 +43,16 @@ fun EnterWiFiPasswordScreen(
 ) {
     val passwordFieldState by viewModel.state.collectAsState()
 
-    val passwordIcon = if (passwordFieldState.shown) {
-        painterResource(R.drawable.password_shown)
-    }
-    else {
-        painterResource(R.drawable.password_not_shown)
-    }
-
-    val passwordIsShown = if (passwordFieldState.shown) {
-        VisualTransformation.None}
-    else {
-        PasswordVisualTransformation()
-    }
-
     Column (
         modifier = Modifier
             .fillMaxSize()
     ) {
         TopAppBar(
-            title = { Text(text = stringResource(R.string.choose_wi_fi_top_bar_title)) },
-            colors = TopAppBarDefaults.smallTopAppBarColors(
+            title = { Text(
+                text = stringResource(R.string.choose_wi_fi_top_bar_title),
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            ) },
+            colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.onSurface,
             ),
@@ -81,25 +76,69 @@ fun EnterWiFiPasswordScreen(
             contentAlignment = Alignment.Center
         ) {
             Column {
-                Text(text = stringResource(R.string.connect_to_label) + " " + passwordFieldState.ssid)
+                Text(
+                    text = stringResource(R.string.connect_to_label) + " " + passwordFieldState.ssid,
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     value = passwordFieldState.password,
                     onValueChange = { viewModel.onPasswordUpdated(it) },
                     label = { Text(text = stringResource(R.string.password_label)) },
+                    isError = passwordFieldState.error != null
+                            && passwordFieldState.error != PasswordFieldState.Error.TOO_SHORT,
                     trailingIcon = {
                         IconButton(onClick = { viewModel.onShownUpdated() }) {
                             Icon(
-                                painter = passwordIcon,
+                                painter = run {
+                                    if (passwordFieldState.shown) {
+                                        painterResource(R.drawable.password_shown)
+                                    }
+                                    else {
+                                        painterResource(R.drawable.password_not_shown)
+                                    }
+                                },
                                 contentDescription = stringResource(R.string.show_password_icon_description)
                             )
                         }
                     },
-                    visualTransformation = passwordIsShown
+                    visualTransformation = run {
+                        if (passwordFieldState.shown) {
+                            VisualTransformation.None}
+                        else {
+                            PasswordVisualTransformation()
+                        }
+                    }
                 )
+                when {
+                    passwordFieldState.error == PasswordFieldState.Error.TOO_LONG -> {
+                        Text(
+                            text = stringResource(R.string.too_long_wi_fi_password  ),
+                            modifier = Modifier
+                                .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
+                            color = MaterialTheme.colorScheme.error,
+                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                        )
+                    }
+
+                    passwordFieldState.error == PasswordFieldState.Error.TOO_SHORT -> {
+                        Text(
+                            text = stringResource(R.string.too_short_wi_fi_password),
+                            modifier = Modifier
+                                .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
+                            color = MaterialTheme.colorScheme.inverseSurface,
+                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                        )
+                    }
+
+                    else -> {}
+                }
                 Button(
+                    enabled = run { passwordFieldState.error == null },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),

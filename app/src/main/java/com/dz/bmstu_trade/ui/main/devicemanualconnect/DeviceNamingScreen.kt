@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dz.bmstu_trade.addDeviceViewModels.NameDeviceViewModel
 import com.dz.bmstu_trade.R
+import com.dz.bmstu_trade.addDeviceViewModels.NameFieldState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +43,7 @@ fun DeviceNamingScreen(
     ) {
         TopAppBar(
             title = { Text(text = stringResource(R.string.naming_top_bar_title)) },
-            colors = TopAppBarDefaults.smallTopAppBarColors(
+            colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.onSurface,
             ),
@@ -76,15 +77,17 @@ fun DeviceNamingScreen(
                     isError = nameFieldState.error != null,
                     label = { Text(text = stringResource(R.string.device_name_label)) }
                 )
-                if (nameFieldState.error != null) {
-                    Text(
-                        text = nameFieldState.error.orEmpty(),
+                when (nameFieldState.error) {
+                    NameFieldState.Error.TOO_LONG -> Text(
+                        text = stringResource(R.string.too_long_device_name_error),
                         modifier = Modifier
                             .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
                         color = Color.Red,
                     )
+                    else -> {}
                 }
                 Button(
+                    enabled = nameFieldState.error == null,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),

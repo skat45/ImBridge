@@ -5,18 +5,21 @@
     <string name="settings_label">Настройки</string>
 
     <string name="manual_connection_top_bar_title">Подключение вручную</string>
-    <string name="too_long_device_code_error">Код устройства должен содержать ровно 4 символа</string>
+    <string name="invalid_len_device_code_error">Код устройства должен содержать ровно 4 символа</string>
     <string name="code_location_label">Код находится на крышке устройства</string>
     <string name="input_device_code_label">Введите код</string>
     <string name="connect_by_code_button_title">Подключить</string>
     <string name="connection_progress_top_bar_title">Подключение</string>
     <string name="connection_progress_label">Идёт подключение, подождите</string>
-    <string name="choose_wi_fi_top_bar_title">Подключение к роутеру</string>
+    <string name="choose_wi_fi_top_bar_title">Подключение</string>
     <string name="choose_wi_fi_label">Выберите Wi-Fi сеть</string>
     <string name="password_label">Пароль</string>
+    <string name="too_long_wi_fi_password">Слишком длинный пароль. Максимальная длина - 63 символа</string>
+    <string name="too_short_wi_fi_password">Минимальная длина пароля - 8 символов</string>
     <string name="naming_top_bar_title">Название</string>
     <string name="device_name_label">Имя устройства</string>
     <string name="naming_rules_label">Вы можете придумать название для вашего устройства или оставить поле пустым - имя по умолчанию G8VG</string>
+    <string name="too_long_device_name_error">Имя не может быть длинее 20 символов</string>
     <string name="apply_label">Применить</string>
     <string name="connect_to_label">Подключение к сети</string>
 

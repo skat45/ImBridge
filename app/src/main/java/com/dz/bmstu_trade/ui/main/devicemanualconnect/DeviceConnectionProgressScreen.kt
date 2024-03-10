@@ -1,9 +1,11 @@
 package com.dz.bmstu_trade.ui.main.devicemanualconnect
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -21,7 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dz.bmstu_trade.R
 
@@ -30,11 +34,11 @@ import com.dz.bmstu_trade.R
 fun ConnectionProgressScreen() {
     Column (
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
     ) {
         TopAppBar(
             title = { Text(text = stringResource(R.string.connection_progress_top_bar_title)) },
-            colors = TopAppBarDefaults.smallTopAppBarColors(
+            colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.onSurface,
             ),
@@ -42,7 +46,8 @@ fun ConnectionProgressScreen() {
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -52,35 +57,23 @@ fun ConnectionProgressScreen() {
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Column {
-                LoadingSpinner()
-                Box (
+            Column (
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary,
+                    strokeWidth = dimensionResource(R.dimen.spinner_stroke_width),
+                )
+                Text(
+                    text = stringResource(R.string.connection_progress_label),
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = dimensionResource(R.dimen.space_between_spinner_and_label)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(R.string.connection_progress_label),
-                        fontSize = dimensionResource(R.dimen.spinner_loader_label_font_size).value.sp
-                    )
-                }
+                        .padding(top = dimensionResource(R.dimen.spinner_description_label_padding)),
+                    textAlign = TextAlign.Center
+                )
             }
         }
-    }
-}
-
-
-@Composable
-fun LoadingSpinner() {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        CircularProgressIndicator(
-            color = Color.Blue,
-            strokeWidth = dimensionResource(R.dimen.spinner_stroke_width),
-        )
     }
 }
 

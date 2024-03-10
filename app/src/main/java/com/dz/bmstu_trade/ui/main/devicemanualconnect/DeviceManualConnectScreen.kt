@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.addDeviceViewModels.AddDeviceViewModel
 import com.dz.bmstu_trade.R
+import com.dz.bmstu_trade.addDeviceViewModels.TextFieldState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,7 +46,7 @@ fun DeviceManualConnectScreen(
     ) {
         TopAppBar(
             title = { Text(text = stringResource(R.string.manual_connection_top_bar_title)) },
-            colors = TopAppBarDefaults.smallTopAppBarColors(
+            colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.onSurface,
             ),
@@ -76,18 +77,32 @@ fun DeviceManualConnectScreen(
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
                     value = codeFieldState.value,
                     onValueChange = { viewModel.onCodeUpdated(it) },
-                    isError = codeFieldState.errorCode != null,
+                    isError = codeFieldState.error != null
+                            && codeFieldState.error != TextFieldState.Error.TOO_SHORT,
                     label = { Text(text = stringResource(R.string.input_device_code_label))}
                 )
-                if (codeFieldState.errorCode == 1) {
-                    Text(
-                        text = stringResource(R.string.too_long_device_code_error),
-                        modifier = Modifier
-                            .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                        color = Color.Red,
-                    )
+                when {
+                    codeFieldState.error != null -> {
+                        Text(
+                            text = stringResource(R.string.invalid_len_device_code_error),
+                            modifier = Modifier
+                                .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
+                            color = when (codeFieldState.error) {
+                                TextFieldState.Error.TOO_LARGE -> {
+                                    MaterialTheme.colorScheme.error
+                                }
+                                TextFieldState.Error.TOO_SHORT -> {
+                                    MaterialTheme.colorScheme.inverseSurface
+                                }
+                                else -> MaterialTheme.colorScheme.onSurface
+                            },
+                        )
+                    }
+
+                    else -> {}
                 }
                 Button(
+                    enabled = run { codeFieldState.error == null },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),

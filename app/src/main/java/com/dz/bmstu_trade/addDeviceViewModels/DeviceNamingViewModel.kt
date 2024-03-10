@@ -1,6 +1,8 @@
 package com.dz.bmstu_trade.addDeviceViewModels
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
+import com.dz.bmstu_trade.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -12,10 +14,9 @@ class NameDeviceViewModel : ViewModel() {
     fun onNameUpdated(name: String) {
         this._name.value = NameFieldState(
             value = name,
-            error = if (name.length > 20) {
-                "Длина имени не должна превышать 20 символов"
-            } else {
-                null
+            error = when {
+                name.length > 20 -> NameFieldState.Error.TOO_LONG
+                else -> null
             },
         )
     }
@@ -23,5 +24,12 @@ class NameDeviceViewModel : ViewModel() {
 
 data class NameFieldState(
     val value: String,
-    val error: String? = null,
-)
+    val error: Error? = null,
+) {
+    enum class Error (
+        @StringRes
+        val messageResId: Int,
+    ) {
+        TOO_LONG(R.string.too_long_device_name_error)
+    }
+}

@@ -1,7 +1,9 @@
 package com.dz.bmstu_trade.addDeviceViewModels
 
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
+import com.dz.bmstu_trade.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -13,10 +15,12 @@ class AddDeviceViewModel : ViewModel() {
     fun onCodeUpdated(code: String) {
         this._code.value = TextFieldState(
             value = code,
-            errorCode = if (code.length > 4) {
-                1
-            } else {
-                null
+            error = when {
+                code.length > 4 ->
+                    TextFieldState.Error.TOO_LARGE
+                code.length < 4 ->
+                    TextFieldState.Error.TOO_SHORT
+                else -> null
             },
         )
     }
@@ -24,7 +28,15 @@ class AddDeviceViewModel : ViewModel() {
 
 data class TextFieldState(
     val value: String,
-    val errorCode: Int? = null,
-)
+    val error: Error? = Error.TOO_SHORT,
+) {
+    enum class Error(
+        @StringRes
+        val messageResId: Int,
+    ) {
+        TOO_LARGE(R.string.invalid_len_device_code_error),
+        TOO_SHORT(R.string.invalid_len_device_code_error),
+    }
+}
 
 
