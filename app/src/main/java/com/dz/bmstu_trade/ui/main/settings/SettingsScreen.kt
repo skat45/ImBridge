@@ -63,8 +63,8 @@ fun SettingsScreen(
             }
 
             ChangeThemeItem(
-                changed = switchState.value,
-                onClick = { viewModel.onSwitchChanged(!switchState.value) },
+                changed = switchState,
+                onClick = { viewModel.onSwitchChanged(!switchState) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -90,7 +90,7 @@ private fun SelectLanguageItem(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.clickable { onClick() },
+        modifier = modifier.clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
@@ -132,7 +132,7 @@ private fun ChangeThemeItem(
 ) {
     Row(
         modifier = modifier
-            .clickable { onClick() },
+            .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(modifier = Modifier.weight(1f)) {
