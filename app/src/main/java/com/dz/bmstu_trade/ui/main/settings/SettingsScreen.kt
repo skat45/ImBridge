@@ -114,7 +114,7 @@ private fun SelectLanguageItem(
         }
         Icon(
             imageVector = Icons.Rounded.KeyboardArrowRight,
-            contentDescription = stringResource(R.string.Arrow_descr),
+            contentDescription = stringResource(R.string.Change_language),
             modifier = Modifier.padding(horizontal = 16.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
