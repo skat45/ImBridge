@@ -102,28 +102,17 @@ fun EnterWiFiPasswordScreen(
                     else PasswordVisualTransformation()
                 )
 
-                when {
-                    passwordFieldState.error == PasswordFieldState.Error.TOO_LONG -> {
-                        Text(
-                            text = stringResource(PasswordFieldState.Error.TOO_LONG.messageResId),
-                            modifier = Modifier
-                                .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                            color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.labelMedium,
-                        )
-                    }
-
-                    passwordFieldState.error == PasswordFieldState.Error.TOO_SHORT -> {
-                        Text(
-                            text = stringResource(PasswordFieldState.Error.TOO_SHORT.messageResId),
-                            modifier = Modifier
-                                .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                            color = MaterialTheme.colorScheme.inverseSurface,
-                            style = MaterialTheme.typography.labelMedium,
-                        )
-                    }
-
-                    else -> {}
+                passwordFieldState.error?.let {
+                    Text(
+                        text = stringResource(it.messageResId),
+                        modifier = Modifier
+                            .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
+                        color = when (it) {
+                            PasswordFieldState.Error.TOO_LONG -> MaterialTheme.colorScheme.error
+                            PasswordFieldState.Error.TOO_SHORT -> MaterialTheme.colorScheme.onSurfaceVariant
+                        },
+                        style = MaterialTheme.typography.labelMedium,
+                    )
                 }
                 Button(
                     enabled = passwordFieldState.error == null,
