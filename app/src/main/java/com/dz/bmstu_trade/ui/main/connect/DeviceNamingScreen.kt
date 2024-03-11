@@ -78,9 +78,9 @@ fun DeviceNamingScreen(
                     label = { Text(text = stringResource(R.string.device_name_label)) }
                 )
 
-                if (nameFieldState.error == NameFieldState.Error.TOO_LONG) {
+                if (nameFieldState.error != null) {
                     Text(
-                        text = stringResource(NameFieldState.Error.TOO_LONG.messageResId),
+                        text = stringResource(nameFieldState.error!!.messageResId),
                         modifier = Modifier
                             .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
                         color = MaterialTheme.colorScheme.error,

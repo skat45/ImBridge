@@ -82,7 +82,7 @@ fun DeviceManualConnectScreen(
                 )
                 if (codeFieldState.error != null) {
                     Text(
-                        text = stringResource(TextFieldState.Error.TOO_LARGE.messageResId),
+                        text = stringResource(codeFieldState.error!!.messageResId),
                         modifier = Modifier
                             .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
                         color = when (codeFieldState.error) {
