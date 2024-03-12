@@ -3,6 +3,12 @@
     <string name="home_label">Главная</string>
     <string name="gallery_label">Галлерея</string>
     <string name="settings_label">Настройки</string>
+    <string name="turn_on_display">Включить дисплей</string>
+    <string name="brightness">Яркость</string>
+    <string name="watch_other">смотреть все</string>
+    <string name="change_picture">Сменить рисунок</string>
+    <string name="device_name_text_field">Имя устройства</string>
+    <string name="add_new_device">Добавить новое устройство</string>
     <string name="manual_connection_top_bar_title">Подключение вручную</string>
     <string name="invalid_len_device_code_error">Код устройства должен содержать ровно 4 символа</string>
     <string name="code_location_label">Код находится на крышке устройства</string>
@@ -28,7 +34,7 @@
     <string name="show_password_icon_description">Show/hide password</string>
     <string name="wi_fi_icon_description">Иконка Wi-Fi</string>
 
-  
+
     <string name="Turn_on_darkTheme">Включить темную тему</string>
     <string name="Exit_from_account">Выйти из аккаунта</string>
     <string name="Change_language">Сменить язык</string>
