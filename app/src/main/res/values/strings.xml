@@ -3,4 +3,10 @@
     <string name="home_label">Главная</string>
     <string name="gallery_label">Галлерея</string>
     <string name="settings_label">Настройки</string>
+    <string name="turn_on_display">Включить дисплей</string>
+    <string name="brightness">Яркость</string>
+    <string name="watch_other">смотреть все</string>
+    <string name="change_picture">Сменить рисунок</string>
+    <string name="device_name_text_field">Имя устройства</string>
+    <string name="add_new_device">Добавить новое устройство</string>
 </resources>
