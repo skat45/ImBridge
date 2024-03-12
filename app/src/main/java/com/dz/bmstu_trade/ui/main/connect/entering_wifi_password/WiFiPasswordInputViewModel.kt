@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.main.connect.wiFiPasswordVM
+package com.dz.bmstu_trade.ui.main.connect.entering_wifi_password
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel

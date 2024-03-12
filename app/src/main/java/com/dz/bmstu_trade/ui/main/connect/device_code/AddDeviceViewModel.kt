@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.main.connect.deviceCodeVM
+package com.dz.bmstu_trade.ui.main.connect.device_code
 
 
 import androidx.annotation.StringRes

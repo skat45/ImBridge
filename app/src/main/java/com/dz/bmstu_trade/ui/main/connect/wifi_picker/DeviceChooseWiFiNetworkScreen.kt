@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.main.connect
+package com.dz.bmstu_trade.ui.main.connect.wifi_picker
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,7 +33,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dz.bmstu_trade.R
-import com.dz.bmstu_trade.ui.main.connect.wiFiPickerVM.WiFiPickerViewModel
 import com.dz.bmstu_trade.data.model.WiFiNetwork
 import com.germainkevin.collapsingtopbar.CollapsingTopBar
 import com.germainkevin.collapsingtopbar.CollapsingTopBarDefaults
@@ -61,11 +60,11 @@ fun DeviceChooseWiFiNetworkScreen(
             scrollBehavior = scrollBehavior,
             title = { Text(
                 text = stringResource(R.string.choose_wi_fi_top_bar_title),
-                fontSize = MaterialTheme.typography.titleLarge.fontSize
+                style = MaterialTheme.typography.titleLarge
             ) },
             subtitle = { Text(
                 text = stringResource(R.string.choose_wi_fi_label),
-                fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             ) },
             colors = CollapsingTopBarDefaults.colors(
@@ -127,7 +126,7 @@ fun WiFiItem(network: WiFiNetwork) {
         )
         Text(
             text = network.ssid,
-            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .padding(vertical = dimensionResource(R.dimen.wi_fi_network_space))

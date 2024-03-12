@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.main.connect
+package com.dz.bmstu_trade.ui.main.connect.entering_wifi_password
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,8 +31,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.dz.bmstu_trade.R
-import com.dz.bmstu_trade.ui.main.connect.wiFiPasswordVM.PasswordFieldState
-import com.dz.bmstu_trade.ui.main.connect.wiFiPasswordVM.WiFiPasswordInputViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +46,7 @@ fun EnterWiFiPasswordScreen(
         TopAppBar(
             title = { Text(
                 text = stringResource(R.string.choose_wi_fi_top_bar_title),
-                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                style = MaterialTheme.typography.titleLarge,
             ) },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,

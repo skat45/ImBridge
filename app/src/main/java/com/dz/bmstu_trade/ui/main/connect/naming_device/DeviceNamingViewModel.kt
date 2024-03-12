@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.main.connect.deviceNamingVM
+package com.dz.bmstu_trade.ui.main.connect.naming_device
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel

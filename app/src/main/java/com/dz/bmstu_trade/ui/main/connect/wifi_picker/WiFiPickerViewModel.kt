@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.main.connect.wiFiPickerVM
+package com.dz.bmstu_trade.ui.main.connect.wifi_picker
 
 import androidx.lifecycle.ViewModel
 import com.dz.bmstu_trade.data.model.WiFiNetwork

@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.main.connect
+package com.dz.bmstu_trade.ui.main.connect.naming_device
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,26 +25,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import com.dz.bmstu_trade.ui.main.connect.deviceCodeVM.AddDeviceViewModel
 import com.dz.bmstu_trade.R
-import com.dz.bmstu_trade.ui.main.connect.deviceCodeVM.TextFieldState
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeviceManualConnectScreen(
-    navController: NavHostController? = null,
-    viewModel: AddDeviceViewModel = remember { AddDeviceViewModel() }
+fun DeviceNamingScreen(
+    viewModel: NameDeviceViewModel = remember { NameDeviceViewModel() }
 ) {
-    val codeFieldState by viewModel.code.collectAsState()
+    val nameFieldState by viewModel.name.collectAsState()
 
     Column (
         modifier = Modifier
             .fillMaxSize()
     ) {
         TopAppBar(
-            title = { Text(text = stringResource(R.string.manual_connection_top_bar_title)) },
+            title = { Text(text = stringResource(R.string.naming_top_bar_title)) },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.onSurface,
@@ -53,7 +48,7 @@ fun DeviceManualConnectScreen(
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = stringResource(R.string.arrow_back_icon_description)
+                        contentDescription = stringResource(R.string.arrow_back_icon_description),
                     )
                 }
             }
@@ -69,49 +64,43 @@ fun DeviceManualConnectScreen(
             contentAlignment = Alignment.Center
         ) {
             Column {
-                Text(text = stringResource(R.string.code_location_label))
+                Text(text = stringResource(R.string.naming_rules_label))
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                    value = codeFieldState.value,
-                    onValueChange = { viewModel.onCodeUpdated(it) },
-                    isError = codeFieldState.error != null
-                            && codeFieldState.error != TextFieldState.Error.TOO_SHORT,
-                    label = { Text(text = stringResource(R.string.input_device_code_label))}
+                    value = nameFieldState.value,
+                    onValueChange = { viewModel.onNameUpdated(it) },
+                    isError = nameFieldState.error != null,
+                    label = { Text(text = stringResource(R.string.device_name_label)) }
                 )
-                if (codeFieldState.error != null) {
+
+                if (nameFieldState.error != null) {
                     Text(
-                        text = stringResource(codeFieldState.error!!.messageResId),
+                        text = stringResource(nameFieldState.error!!.messageResId),
                         modifier = Modifier
                             .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                        color = when (codeFieldState.error) {
-                            TextFieldState.Error.TOO_LARGE -> {
-                                MaterialTheme.colorScheme.error
-                            }
-                            TextFieldState.Error.TOO_SHORT -> {
-                                MaterialTheme.colorScheme.inverseSurface
-                            }
-                            else -> MaterialTheme.colorScheme.onSurface
-                        },
+                        color = MaterialTheme.colorScheme.error,
                     )
                 }
+
                 Button(
-                    enabled = run { codeFieldState.error == null },
+                    enabled = nameFieldState.error == null,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
                     onClick = { /* TODO */ }
                 ) {
-                    Text(text = stringResource(id = R.string.connect_by_code_button_title))
+                    Text(text = stringResource(id = R.string.apply_label))
                 }
             }
         }
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
-fun ManualConnectionPreview() {
-    DeviceManualConnectScreen()
+fun DeviceNamingPreview() {
+    DeviceNamingScreen()
 }

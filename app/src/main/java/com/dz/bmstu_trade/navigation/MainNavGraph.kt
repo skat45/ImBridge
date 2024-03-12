@@ -9,7 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.dz.bmstu_trade.ui.main.canvas.CanvasScreen
-import com.dz.bmstu_trade.ui.main.connect.DeviceManualConnectScreen
+import com.dz.bmstu_trade.ui.main.connect.device_code.DeviceManualConnectScreen
 import com.dz.bmstu_trade.ui.main.gallery.GalleryScreen
 import com.dz.bmstu_trade.ui.main.home.HomeScreen
 import com.dz.bmstu_trade.ui.main.setlanguage.SettingsLanguage

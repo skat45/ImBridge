@@ -1,4 +1,4 @@
-package com.dz.bmstu_trade.ui.main.connect
+package com.dz.bmstu_trade.ui.main.connect.connection_progress_bar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
