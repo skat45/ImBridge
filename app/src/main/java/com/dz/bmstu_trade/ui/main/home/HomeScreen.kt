@@ -1,6 +1,7 @@
 package com.dz.bmstu_trade.ui.main.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,6 +32,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -40,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -49,106 +53,168 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dz.bmstu_trade.R
-import com.dz.bmstu_trade.navigation.Routes
-
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavHostController) {
     var sliderPosition by remember { mutableFloatStateOf(0f) }
-    var isSwitchChecked by remember { mutableStateOf(false) }
-    val scrollState = rememberScrollState()
+    var isDisplayOnSwitchChecked by remember { mutableStateOf(false) }
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
 
-    val devices = listOf("Device 1", "Device 2", "Device 3")
+    val devices = persistentListOf("Device 1", "Device 2", "Device 3")
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .verticalScroll(scrollState),
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        TextButton(
-            onClick = {
-                navController.navigate(Routes.DEV_MAN_CONNECT.value)
-            }
+        AddDeviceButton {
+            showBottomSheet = true
+        }
+
+        DeviceNameTextField(devices = devices)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        DeviceImage()
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        MoreImages(
+            onMoreButtonClick = {
+                // Todo: перейти на экран галлереи
+            },
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        BrightnessSlider(
+            sliderPosition = sliderPosition,
+            onValueChange = { newValue ->
+                sliderPosition = newValue
+            },
+        )
+
+        DisplayTurnOnSwitch(
+            isDisplayOnSwitchChecked = isDisplayOnSwitchChecked,
+            onValueChange = { newValue ->
+                isDisplayOnSwitchChecked = newValue
+            },
+        )
+    }
+
+    if (showBottomSheet) {
+        HomeBottomSheet(
+            sheetState,
+            onValueChange = {
+                showBottomSheet = it
+            },
+            onManualConnectClick = {
+                // Todo: перейти на экран подключения по qr-коду
+            },
+            onQrConnectClick = {
+                // Todo: перейти на экран подключения вручную
+            },
+        )
+    }
+}
+
+@Composable
+fun AddDeviceButton(onButtonClick: () -> Unit) {
+    TextButton(
+        onClick = onButtonClick,
+        modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.home_screen_horizontal_padding))
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(stringResource(R.string.add_new_device), style = TextStyle(fontSize = 18.sp))
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_link_24),
-                    contentDescription = null
+            Text(stringResource(R.string.add_new_device), style = TextStyle(fontSize = 18.sp))
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_link_24),
+                contentDescription = null
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DeviceNameTextField(devices: ImmutableList<String>) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedOption by remember { mutableStateOf("Device") }
+    var textFieldValue by remember { mutableStateOf(selectedOption) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        },
+        modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.home_screen_horizontal_padding))
+    ) {
+        OutlinedTextField(
+            value = textFieldValue,
+            onValueChange = {
+                textFieldValue = it
+            },
+            modifier = Modifier
+                .menuAnchor()
+                .fillMaxWidth(),
+            label = { Text(stringResource(R.string.device_name_text_field)) },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+            },
+            readOnly = true,
+            maxLines = 1
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = {
+                expanded = false
+            },
+            modifier = Modifier.exposedDropdownSize(true)
+        ) {
+            devices.forEach { device ->
+                DropdownMenuItem(
+                    text = { Text(device) },
+                    onClick = {
+                        selectedOption = device
+                        textFieldValue = device
+                        expanded = false
+                    }
                 )
             }
         }
+    }
+}
 
-        var expanded by remember { mutableStateOf(false) }
-        var selectedOption by remember { mutableStateOf("Device") }
-        var textFieldValue by remember { mutableStateOf(selectedOption) }
+@Composable
+fun DeviceImage() {
+    Box(
+        modifier = Modifier
+            .height(300.dp)
+            .padding(horizontal = dimensionResource(R.dimen.home_screen_horizontal_padding))
+            .fillMaxWidth()
+            .background(Color.LightGray, RoundedCornerShape(10.dp)),
+        contentAlignment = Alignment.Center
+    ) {
 
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = {
-                expanded = !expanded
-            }
-        ) {
-            OutlinedTextField(
-                value = textFieldValue,
-                onValueChange = {
-                    textFieldValue = it
-                },
-                modifier = Modifier
-                    .menuAnchor()
-                    .fillMaxWidth(),
-                label = { Text(stringResource(R.string.device_name_text_field)) },
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                },
-                readOnly = false,
-                maxLines = 1
-            )
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = {
-                    expanded = false
-                },
-                modifier = Modifier.exposedDropdownSize(true)
-            ) {
-                devices.forEach { device ->
-                    DropdownMenuItem(
-                        text = { Text(device) },
-                        onClick = {
-                            selectedOption = device
-                            textFieldValue = device
-                            expanded = false
-                        }
-                    )
-                }
-            }
-        }
+    }
+}
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Box(
-            modifier = Modifier
-                .height(300.dp)
-                .fillMaxWidth()
-                .background(Color.LightGray, RoundedCornerShape(10.dp)),
-            contentAlignment = Alignment.Center
-        ) {
-
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-
+@Composable
+fun MoreImages(modifier: Modifier = Modifier, onMoreButtonClick: () -> Unit) {
+    Column(modifier = modifier) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
         ) {
             Text(
                 stringResource(R.string.change_picture),
@@ -157,47 +223,76 @@ fun HomeScreen(navController: NavHostController) {
                     .fillMaxHeight()
                     .align(Alignment.CenterVertically)
             )
-            TextButton(onClick = { /* Посмотреть все */ }) {
+            TextButton(onClick = onMoreButtonClick) {
                 Text(stringResource(R.string.watch_other))
             }
         }
 
-
         LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(6) { index ->
-                Card(
-                    modifier = Modifier.size(100.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.LightGray)
-                ) {
-                }
+            item {
+                Spacer(modifier = Modifier.width(12.dp))
+            }
+            items(6) { _ ->
+                ImageItem(
+                    Modifier
+                        .size(100.dp)
+                        .padding(horizontal = 4.dp)
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.width(12.dp))
             }
         }
+    }
+}
 
-        Spacer(modifier = Modifier.height(24.dp))
+@Composable
+fun BrightnessSlider(sliderPosition: Float, onValueChange: (Float) -> Unit) {
+    Text(
+        text = stringResource(R.string.brightness),
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = dimensionResource(R.dimen.home_screen_horizontal_padding))
+    )
 
-        Text(text = stringResource(R.string.brightness), Modifier.fillMaxWidth())
+    Slider(
+        value = sliderPosition,
+        onValueChange = onValueChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = dimensionResource(R.dimen.home_screen_horizontal_padding))
+    )
+}
 
-
-        Slider(
-            value = sliderPosition,
-            onValueChange = { sliderPosition = it },
-            modifier = Modifier.fillMaxWidth()
+@Composable
+fun DisplayTurnOnSwitch(isDisplayOnSwitchChecked: Boolean, onValueChange: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onValueChange(!isDisplayOnSwitchChecked) }
+            .padding(
+                horizontal = dimensionResource(R.dimen.home_screen_horizontal_padding),
+                vertical = 8.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(stringResource(R.string.turn_on_display), modifier = Modifier.weight(1f))
+        Switch(
+            checked = isDisplayOnSwitchChecked,
+            onCheckedChange = null
         )
+    }
+}
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(stringResource(R.string.turn_on_display), modifier = Modifier.weight(1f))
-            Switch(
-                checked = isSwitchChecked,
-                onCheckedChange = { isSwitchChecked = it }
-            )
-        }
+@Composable
+fun ImageItem(modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.LightGray)
+    ) {
     }
 }
 

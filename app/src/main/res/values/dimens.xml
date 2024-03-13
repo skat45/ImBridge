@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="home_screen_horizontal_padding">16dp</dimen>
     <dimen name="general_padding_start_end">16dp</dimen>
     <dimen name="padding_top_code_connection_screen">128dp</dimen>
     <dimen name="space_between_spinner_and_label">40dp</dimen>
