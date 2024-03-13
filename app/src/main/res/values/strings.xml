@@ -9,4 +9,6 @@
     <string name="change_picture">Сменить рисунок</string>
     <string name="device_name_text_field">Имя устройства</string>
     <string name="add_new_device">Добавить новое устройство</string>
+    <string name="qr_code_connect">Подключить по QR-коду</string>
+    <string name="manual_connect">Подключить вручную</string>
 </resources>
