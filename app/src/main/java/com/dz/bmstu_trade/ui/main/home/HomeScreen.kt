@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dz.bmstu_trade.R
+import com.dz.bmstu_trade.navigation.Routes
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -115,10 +116,10 @@ fun HomeScreen(navController: NavHostController) {
                 showBottomSheet = it
             },
             onManualConnectClick = {
-                // Todo: перейти на экран подключения по qr-коду
+                navController.navigate(Routes.DEV_MAN_CONNECT.value)
             },
             onQrConnectClick = {
-                // Todo: перейти на экран подключения вручную
+                // Todo: перейти на экран подключения по qr-коду
             },
         )
     }
