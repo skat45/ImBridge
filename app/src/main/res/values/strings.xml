@@ -9,7 +9,7 @@
     <string name="input_device_code_label">Введите код</string>
     <string name="connect_by_code_button_title">Подключить</string>
     <string name="connection_progress_top_bar_title">Подключение</string>
-    <string name="connection_progress_label">Идёт подключение, подождите</string>
+    <string name="connection_to_progress_label">Идёт подключение к</string>
     <string name="choose_wi_fi_top_bar_title">Подключение</string>
     <string name="choose_wi_fi_label">Выберите Wi-Fi сеть</string>
     <string name="password_label">Пароль</string>

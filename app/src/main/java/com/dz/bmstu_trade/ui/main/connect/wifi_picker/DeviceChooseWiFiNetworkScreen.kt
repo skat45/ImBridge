@@ -31,7 +31,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
 import com.dz.bmstu_trade.data.model.WiFiNetwork
 import com.germainkevin.collapsingtopbar.CollapsingTopBar
@@ -40,16 +40,21 @@ import com.germainkevin.collapsingtopbar.rememberCollapsingTopBarScrollBehavior
 
 @Composable
 fun DeviceChooseWiFiNetworkScreen(
-    viewModel: WiFiPickerViewModel = remember { WiFiPickerViewModel() }
+    navController: NavHostController,
+    wiFiPickerViewModel: WiFiPickerViewModel
 ) {
     val scrollBehavior = rememberCollapsingTopBarScrollBehavior()
     val scrollableState = rememberLazyListState()
-    val networks by viewModel.networks.collectAsState()
+    val networks by wiFiPickerViewModel.networks.collectAsState()
 
-    Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
+    Column(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+    ) {
         CollapsingTopBar(
             navigationIcon = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = {
+                    navController.navigate("home/deviceManual")
+                }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = stringResource(R.string.arrow_back_icon_description),
@@ -133,10 +138,4 @@ fun WiFiItem(network: WiFiNetwork) {
                 .padding(start = dimensionResource(R.dimen.wi_fi_network_space))
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ChooseWiFiNetworkPreview() {
-    DeviceChooseWiFiNetworkScreen()
 }

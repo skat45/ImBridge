@@ -1,23 +1,36 @@
 package com.dz.bmstu_trade.ui.main.connect.wifi_picker
 
+import android.content.Context
+import android.content.pm.PackageManager
+import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.lifecycle.ViewModel
+import com.dz.bmstu_trade.Manifest
 import com.dz.bmstu_trade.data.model.WiFiNetwork
+import com.dz.bmstu_trade.domain.interactor.GetWiFiList
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
-class WiFiPickerViewModel : ViewModel() {
-    val networks: StateFlow<List<WiFiNetwork>> = MutableStateFlow(listOf(
-        WiFiNetwork("TP-Link_14F9", true),
-        WiFiNetwork("bmstu_wifi", true),
-        WiFiNetwork("POCO M3 Pro 5G (Екатерина Чижикова Олеговна)", true),
-        WiFiNetwork("Mosscow_WiFi_Free", false),
-        WiFiNetwork("bmstu_guest", true),
-        WiFiNetwork("Proizvodstvo", true),
-        WiFiNetwork("bmstu_staff", true),
-        WiFiNetwork("iPhone (София)", false),
-        WiFiNetwork("BRUSOK", true),
-        WiFiNetwork("IU4-Student", true),
-    ))
+@OptIn(DelicateCoroutinesApi::class)
+class WiFiPickerViewModel (private val context: Context): ViewModel() {
+    private val _networks = MutableStateFlow(mutableListOf(WiFiNetwork("", false)))
+    val networks: StateFlow<MutableList<WiFiNetwork>> = _networks
 
-    // TODO Надо прифигаить обновление списка сетей вай фай
+    init { // ACCESS_FINE_LOCATION
+
+        val wiFiListGetter = GetWiFiList(context)
+        GlobalScope.launch {
+            while (true) {
+                wiFiListGetter.getResult()
+                _networks.value = wiFiListGetter.result
+                delay(1000L)
+            }
+        }
+    }
+
 }

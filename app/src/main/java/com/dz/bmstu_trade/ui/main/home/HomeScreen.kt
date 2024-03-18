@@ -21,7 +21,7 @@ fun HomeScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Center
     ){
         Button(
-            onClick = { navController.navigate(Routes.DEV_MAN_CONNECT.value) },
+            onClick = { navController.navigate(Routes.ENTER_DEV_CODE.value) },
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Text(text = "Подключение устройства вручную")

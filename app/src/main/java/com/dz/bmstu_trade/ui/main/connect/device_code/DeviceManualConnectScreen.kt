@@ -19,12 +19,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
 
@@ -32,10 +30,11 @@ import com.dz.bmstu_trade.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeviceManualConnectScreen(
-    navController: NavHostController? = null,
-    viewModel: AddDeviceViewModel = remember { AddDeviceViewModel() }
+    navController: NavHostController,
+    onEnterCode: () -> Unit,
+    codeViewModel: AddDeviceViewModel
 ) {
-    val codeFieldState by viewModel.code.collectAsState()
+    val codeFieldState by codeViewModel.code.collectAsState()
 
     Column (
         modifier = Modifier
@@ -48,7 +47,7 @@ fun DeviceManualConnectScreen(
                 titleContentColor = MaterialTheme.colorScheme.onSurface,
             ),
             navigationIcon = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = stringResource(R.string.arrow_back_icon_description)
@@ -73,7 +72,7 @@ fun DeviceManualConnectScreen(
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
                     value = codeFieldState.value,
-                    onValueChange = { viewModel.onCodeUpdated(it) },
+                    onValueChange = { codeViewModel.onCodeUpdated(it) },
                     isError = codeFieldState.error != null
                             && codeFieldState.error != TextFieldState.Error.TOO_SHORT,
                     label = { Text(text = stringResource(R.string.input_device_code_label))}
@@ -99,17 +98,11 @@ fun DeviceManualConnectScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                    onClick = { /* TODO */ }
+                    onClick = { onEnterCode() }
                 ) {
-                    Text(text = stringResource(id = R.string.connect_by_code_button_title))
+                    Text(text = stringResource(R.string.connect_by_code_button_title))
                 }
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ManualConnectionPreview() {
-    DeviceManualConnectScreen()
 }
