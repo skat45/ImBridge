@@ -19,87 +19,94 @@ import androidx.navigation.NavHostController
 fun SignInScreen(navController: NavHostController, onSignIn: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.surface)
     ) {
         Text(
-            text = "IMBRIDGE",
-            modifier = Modifier.padding(top = 128.dp),
-            color = Color(0xFF6A1B9A),
-            fontFamily = FontFamily.SansSerif,
-            style = TextStyle(fontSize = 40.sp),
-        )
+                text = "IMBRIDGE",
+                modifier = Modifier
+                    .padding(top = 128.dp)
+                    .align(alignment = Alignment.TopCenter),
+                color = Color(0xFF6A1B9A),
+                fontFamily = FontFamily.SansSerif,
+                style = TextStyle(fontSize = 40.sp),
+            )
 
-        Spacer(modifier = Modifier.height(116.dp))
-
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("e-mail") },
-            textStyle = TextStyle(fontSize = 16.sp),
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Пароль") },
-            textStyle = TextStyle(fontSize = 16.sp),
-        )
-
-        Spacer(modifier = Modifier.height(180.dp))
+            Spacer(modifier = Modifier.height(116.dp))
 
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .padding(16.dp)
+                .align(alignment = Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Button(
+
+            OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { /* Handle login button click */ },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6A1B9A))
-            ) {
-                Text("Вход", color = Color.White, fontSize = 14.sp)
-            }
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("e-mail") },
+                textStyle = TextStyle(fontSize = 16.sp),
+            )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
+            OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { /* Handle registration button click */ },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color(0xFF6A1B9A)),
-                border = BorderStroke(width = 1.dp, color = Color(0xFF6A1B9A))
-            ) {
-                Text("Регистрация", color = Color(0xFF6A1B9A), fontSize = 14.sp)
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text("Также можно",
-                modifier = Modifier.fillMaxWidth(),
-                color = Color.Black,
-                fontSize = 10.sp,
-
-                )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                modifier = Modifier.fillMaxWidth(), //0x0077FF
-                onClick = { /* Handle registration button click */ },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color.Blue),
-                border = BorderStroke(width = 1.dp, color = Color.Blue)
-            ) {
-                Text("Войти через VK ID", color = Color.Blue, fontSize = 14.sp)
-            }
-
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Пароль") },
+                textStyle = TextStyle(fontSize = 16.sp),
+            )
         }
+            Spacer(modifier = Modifier.height(180.dp))
+
+            Column(
+                modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { /* Handle login button click */ },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6A1B9A))
+                ) {
+                    Text("Вход", color = Color.White, fontSize = 14.sp)
+                }
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { /* Handle registration button click */ },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = Color(0xFF6A1B9A)
+                    ),
+                    border = BorderStroke(width = 1.dp, color = Color(0xFF6A1B9A))
+                ) {
+                    Text("Регистрация", color = Color(0xFF6A1B9A), fontSize = 14.sp)
+                }
+
+                Text(
+                    "Также можно",
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color.Black,
+                    fontSize = 10.sp,
+
+                    )
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(), //0x0077FF
+                    onClick = { /* Handle registration button click */ },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = Color.Blue
+                    ),
+                    border = BorderStroke(width = 1.dp, color = Color.Blue)
+                ) {
+                    Text("Войти через VK ID", color = Color.Blue, fontSize = 14.sp)
+                }
+
+            }
     }
 }
