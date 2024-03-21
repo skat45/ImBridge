@@ -35,4 +35,15 @@
     <string name="Turn_on_darkTheme">Включить темную тему</string>
     <string name="Exit_from_account">Выйти из аккаунта</string>
     <string name="Change_language">Сменить язык</string>
+    <string name="Community">Сообщество</string>
+    <string name="Favorite">Избранное</string>
+    <string name="My_pic">Мои рисунки</string>
+    <string name="enter_name_of_pic">Введите название рисунка</string>
+    <string name="OpenDropDown_menu">Открыть выпадающий список</string>
+    <string name="Load_pic_to_device">Загрузить картинку на устройство</string>
+    <string name="Publish_pic">Опубликовать рисунок</string>
+    <string name="Delete_pic">Удалить рисунок</string>
+    <string name="Create_new_pic">Создать новый рисунок</string>
+    <string name="Add_to_fav">Добавить в избранное</string>
+    <string name="Delete_from_fav">Удвлить из избранного</string>
 </resources>

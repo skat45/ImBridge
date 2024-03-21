@@ -16,4 +16,5 @@
     <dimen name="wi_fi_ssid_name_padding_top">32dp</dimen>
     <dimen name="wi_fi_card_height">80dp</dimen>
     <dimen name="wi_fi_card_border_radius">16dp</dimen>
+    <dimen name = "GalleryScreenHorizontalPadding">16dp</dimen>
 </resources>
