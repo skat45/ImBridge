@@ -1,36 +1,44 @@
 package com.dz.bmstu_trade.ui.main.connect.wifi_picker
 
-import android.content.Context
-import android.content.pm.PackageManager
-import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import androidx.compose.material3.AlertDialog
 import androidx.lifecycle.ViewModel
-import com.dz.bmstu_trade.Manifest
 import com.dz.bmstu_trade.data.model.WiFiNetwork
-import com.dz.bmstu_trade.domain.interactor.GetWiFiList
+import com.dz.bmstu_trade.domain.interactor.GetWiFiInteractor
+import com.dz.bmstu_trade.domain.interactor.GetWiFiInteractorImpl
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @OptIn(DelicateCoroutinesApi::class)
-class WiFiPickerViewModel (private val context: Context): ViewModel() {
+class WiFiPickerViewModel (): ViewModel() {
+    private val getWiFiInteractor: GetWiFiInteractor = GetWiFiInteractorImpl()
+
+    private val _requiredPermissions = MutableStateFlow<Array<String>>(emptyArray())
+    val requiredPermissions: StateFlow<Array<String>> = _requiredPermissions
+
     private val _networks = MutableStateFlow(mutableListOf(WiFiNetwork("", false)))
     val networks: StateFlow<MutableList<WiFiNetwork>> = _networks
 
-    init { // ACCESS_FINE_LOCATION
+    private val eventChanel = Channel<WiFiPickerEvent>()
+    val eventsFlow = eventChanel.receiveAsFlow()
 
-        val wiFiListGetter = GetWiFiList(context)
-        GlobalScope.launch {
-            while (true) {
-                wiFiListGetter.getResult()
-                _networks.value = wiFiListGetter.result
-                delay(1000L)
+    init {
+        _requiredPermissions.value = getWiFiInteractor.getRequiredPermissions()
+    }
+
+    fun onPermissionsResult(result: Map<String, Boolean>) {
+        if (result.all { (_, value) -> value }) {
+
+        }
+        else {
+            GlobalScope.launch {
+                eventChanel.send(WiFiPickerEvent.ShowPermissionsAlertDialog())
             }
         }
     }
-
 }

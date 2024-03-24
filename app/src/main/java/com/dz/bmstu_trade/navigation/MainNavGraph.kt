@@ -32,7 +32,7 @@ import com.dz.bmstu_trade.ui.main.settings.SettingsScreen
 fun MainNavHost(
     outerNavHostController: NavHostController,
     mainNavController: NavHostController,
-    innerPadding: PaddingValues
+    innerPadding: PaddingValues,
 ) {
     val codeViewModel = remember { AddDeviceViewModel() }
 
@@ -45,7 +45,8 @@ fun MainNavHost(
                 DeviceManualConnectScreen(
                     mainNavController,
                     onEnterCode = {
-                        mainNavController.navigate("home/connectingProgress")
+//                        mainNavController.navigate("home/connectingProgress")
+                        mainNavController.navigate("home/chooseWiFi")
                     },
                     codeViewModel
                 )
@@ -64,7 +65,7 @@ fun MainNavHost(
             composable(Routes.CHOOSE_WIFI.value) {
                 DeviceChooseWiFiNetworkScreen(
                     navController = mainNavController,
-                    wiFiPickerViewModel = WiFiPickerViewModel(LocalContext.current)
+                    viewModel = WiFiPickerViewModel(),
                 )
             }
         }
