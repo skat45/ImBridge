@@ -7,37 +7,37 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.dz.bmstu_trade.R
 
 
 @Composable
 fun SignInScreen(navController: NavHostController, onSignIn: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.surface)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         Text(
-                text = "IMBRIDGE",
-                modifier = Modifier
-                    .padding(top = 128.dp)
-                    .align(alignment = Alignment.TopCenter),
-                color = Color(0xFF6A1B9A),
-                fontFamily = FontFamily.SansSerif,
-                style = TextStyle(fontSize = 40.sp),
-            )
-
-            Spacer(modifier = Modifier.height(116.dp))
+            text = stringResource(R.string.Logo),
+            modifier = Modifier
+                .padding(top = dimensionResource(R.dimen.logo_padding))
+                .align(alignment = Alignment.TopCenter),
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.titleLarge.copy(fontSize = 40.sp)
+        )
 
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(dimensionResource(R.dimen.email_password_padding))
                 .align(alignment = Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -47,64 +47,78 @@ fun SignInScreen(navController: NavHostController, onSignIn: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("e-mail") },
-                textStyle = TextStyle(fontSize = 16.sp),
+                label = { Text(text = stringResource(R.string.Email)) },
+                textStyle = MaterialTheme.typography.bodyMedium,
             )
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Пароль") },
-                textStyle = TextStyle(fontSize = 16.sp),
+                label = { Text(text = stringResource(R.string.Password)) },
+                textStyle = MaterialTheme.typography.bodyMedium,
             )
         }
-            Spacer(modifier = Modifier.height(180.dp))
 
             Column(
                 modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(16.dp),
+                    .align(Alignment.BottomCenter)
+                    .padding(dimensionResource(R.dimen.enter_register_padding)),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { /* Handle login button click */ },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6A1B9A))
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text("Вход", color = Color.White, fontSize = 14.sp)
+                    Text(
+                        text = stringResource(R.string.Login),
+                        color = colorResource(R.color.white),
+                        style = MaterialTheme.typography.labelLarge
+                    )
                 }
 
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { /* Handle registration button click */ },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.White,
-                        contentColor = Color(0xFF6A1B9A)
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        contentColor = MaterialTheme.colorScheme.primary
                     ),
-                    border = BorderStroke(width = 1.dp, color = Color(0xFF6A1B9A))
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 ) {
-                    Text("Регистрация", color = Color(0xFF6A1B9A), fontSize = 14.sp)
+                    Text(
+                        text = stringResource(R.string.Register),
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.labelLarge
+                    )
                 }
 
                 Text(
-                    "Также можно",
+                    text = stringResource(R.string.also_you_can),
                     modifier = Modifier.fillMaxWidth(),
-                    color = Color.Black,
-                    fontSize = 10.sp,
-
-                    )
+                    textAlign = TextAlign.Center,
+                    color = colorResource(R.color.black),
+                    style = MaterialTheme.typography.bodySmall
+                )
 
                 Button(
                     modifier = Modifier.fillMaxWidth(), //0x0077FF
                     onClick = { /* Handle registration button click */ },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.White,
-                        contentColor = Color.Blue
+                        containerColor = colorResource(R.color.white),
+                        contentColor = colorResource(R.color.vk_blue)
                     ),
-                    border = BorderStroke(width = 1.dp, color = Color.Blue)
+                    border = BorderStroke(width = 1.dp, color = colorResource(R.color.vk_blue))
                 ) {
-                    Text("Войти через VK ID", color = Color.Blue, fontSize = 14.sp)
+                    Text(
+                        text = stringResource(R.string.Log_in_with_VK_ID),
+                        color = colorResource(R.color.vk_blue),
+                        style = MaterialTheme.typography.labelLarge
+                    )
                 }
 
             }
