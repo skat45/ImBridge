@@ -35,6 +35,8 @@
     <string name="Turn_on_darkTheme">Включить темную тему</string>
     <string name="Exit_from_account">Выйти из аккаунта</string>
     <string name="Change_language">Сменить язык</string>
+    <string name="canvas_title">Холст</string>
+    <string name="input_pic_name">Введите название рисунка</string>
     <string name="Logo">IMBRIDGE</string>
     <string name="Email">e-mail</string>
     <string name="Password">Пароль</string>
