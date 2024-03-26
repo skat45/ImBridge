@@ -82,13 +82,17 @@ fun HomeScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        DeviceImage()
+        DeviceImage(
+            onEditButtonClick = {
+                navController.navigate(Routes.CANVAS.value)
+            }
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         MoreImages(
             onMoreButtonClick = {
-                // Todo: перейти на экран галлереи
+                /* Todo: Перейти в галлерею? */
             },
         )
 
@@ -195,13 +199,14 @@ fun DeviceNameTextField(devices: ImmutableList<String>) {
 }
 
 @Composable
-fun DeviceImage() {
+fun DeviceImage(onEditButtonClick: () -> Unit) {
     Box(
         modifier = Modifier
             .height(300.dp)
             .padding(horizontal = dimensionResource(R.dimen.home_screen_horizontal_padding))
             .fillMaxWidth()
-            .background(Color.LightGray, RoundedCornerShape(10.dp)),
+            .background(Color.LightGray, RoundedCornerShape(10.dp))
+            .clickable { onEditButtonClick() },
         contentAlignment = Alignment.Center
     ) {
 
