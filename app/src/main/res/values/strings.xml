@@ -35,4 +35,12 @@
     <string name="Turn_on_darkTheme">Включить темную тему</string>
     <string name="Exit_from_account">Выйти из аккаунта</string>
     <string name="Change_language">Сменить язык</string>
+    <string name="Logo">IMBRIDGE</string>
+    <string name="Email">e-mail</string>
+    <string name="Password">Пароль</string>
+    <string name="Login">Вход</string>
+    <string name="Register">Регистрация</string>
+    <string name="also_you_can">Также можно</string>
+    <string name="Log_in_with_VK_ID">Войти через VK ID</string>
+
 </resources>
