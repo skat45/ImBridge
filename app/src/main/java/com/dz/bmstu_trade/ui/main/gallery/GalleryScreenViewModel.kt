@@ -1,15 +1,11 @@
 package com.dz.bmstu_trade.ui.main.gallery
 
-import com.dz.bmstu_trade.data.model.ImageCard
-import com.dz.bmstu_trade.data.model.GalleryState
-
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
-import com.dz.bmstu_trade.R
+import com.dz.bmstu_trade.data.model.ImageCard
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -43,6 +39,9 @@ class GalleryScreenViewModel : ViewModel() {
 
     )
     val screenState: StateFlow<ImmutableMap<Tab, GalleryState>> = _screenState
+    private inline fun <T> PersistentList<T>.set(index: Int, block: (item: T) -> T) =
+        this.set(index, block(this[index]))
+
     fun applyAction(action: GalleryAction) {
         when (action) {
             is GalleryAction.SearchedChanged -> onChangeSearch(action.query, action.selectedTab)
@@ -70,17 +69,6 @@ class GalleryScreenViewModel : ViewModel() {
         }
     }
 
-    private fun changeLikeIconState(isLiked: Boolean, index: Int, selectedTab: Tab) {
-        _screenState.value[selectedTab]?.let { galleryState ->
-            val updatedImageCards = galleryState.imageCards.toMutableList()
-            updatedImageCards[index] = updatedImageCards[index].copy(isLiked = isLiked)
-            _screenState.value = _screenState.value.put(
-                selectedTab,
-                galleryState.copy(imageCards = updatedImageCards.toPersistentList())
-            )
-        }
-    }
-
     private fun changeStateOfLikedCard(isLiked: Boolean, index: Int, selectedTab: Tab) {
 
         if (isLiked) {
@@ -88,19 +76,7 @@ class GalleryScreenViewModel : ViewModel() {
             addCardToFav(index)
         } else {
             if (selectedTab == Tab.FAVOURITES) {
-                val community = _screenState.value[Tab.COMMUNITY]?.imageCards
-                val deletedCardFavorite = _screenState.value[selectedTab]?.imageCards
-
-                if (community != null && deletedCardFavorite != null && community.indexOf(
-                        deletedCardFavorite[index]
-                    ) != -1
-                ) {
-                    changeLikeIconState(
-                        false,
-                        community.indexOf(deletedCardFavorite[index]),
-                        Tab.COMMUNITY
-                    )
-                }
+                changeLikeStateInCommunityFromFav(selectedTab, index)
                 deleteCardFromFav(selectedTab, index)
 
             } else {
@@ -113,15 +89,36 @@ class GalleryScreenViewModel : ViewModel() {
 
     }
 
+    private fun changeLikeStateInCommunityFromFav(selectedTab: Tab, index: Int) {
+        val community = _screenState.value[Tab.COMMUNITY]?.imageCards ?: return
+        val deletedCardFavorite = _screenState.value[selectedTab]?.imageCards ?: return
+
+        community.indexOf(deletedCardFavorite[index]).let {
+            if (it == NOT_FOUND) return
+            changeLikeIconState(
+                isLiked = false,
+                index = it,
+                selectedTab = Tab.COMMUNITY
+            )
+        }
+    }
+
+    private fun changeLikeIconState(isLiked: Boolean, index: Int, selectedTab: Tab) {
+        _screenState.value[selectedTab]?.let { galleryState ->
+            _screenState.value = _screenState.value.put(
+                selectedTab,
+                galleryState.copy(imageCards = galleryState.imageCards.set(index) { it.copy(isLiked = isLiked) })
+            )
+        }
+    }
+
     private fun addCardToFav(index: Int) {
         val newImageCard = _screenState.value[Tab.COMMUNITY]
         if (newImageCard != null) {
             _screenState.value[Tab.FAVOURITES]?.let { galleryState ->
-                val updatedImageCards = galleryState.imageCards.toMutableList()
-                updatedImageCards.add(newImageCard.imageCards[index])
                 _screenState.value = _screenState.value.put(
                     Tab.FAVOURITES,
-                    galleryState.copy(imageCards = updatedImageCards.toPersistentList())
+                    galleryState.copy(imageCards = galleryState.imageCards.add(newImageCard.imageCards[index]))
                 )
             }
         }
@@ -133,11 +130,9 @@ class GalleryScreenViewModel : ViewModel() {
         val deletedImageCard = _screenState.value[selectedTab]
         if (deletedImageCard != null) {
             _screenState.value[Tab.FAVOURITES]?.let { galleryState ->
-                val updatedImageCards = galleryState.imageCards.toMutableList()
-                updatedImageCards.remove(deletedImageCard.imageCards[index])
                 _screenState.value = _screenState.value.put(
                     Tab.FAVOURITES,
-                    galleryState.copy(imageCards = updatedImageCards.toPersistentList())
+                    galleryState.copy(imageCards = galleryState.imageCards.remove(deletedImageCard.imageCards[index]))
                 )
             }
         }
@@ -145,24 +140,10 @@ class GalleryScreenViewModel : ViewModel() {
 
     }
 
+    companion object {
+        private const val NOT_FOUND = -1
+    }
+
 
 }
 
-
-enum class Tab(
-    @StringRes
-    val titleResId: Int,
-) {
-    COMMUNITY(R.string.community),
-    FAVOURITES(R.string.favorite),
-    MY_PICTURES(R.string.my_pic),
-}
-
-
-sealed class GalleryAction {
-    data class SearchedChanged(val query: String, val selectedTab: Tab) : GalleryAction()
-    data class LikeStateChanged(val isLiked: Boolean, val index: Int, val selectedTab: Tab) :
-        GalleryAction()
-
-    data class SearchedCleared(val selectedTab: Tab) : GalleryAction()
-}

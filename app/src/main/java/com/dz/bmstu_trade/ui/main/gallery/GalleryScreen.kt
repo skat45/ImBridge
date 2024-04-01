@@ -1,6 +1,5 @@
 package com.dz.bmstu_trade.ui.main.gallery
 
-import com.dz.bmstu_trade.data.model.GalleryState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -9,25 +8,22 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Add
@@ -36,7 +32,6 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -50,7 +45,11 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.*
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -128,17 +127,19 @@ fun SelectedTab(
                 .padding(horizontal = dimensionResource(R.dimen.GalleryScreenHorizontalPadding))
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Box(modifier = Modifier.weight(1f))
+        Box(modifier = Modifier
+            .weight(1f)
+            .fillMaxSize())
         {
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 186.dp),
+                columns = GridCells.Adaptive(minSize = 150.dp),
                 modifier = Modifier.padding(horizontal = 10.dp)
             ) {
                 itemsIndexed(state.imageCards) { index, card ->
                     ImageCard(
                         modifier = Modifier
                             .padding(horizontal = 8.dp)
-                            .width(168.dp)
+                            .fillMaxWidth()
                             .height(205.dp),
                         state = state,
                         cardIndex = index,
@@ -196,9 +197,9 @@ fun SearchLine(
             Icon(
                 Icons.Outlined.Clear,
                 contentDescription = stringResource(R.string.clear_search_line),
-                modifier = Modifier.clickable(interactionSource = remember {
-                    MutableInteractionSource()
-                }, indication = rememberRipple(bounded = false), onClick = clear)
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(bounded = false), onClick = clear)
             )
         },
         placeholder = { Text(text = stringResource(R.string.enter_name_of_pic)) },
@@ -220,10 +221,6 @@ fun ImageCard(
     onAction: (GalleryAction) -> Unit,
     selectedTab: Tab
 ) {
-    var buttonState by remember {
-        mutableStateOf(false)
-    }
-
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(5.dp),
@@ -234,11 +231,13 @@ fun ImageCard(
         ) {
             Box(
                 modifier = Modifier
-                    .size(168.dp),
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
+                        .clip(RoundedCornerShape(8.dp))
                         .background(colorResource(R.color.canvas_color))
 
                 ) {}//на этом месте картинка
@@ -269,54 +268,10 @@ fun ImageCard(
                     text = state.imageCards[cardIndex].title,
                     modifier = Modifier
                         .padding(4.dp)
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
+                        .weight(1f),
+                    style = MaterialTheme.typography.bodyMedium
                 )
-                Box()
-                {
-                    IconButton(onClick = { buttonState = true }) {
-                        Icon(
-                            painter = painterResource(R.drawable.baseline_more_horiz_24),
-                            contentDescription = stringResource(R.string.openDropDown_menu)
-                        )
-                    }
-
-                    DropdownMenu(
-                        expanded = buttonState,
-                        onDismissRequest = { buttonState = false },
-                        modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh)
-
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(
-                                stringResource(R.string.load_pic_to_device),
-                                fontSize = 10.sp,
-                                modifier = Modifier
-                                    .clickable(onClick = {})
-                                    .padding(horizontal = 10.dp)
-                            )
-                            if (selectedTab.ordinal == Tab.MY_PICTURES.ordinal) {
-                                Text(
-                                    stringResource(R.string.publish_pic),
-                                    fontSize = 10.sp,
-                                    modifier = Modifier
-                                        .clickable(onClick = {})
-                                        .padding(horizontal = 10.dp)
-                                )
-                                Text(
-                                    stringResource(R.string.delete_pic),
-                                    fontSize = 10.sp,
-                                    modifier = Modifier
-                                        .clickable(onClick = {})
-                                        .padding(horizontal = 10.dp)
-                                )
-                            }
-                        }
-
-
-                    }
-                }
-
+                DropDownMenuImage(selectedTab = selectedTab)
 
             }
 
@@ -327,13 +282,70 @@ fun ImageCard(
 }
 
 @Composable
+fun DropDownMenuImage(
+    modifier: Modifier = Modifier,
+    selectedTab: Tab
+) {
+    var buttonState by remember {
+        mutableStateOf(false)
+    }
+    Box {
+        IconButton(
+            onClick = { buttonState = true },
+            modifier = Modifier
+                .size(32.dp)
+                .padding(4.dp)
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.baseline_more_horiz_24),
+                contentDescription = stringResource(R.string.openDropDown_menu)
+            )
+        }
+
+        DropdownMenu(
+            expanded = buttonState,
+            onDismissRequest = { buttonState = false },
+            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh)
+
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    stringResource(R.string.load_pic_to_device),
+                    fontSize = 10.sp,
+                    modifier = Modifier
+                        .clickable(onClick = {})
+                        .padding(horizontal = 10.dp)
+                )
+                if (selectedTab.ordinal == Tab.MY_PICTURES.ordinal) {
+                    Text(
+                        stringResource(R.string.publish_pic),
+                        fontSize = 10.sp,
+                        modifier = Modifier
+                            .clickable(onClick = {})
+                            .padding(horizontal = 10.dp)
+                    )
+                    Text(
+                        stringResource(R.string.delete_pic),
+                        fontSize = 10.sp,
+                        modifier = Modifier
+                            .clickable(onClick = {})
+                            .padding(horizontal = 10.dp)
+                    )
+                }
+            }
+
+
+        }
+    }
+}
+
+@Composable
 fun IconFavorite(
     isLiked: Boolean,
     onAction: (GalleryAction) -> Unit,
     selectedTab: Tab,
     cardIndex: Int
 ) {
-
     IconToggleButton(
         checked = isLiked,
         onCheckedChange = {
