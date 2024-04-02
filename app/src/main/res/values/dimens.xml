@@ -19,5 +19,5 @@
     <dimen name="logo_padding">128dp</dimen>
     <dimen name="email_password_padding">16dp</dimen>
     <dimen name="enter_register_padding">16dp</dimen>
-
+    <dimen name="submit_register">36dp</dimen>
 </resources>

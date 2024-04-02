@@ -3,24 +3,34 @@ package com.dz.bmstu_trade.ui.auth.signin
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
+import androidx.compose.ui.text.input.TextFieldValue
+import com.dz.bmstu_trade.navigation.Routes
 
 
 @Composable
 fun SignInScreen(navController: NavHostController, onSignIn: () -> Unit) {
-    var email by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf(TextFieldValue()) }
     var password by remember { mutableStateOf("") }
+    var passwordVisibility by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -49,6 +59,16 @@ fun SignInScreen(navController: NavHostController, onSignIn: () -> Unit) {
                 onValueChange = { email = it },
                 label = { Text(text = stringResource(R.string.Email)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
+                trailingIcon = {
+                    if (email.text.isNotEmpty()) {
+                        IconButton(onClick = { email = TextFieldValue() }) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_clean_field_20),
+                                contentDescription = "Clear text",
+                            )
+                        }
+                    }
+                },
             )
 
             OutlinedTextField(
@@ -57,6 +77,24 @@ fun SignInScreen(navController: NavHostController, onSignIn: () -> Unit) {
                 onValueChange = { password = it },
                 label = { Text(text = stringResource(R.string.Password)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Password
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { /* Handle done action if needed */ }
+                ),
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                        Icon(
+                            painter = if (passwordVisibility) painterResource(R.drawable.password_shown)
+                            else painterResource(R.drawable.password_not_shown),
+                            contentDescription = stringResource(R.string.show_password_icon_description)
+                        )
+                    }
+                },
+                visualTransformation = if (passwordVisibility) VisualTransformation.None
+                else PasswordVisualTransformation()
             )
         }
 
@@ -80,7 +118,7 @@ fun SignInScreen(navController: NavHostController, onSignIn: () -> Unit) {
 
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { /* Handle registration button click */ },
+                    onClick = { navController.navigate(Routes.SIGN_UP.value) },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.surface,
                         contentColor = MaterialTheme.colorScheme.primary
