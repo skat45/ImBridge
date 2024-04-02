@@ -33,12 +33,12 @@ fun MainNavHost(
         navigation(startDestination = Routes.HOME_ROOT.value, route = Routes.HOME.value) {
             composable(Routes.HOME_ROOT.value) { HomeScreen(mainNavController) }
             composable(Routes.DEV_MAN_CONNECT.value) { DeviceManualConnectScreen(mainNavController) }
+            composable(Routes.CANVAS.value) { CanvasScreen(mainNavController) }
         }
         navigation(startDestination = Routes.SETTINGS_ROOT.value, route = Routes.SETTINGS.value) {
             composable(Routes.SETTINGS_ROOT.value) { SettingsScreen(mainNavController) }
             composable(Routes.SETTINGS_LANGUAGE.value) { SettingsLanguage(mainNavController) }
         }
         composable(Routes.GALLERY.value) { GalleryScreen(mainNavController) }
-        composable(Routes.CANVAS.value) { CanvasScreen(mainNavController) }
     }
 }

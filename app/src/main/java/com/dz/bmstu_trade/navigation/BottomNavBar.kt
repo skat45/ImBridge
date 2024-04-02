@@ -48,7 +48,8 @@ fun BottomNavigationBar(navController: NavHostController) {
             NavigationBarItem(
                 icon = { Icon(item.icon, contentDescription = null) },
                 label = { Text(item.title) },
-                selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                selected = (currentDestination?.hierarchy?.any { it.route == item.route } == true)
+                        or (item.route == Routes.CANVAS.value),
                 onClick = {
                     navController.navigate(item.route) {
                         launchSingleTop = true
