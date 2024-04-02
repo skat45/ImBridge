@@ -32,9 +32,21 @@
     <string name="arrow_back_icon_description">Кнопка вернуться на предыдущий экран</string>
     <string name="show_password_icon_description">Show/hide password</string>
     <string name="wi_fi_icon_description">Иконка Wi-Fi</string>
-    <string name="Turn_on_darkTheme">Включить темную тему</string>
-    <string name="Exit_from_account">Выйти из аккаунта</string>
-    <string name="Change_language">Сменить язык</string>
+    <string name="turn_on_darkTheme">Включить темную тему</string>
+    <string name="exit_from_account">Выйти из аккаунта</string>
+    <string name="change_language">Сменить язык</string>
+    <string name="community">Сообщество</string>
+    <string name="favorite">Избранное</string>
+    <string name="my_pic">Мои рисунки</string>
+    <string name="enter_name_of_pic">Введите название рисунка</string>
+    <string name="openDropDown_menu">Открыть выпадающий список</string>
+    <string name="load_pic_to_device">Загрузить картинку на устройство</string>
+    <string name="publish_pic">Опубликовать рисунок</string>
+    <string name="delete_pic">Удалить рисунок</string>
+    <string name="create_new_pic">Создать новый рисунок</string>
+    <string name="add_to_fav">Добавить в избранное</string>
+    <string name="delete_from_fav">Удалить из избранного</string>
+    <string name="clear_search_line">Отчистить строку поиска</string>
     <string name="canvas_title">Холст</string>
     <string name="input_pic_name">Введите название рисунка</string>
     <string name="zoom_out_button_description">Отдаление от холста</string>
@@ -60,5 +72,4 @@
     <string name="naming_top_bar_register">Регистрация</string>
     <string name="subbmit_Password">Подтвердите пароль</string>
     <string name="clear_text">Очистить текстовое поле</string>
-
 </resources>

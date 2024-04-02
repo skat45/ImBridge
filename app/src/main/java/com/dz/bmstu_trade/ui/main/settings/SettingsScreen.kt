@@ -102,11 +102,11 @@ private fun SelectLanguageItem(
         ) {
             Icon(
                 painter = painterResource(R.drawable.baseline_language_24),
-                contentDescription = stringResource(R.string.Change_language),
+                contentDescription = stringResource(R.string.change_language),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                text = stringResource(R.string.Change_language),
+                text = stringResource(R.string.change_language),
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.padding(horizontal = 14.dp)
             )
@@ -114,7 +114,7 @@ private fun SelectLanguageItem(
         }
         Icon(
             imageVector = Icons.Rounded.KeyboardArrowRight,
-            contentDescription = stringResource(R.string.Change_language),
+            contentDescription = stringResource(R.string.change_language),
             modifier = Modifier.padding(horizontal = 16.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -138,7 +138,7 @@ private fun ChangeThemeItem(
         Row(modifier = Modifier.weight(1f)) {
             Spacer(modifier = Modifier.width((24 + 16).dp))
             Text(
-                text = stringResource(R.string.Turn_on_darkTheme),
+                text = stringResource(R.string.turn_on_darkTheme),
                 modifier = Modifier.padding(horizontal = 14.dp),
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Medium
@@ -175,7 +175,7 @@ private fun ExitFromAccountItem(
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer)
         ) {
             Text(
-                text = stringResource(R.string.Exit_from_account),
+                text = stringResource(R.string.exit_from_account),
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Medium
             )

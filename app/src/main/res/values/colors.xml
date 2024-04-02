@@ -8,4 +8,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="vk_blue">#FF0077FF</color>
+    <color name="canvas_color">#FF49454F</color>
 </resources>
