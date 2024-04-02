@@ -28,24 +28,30 @@ import kotlin.math.max
 @Composable
 fun DrawingGrid(
     modifier: Modifier = Modifier,
-    drawing: MutableState<Drawing> = remember {
-        mutableStateOf(Drawing())
+    picture: MutableState<Picture> = remember {
+        mutableStateOf(Picture())
     },
     padding: Dp = 8.dp,
     gridCellsColor: Color = Color.Black,
     gridLinesColor: Color = Color.LightGray,
     selectedColor: MutableState<Color>,
-    scale: MutableState<Float> = mutableFloatStateOf(1f),
-    offset: MutableState<Offset> = mutableStateOf(Offset.Zero),
-    eraseMode: MutableState<Boolean> = mutableStateOf(false),
-    reflectHorizontalMode: MutableState<Boolean> = mutableStateOf(false),
-    reflectVerticalMode: MutableState<Boolean> = mutableStateOf(false),
-    dragMode: MutableState<Boolean> = mutableStateOf(false),
-    onUpdateDrawing: (Drawing) -> Unit,
+    scale: MutableState<Float> = remember {
+        mutableFloatStateOf(1f)
+    },
+    offset: MutableState<Offset> = remember {
+        mutableStateOf(Offset.Zero)
+    },
+    interactMode: MutableState<InteractMode> = remember {
+        mutableStateOf(InteractMode.DrawState)
+    },
+    drawMode: MutableState<DrawMode> = remember {
+        mutableStateOf(DrawMode.NoReflect)
+    },
+    onUpdateDrawing: (Picture) -> Unit,
 ) {
-    val aspectRatio = drawing.value.columns.toFloat() / drawing.value.rows
+    val aspectRatio = picture.value.columns.toFloat() / picture.value.rows
 
-    with(drawing.value) {
+    with(picture.value) {
         BoxWithConstraints(
             modifier = modifier
                 .fillMaxWidth()
@@ -58,88 +64,107 @@ fun DrawingGrid(
                 .size(cellSize * columns, cellSize * rows)
                 .clipToBounds()
                 .pointerInput(Unit) {
-                    detectTapGestures { offset ->
-                        val updateDrawing = drawing.value.copy()
-                        var reflectedPosition: Offset? = null
-                        if (reflectHorizontalMode.value) {
-                            reflectedPosition = Offset(size.width - offset.x, offset.y)
-                        }
-                        if (reflectVerticalMode.value) {
-                            reflectedPosition = Offset(offset.x, size.height - offset.y)
-                        }
-                        if (reflectedPosition != null) {
-                            val xReflected = (reflectedPosition.x / cellSize.toPx()).toInt()
-                            val yReflected = (reflectedPosition.y / cellSize.toPx()).toInt()
-                            updateDrawing.updateCell(
-                                xReflected,
-                                yReflected,
-                                if (!eraseMode.value) selectedColor.value else gridCellsColor
-                            )
-                        }
-                        val x = (offset.x / cellSize.toPx() / scale.value).toInt()
-                        val y = (offset.y / cellSize.toPx() / scale.value).toInt()
-                        updateDrawing.updateCell(
-                            x,
-                            y,
-                            if (!eraseMode.value) selectedColor.value else gridCellsColor
-                        )
-                        drawing.value = updateDrawing
-                        onUpdateDrawing(drawing.value)
-                    }
-                }
-                .pointerInput(Unit) {
-                    detectDragGestures(onDragEnd = {
-                        onUpdateDrawing(drawing.value)
-                    }) { change, dragAmount ->
-                        if (dragMode.value) {
-                            val originalWidth = maxWidth.toPx()
-                            val originalHeight = maxHeight.toPx()
-                            val scaledWidth = originalWidth / scale.value
-                            val scaledHeight = originalHeight / scale.value
-
-                            val maxOffsetX = max(0f, originalWidth - scaledWidth)
-                            val maxOffsetY = max(0f, originalHeight - scaledHeight)
-                            val newOffsetX =
-                                (offset.value.x + dragAmount.x).coerceIn(-maxOffsetX, 0f)
-                            val newOffsetY =
-                                (offset.value.y + dragAmount.y).coerceIn(-maxOffsetY, 0f)
-
-                            offset.value = Offset(newOffsetX, newOffsetY)
-                            change.consume()
-                        } else {
-                            val updateDrawing = drawing.value.copy()
+                    detectTapGestures { tapOffset ->
+                        if (interactMode.value != InteractMode.DragState) {
+                            val updateDrawing = picture.value.copy()
                             val positions = mutableListOf<Offset>()
-                            positions.add(change.position)
-                            if (reflectHorizontalMode.value) {
-                                positions.add(
-                                    Offset(
-                                        size.width - change.position.x,
-                                        change.position.y
+                            positions.add(tapOffset)
+                            when (drawMode.value) {
+                                DrawMode.ReflectHorizontal -> {
+                                    positions.add(Offset(size.width - tapOffset.x, tapOffset.y))
+                                }
+
+                                DrawMode.ReflectVertical -> {
+                                    positions.add(
+                                        Offset(
+                                            tapOffset.x,
+                                            size.height - tapOffset.y
+                                        )
                                     )
-                                )
-                            }
-                            if (reflectVerticalMode.value) {
-                                positions.add(
-                                    Offset(
-                                        change.position.x,
-                                        size.height - change.position.y
-                                    )
-                                )
+                                }
+
+                                DrawMode.NoReflect -> {}
                             }
                             for (position in positions) {
-                                val x =
-                                    ((position.x - offset.value.x) / cellSize.toPx() / scale.value).toInt()
-                                val y =
-                                    ((position.y - offset.value.y) / cellSize.toPx() / scale.value).toInt()
+                                val x = ((position.x - offset.value.x)
+                                            / cellSize.toPx()
+                                            / scale.value).toInt()
+                                val y = ((position.y - offset.value.y)
+                                            / cellSize.toPx()
+                                            / scale.value).toInt()
                                 if (x in 0 until columns && y in 0 until rows) {
                                     updateDrawing.updateCell(
                                         x,
                                         y,
-                                        if (!eraseMode.value) selectedColor.value else gridCellsColor
+                                        if (interactMode.value == InteractMode.DrawState)
+                                            selectedColor.value
+                                        else
+                                            gridCellsColor
                                     )
                                 }
                             }
-                            drawing.value = updateDrawing
+                            picture.value = updateDrawing
+                            onUpdateDrawing(picture.value)
+                        }
+                    }
+                }
+                .pointerInput(Unit) {
+                    detectDragGestures(onDragEnd = {
+                        onUpdateDrawing(picture.value)
+                    }) { change, dragAmount ->
+                        if (interactMode.value == InteractMode.DragState) {
+                            val scaledWidth = maxWidth.toPx() / scale.value
+                            val scaledHeight = maxHeight.toPx() / scale.value
+                            val maxOffsetX = max(0f, maxWidth.toPx() - scaledWidth)
+                            val maxOffsetY = max(0f, maxHeight.toPx() - scaledHeight)
+                            val newOffsetX =
+                                (offset.value.x + dragAmount.x).coerceIn(-maxOffsetX, 0f)
+                            val newOffsetY =
+                                (offset.value.y + dragAmount.y).coerceIn(-maxOffsetY, 0f)
+                            offset.value = Offset(newOffsetX, newOffsetY)
+                            change.consume()
+                        } else {
+                            val updateDrawing = picture.value.copy()
+                            val positions = mutableListOf<Offset>()
+                            positions.add(change.position)
+                            when (drawMode.value) {
+                                DrawMode.ReflectHorizontal -> {
+                                    positions.add(
+                                        Offset(
+                                            size.width - change.position.x,
+                                            change.position.y
+                                        )
+                                    )
+                                }
+                                DrawMode.ReflectVertical -> {
+                                    positions.add(
+                                        Offset(
+                                            change.position.x,
+                                            size.height - change.position.y
+                                        )
+                                    )
+                                }
+                                DrawMode.NoReflect -> {}
+                            }
+                            for (position in positions) {
+                                val x = ((position.x - offset.value.x) /
+                                            cellSize.toPx() /
+                                            scale.value).toInt()
+                                val y = ((position.y - offset.value.y) /
+                                            cellSize.toPx() /
+                                            scale.value).toInt()
+                                if (x in 0 until columns && y in 0 until rows) {
+                                    updateDrawing.updateCell(
+                                        x,
+                                        y,
+                                        if (interactMode.value == InteractMode.DrawState)
+                                            selectedColor.value
+                                        else
+                                            gridCellsColor
+                                    )
+                                }
+                            }
+                            picture.value = updateDrawing
                         }
                     }
                 }
@@ -158,7 +183,6 @@ fun DrawingGrid(
                             )
                         }
                     }
-
                     for (i in 0..rows) {
                         drawLine(
                             gridLinesColor,
@@ -167,7 +191,6 @@ fun DrawingGrid(
                             strokeWidth = 0.5.dp.toPx()
                         )
                     }
-
                     for (j in 0..columns) {
                         drawLine(
                             gridLinesColor,
@@ -192,14 +215,15 @@ fun DrawScope.drawCell(offset: Offset, size: Float, color: Color) {
     )
 }
 
-sealed class InteractMode{
+sealed class InteractMode {
     object DrawState : InteractMode()
     object EraseState : InteractMode()
     object DragState : InteractMode()
 }
 
-sealed class DrawMode{
+sealed class DrawMode {
+    object NoReflect : DrawMode()
     object ReflectHorizontal : DrawMode()
     object ReflectVertical : DrawMode()
-    object NoReflect : DrawMode()
+
 }

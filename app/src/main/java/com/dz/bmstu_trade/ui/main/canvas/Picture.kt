@@ -2,14 +2,14 @@ package com.dz.bmstu_trade.ui.main.canvas
 
 import androidx.compose.ui.graphics.Color
 
-data class Drawing(
+data class Picture(
     val rows: Int = 16,
     val columns: Int = 16,
     var pixelColors: List<Color> = List(rows * columns) { Color.Black }
 ) {
     companion object{
-        fun clear(rows: Int, columns: Int,color: Color): Drawing {
-            return Drawing(rows, columns, List(rows * columns) { color })
+        fun clear(rows: Int, columns: Int,color: Color): Picture {
+            return Picture(rows, columns, List(rows * columns) { color })
         }
     }
 

@@ -1,19 +1,19 @@
 package com.dz.bmstu_trade.ui.main.canvas
 
-class DrawingHistory(drawing: Drawing) {
-    val undoStack: MutableList<Drawing> = mutableListOf()
-    val redoStack: MutableList<Drawing> = mutableListOf()
+class DrawingHistory(picture: Picture) {
+    val undoStack: MutableList<Picture> = mutableListOf()
+    val redoStack: MutableList<Picture> = mutableListOf()
 
     init {
-        this.pushState(drawing)
+        this.pushState(picture)
     }
 
-    fun pushState(state: Drawing) {
+    fun pushState(state: Picture) {
         undoStack.add(state)
         redoStack.clear()
     }
 
-    fun undo(): Drawing? {
+    fun undo(): Picture? {
         if (undoStack.isNotEmpty()) {
             redoStack.add(undoStack.removeLast())
             return undoStack.lastOrNull()
@@ -21,7 +21,7 @@ class DrawingHistory(drawing: Drawing) {
         return null
     }
 
-    fun redo(): Drawing? {
+    fun redo(): Picture? {
         if (redoStack.isNotEmpty()) {
             val state = redoStack.removeLast()
             undoStack.add(state)
