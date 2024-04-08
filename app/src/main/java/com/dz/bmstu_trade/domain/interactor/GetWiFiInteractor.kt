@@ -1,12 +1,12 @@
 package com.dz.bmstu_trade.domain.interactor
 
-import com.dz.bmstu_trade.data.model.WiFiNetwork
+import android.net.wifi.ScanResult
 
 interface GetWiFiInteractor {
     fun getRequiredPermissions(): Array<String>
 
-    fun subscribeToWiFiList(
-        onUpdate: (List<WiFiNetwork>) -> Unit,
+    suspend fun subscribeToWiFiList(
+        onUpdate: (List<ScanResult>) -> Unit,
         onFailure: (Throwable) -> Unit
     )
 

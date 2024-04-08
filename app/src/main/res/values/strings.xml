@@ -3,6 +3,7 @@
     <string name="home_label">Главная</string>
     <string name="gallery_label">Галлерея</string>
     <string name="settings_label">Настройки</string>
+    <string name="to_settings_label">В настройки</string>
     <string name="manual_connection_top_bar_title">Подключение вручную</string>
     <string name="invalid_len_device_code_error">Код устройства должен содержать ровно 4 символа</string>
     <string name="code_location_label">Код находится на крышке устройства</string>
@@ -21,6 +22,14 @@
     <string name="too_long_device_name_error">Имя не может быть длинее 20 символов</string>
     <string name="apply_label">Применить</string>
     <string name="connect_to_label">Подключение к сети</string>
+    <string name="no_access_to_location_label">Нет доступа к местоположению</string>
+    <string name="update_label">Обновить</string>
+    <string name="devise_doesnt_support_5g_label">5G, не поддерживается матрицей</string>
+    <string name="no_wifi_detected_label">Не найдено ни одной WiFi сети, идёт поиск</string>
+    <string name="required_access_to_location_old_device_label">Требуется доступ к местоположению. Пожалуйста, убедитесть, что он есть</string>
+    <string name="cancel_label">Отмена</string>
+    <string name="required_access_to_fine_location_wifi_list_label">Для просмотра списка WiFi сетей нужен доступ к точной геолокации</string>
+    <string name="access_permission_title">Разрешение доступа</string>
 
 
 

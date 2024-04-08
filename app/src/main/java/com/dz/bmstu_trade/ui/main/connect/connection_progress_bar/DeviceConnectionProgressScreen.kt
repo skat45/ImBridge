@@ -1,9 +1,7 @@
-@file:Suppress("UNUSED_EXPRESSION")
-
 package com.dz.bmstu_trade.ui.main.connect.connection_progress_bar
 
 import android.annotation.SuppressLint
-import android.content.Context
+import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,7 +28,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
+import com.dz.bmstu_trade.ui.main.connect.net_errors.NoWiFiConnectionLabel
 import com.dz.bmstu_trade.ui.main.connect.device_code.AddDeviceViewModel
+import com.dz.bmstu_trade.ui.main.connect.permission_dialog.GoToSettingsButtonOnClick
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +40,6 @@ fun ConnectionProgressScreen(
     codeViewModel: AddDeviceViewModel,
     wifiViewModel: WifiViewModel,
     onConnectedToDevice: () -> Unit,
-    context: Context
 ) {
     val isWifiEnabled by wifiViewModel.wiFiIsEnabled.collectAsState()
     val connectedToDevice by wifiViewModel.connectedToDevice.collectAsState()
@@ -91,14 +91,16 @@ fun ConnectionProgressScreen(
                     )
                 }
                 else {
+                    NoWiFiConnectionLabel()
+                }
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                     Text(
-                        text = "WiFi выключен, пожалуйста, включите его",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onErrorContainer,
-                        modifier = Modifier
-                            .padding(top = dimensionResource(R.dimen.spinner_description_label_padding)),
-                        textAlign = TextAlign.Center
+                        text = stringResource(R.string.required_access_to_location_old_device_label),
+                        textAlign = TextAlign.Center,
                     )
+                    Button(onClick = { GoToSettingsButtonOnClick() }) {
+                        Text(text = stringResource(R.string.to_settings_label))
+                    }
                 }
             }
         }

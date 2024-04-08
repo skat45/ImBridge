@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,7 +15,6 @@ import com.dz.bmstu_trade.ui.main.connect.connection_progress_bar.WifiViewModel
 import com.dz.bmstu_trade.ui.main.connect.device_code.AddDeviceViewModel
 import com.dz.bmstu_trade.ui.main.connect.device_code.DeviceManualConnectScreen
 import com.dz.bmstu_trade.ui.main.connect.wifi_picker.DeviceChooseWiFiNetworkScreen
-import com.dz.bmstu_trade.ui.main.connect.wifi_picker.WiFiPickerViewModel
 import com.dz.bmstu_trade.ui.main.gallery.GalleryScreen
 import com.dz.bmstu_trade.ui.main.home.HomeScreen
 import com.dz.bmstu_trade.ui.main.setlanguage.SettingsLanguage
@@ -45,8 +43,9 @@ fun MainNavHost(
                 DeviceManualConnectScreen(
                     mainNavController,
                     onEnterCode = {
-//                        mainNavController.navigate("home/connectingProgress")
-                        mainNavController.navigate("home/chooseWiFi")
+                        mainNavController.navigate("home/connectingProgress")
+//                        mainNavController.navigate("home/chooseWiFi")
+                        // Комментируем для того, чтобы иметь возможность перескочить через экан в отсутствии девайса с wifi
                     },
                     codeViewModel
                 )
@@ -55,18 +54,14 @@ fun MainNavHost(
                 ConnectionProgressScreen(
                     mainNavController,
                     codeViewModel,
-                    wifiViewModel = WifiViewModel(context = LocalContext.current, codeViewModel = codeViewModel),
+                    wifiViewModel = WifiViewModel(codeViewModel = codeViewModel),
                     onConnectedToDevice = {
                         mainNavController.navigate("home/chooseWiFi")
                     },
-                    context = LocalContext.current
                 )
             }
             composable(Routes.CHOOSE_WIFI.value) {
-                DeviceChooseWiFiNetworkScreen(
-                    navController = mainNavController,
-                    viewModel = WiFiPickerViewModel(),
-                )
+                DeviceChooseWiFiNetworkScreen(navController = mainNavController)
             }
         }
         navigation(startDestination = Routes.SETTINGS_ROOT.value, route = Routes.SETTINGS.value) {

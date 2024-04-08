@@ -15,7 +15,7 @@ import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import com.dz.bmstu_trade.data.model.WiFiNetwork
 
-// Да, способ старый, но гугловские ничего пока не предложили взамен
+// Да, способ помечен как старый, но гугловские ничего нового пока не предложили
 @SuppressLint("UnspecifiedRegisterReceiverFlag")
 class GetWiFiListInteractor(context: Context, appContext: Context) {
     var result: MutableList<WiFiNetwork> = mutableListOf()

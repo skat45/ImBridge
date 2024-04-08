@@ -69,4 +69,5 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("com.github.germainkevinbusiness:CollapsingTopBarCompose:1.2.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 }

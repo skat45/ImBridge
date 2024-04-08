@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.dz.bmstu_trade.app_context_holder.AppContextHolder
 import com.dz.bmstu_trade.navigation.ImBridgeApp
 import com.dz.bmstu_trade.ui.theme.BMSTU_TradeTheme
 
@@ -12,6 +13,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BMSTU_TradeTheme {
+                AppContextHolder.context = this
                 ImBridgeApp()
             }
         }
