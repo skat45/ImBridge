@@ -1,8 +1,10 @@
 package com.dz.bmstu_trade.ui.main.connect.connection_progress_bar
 
+import android.content.Context
+import android.net.wifi.WifiManager
 import androidx.lifecycle.ViewModel
+import com.dz.bmstu_trade.app_context_holder.AppContextHolder
 import com.dz.bmstu_trade.net.connect_device_wifi.connectToDeviceWiFi
-import com.dz.bmstu_trade.net.wifi.wifiManager
 import com.dz.bmstu_trade.ui.main.connect.device_code.AddDeviceViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -13,6 +15,8 @@ import kotlinx.coroutines.launch
 
 @OptIn(DelicateCoroutinesApi::class)
 class WifiViewModel(private val codeViewModel: AddDeviceViewModel) : ViewModel() {
+
+    private val wifiManager = AppContextHolder.context.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
     private val _connectedToDevice = MutableStateFlow(false)
     val connectedToDevice: StateFlow<Boolean> = _connectedToDevice

@@ -11,11 +11,11 @@ import android.net.wifi.WifiManager
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import com.dz.bmstu_trade.app_context_holder.AppContextHolder.context
-import com.dz.bmstu_trade.net.wifi.wifiManager
 
 class GetWiFiInteractorImpl: GetWiFiInteractor {
 
     private var wifiScanReceiver: BroadcastReceiver? = null
+    private val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
     override fun getRequiredPermissions(): Array<String> {
         return arrayOf(
@@ -55,6 +55,10 @@ class GetWiFiInteractorImpl: GetWiFiInteractor {
 
     override fun unsubscribeFromWiFiList() {
         context.unregisterReceiver(wifiScanReceiver)
+    }
+
+    override fun getWiFiManager(): WifiManager {
+        return wifiManager
     }
 
 }

@@ -1,11 +1,13 @@
 package com.dz.bmstu_trade.ui.main.connect.wifi_picker
 
+import android.content.Context
 import android.net.wifi.ScanResult
+import android.net.wifi.WifiManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dz.bmstu_trade.app_context_holder.AppContextHolder
 import com.dz.bmstu_trade.domain.interactor.GetWiFiInteractor
 import com.dz.bmstu_trade.domain.interactor.GetWiFiInteractorImpl
-import com.dz.bmstu_trade.net.wifi.wifiManager
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
@@ -18,6 +20,7 @@ import kotlinx.coroutines.launch
 @OptIn(DelicateCoroutinesApi::class)
 class WiFiPickerViewModel: ViewModel() {
     private val getWiFiInteractor: GetWiFiInteractor = GetWiFiInteractorImpl()
+    private val wifiManager: WifiManager = getWiFiInteractor.getWiFiManager()
 
     private val _requiredPermissions = MutableStateFlow<Array<String>>(emptyArray())
     val requiredPermissions: StateFlow<Array<String>> = _requiredPermissions

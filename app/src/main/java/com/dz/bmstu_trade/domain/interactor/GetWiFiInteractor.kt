@@ -1,6 +1,7 @@
 package com.dz.bmstu_trade.domain.interactor
 
 import android.net.wifi.ScanResult
+import android.net.wifi.WifiManager
 
 interface GetWiFiInteractor {
     fun getRequiredPermissions(): Array<String>
@@ -11,4 +12,5 @@ interface GetWiFiInteractor {
     )
 
     fun unsubscribeFromWiFiList()
+    fun getWiFiManager(): WifiManager
 }
