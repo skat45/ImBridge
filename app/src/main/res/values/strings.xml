@@ -4,6 +4,14 @@
     <string name="gallery_label">Галлерея</string>
     <string name="settings_label">Настройки</string>
     <string name="to_settings_label">В настройки</string>
+    <string name="turn_on_display">Включить дисплей</string>
+    <string name="brightness">Яркость</string>
+    <string name="watch_other">смотреть все</string>
+    <string name="change_picture">Сменить рисунок</string>
+    <string name="device_name_text_field">Имя устройства</string>
+    <string name="add_new_device">Добавить новое устройство</string>
+    <string name="qr_code_connect">Подключить по QR-коду</string>
+    <string name="manual_connect">Подключить вручную</string>
     <string name="manual_connection_top_bar_title">Подключение вручную</string>
     <string name="invalid_len_device_code_error">Код устройства должен содержать ровно 4 символа</string>
     <string name="code_location_label">Код находится на крышке устройства</string>
@@ -32,13 +40,47 @@
     <string name="access_permission_title">Разрешение доступа</string>
 
 
-
     <string name="arrow_back_icon_description">Кнопка вернуться на предыдущий экран</string>
     <string name="show_password_icon_description">Show/hide password</string>
     <string name="wi_fi_icon_description">Иконка Wi-Fi</string>
-
-  
-    <string name="Turn_on_darkTheme">Включить темную тему</string>
-    <string name="Exit_from_account">Выйти из аккаунта</string>
-    <string name="Change_language">Сменить язык</string>
+    <string name="turn_on_darkTheme">Включить темную тему</string>
+    <string name="exit_from_account">Выйти из аккаунта</string>
+    <string name="change_language">Сменить язык</string>
+    <string name="community">Сообщество</string>
+    <string name="favorite">Избранное</string>
+    <string name="my_pic">Мои рисунки</string>
+    <string name="enter_name_of_pic">Введите название рисунка</string>
+    <string name="openDropDown_menu">Открыть выпадающий список</string>
+    <string name="load_pic_to_device">Загрузить картинку на устройство</string>
+    <string name="publish_pic">Опубликовать рисунок</string>
+    <string name="delete_pic">Удалить рисунок</string>
+    <string name="create_new_pic">Создать новый рисунок</string>
+    <string name="add_to_fav">Добавить в избранное</string>
+    <string name="delete_from_fav">Удалить из избранного</string>
+    <string name="clear_search_line">Отчистить строку поиска</string>
+    <string name="canvas_title">Холст</string>
+    <string name="input_pic_name">Введите название рисунка</string>
+    <string name="zoom_out_button_description">Отдаление от холста</string>
+    <string name="zoom_in_button_description">Приближение к холсту</string>
+    <string name="drag_button_description">Включает режим перxемещения по холсту</string>
+    <string name="reflect_hor_button_description">Включает режим рисования с отражением от вертикальной оси</string>
+    <string name="reflect_ver_button_description">Включает режим рисования с отражением от горизонтальной оси</string>
+    <string name="save_drawing_button_description">Кнопка сохранения рисунка</string>
+    <string name="post_drawing_button_description">Кнопка публикации рисунка</string>
+    <string name="back_button_description">Вернуться на прошлый экран</string>
+    <string name="undo_button_description">Кнопка отката действия</string>
+    <string name="redo_button_description">Кнопка возобнавления действия</string>
+    <string name="draw_mode_button_description">Включение режима рисования</string>
+    <string name="erase_mode_button_description">Включение режима стирания</string>
+    <string name="clear_button_description">Очистка холста</string>
+    <string name="Logo">IMBRIDGE</string>
+    <string name="Email">e-mail</string>
+    <string name="Password">Пароль</string>
+    <string name="Login">Вход</string>
+    <string name="Register">Регистрация</string>
+    <string name="also_you_can">Также можно</string>
+    <string name="Log_in_with_VK_ID">Войти через VK ID</string>
+    <string name="naming_top_bar_register">Регистрация</string>
+    <string name="subbmit_Password">Подтвердите пароль</string>
+    <string name="clear_text">Очистить текстовое поле</string>
 </resources>
