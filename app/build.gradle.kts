@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
     val nav_version = "2.7.7"
 
     implementation("androidx.navigation:navigation-runtime-ktx:$nav_version")

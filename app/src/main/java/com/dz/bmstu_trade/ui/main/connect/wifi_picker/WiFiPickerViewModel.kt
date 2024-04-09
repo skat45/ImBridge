@@ -3,11 +3,13 @@ package com.dz.bmstu_trade.ui.main.connect.wifi_picker
 import android.content.Context
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dz.bmstu_trade.app_context_holder.AppContextHolder
 import com.dz.bmstu_trade.domain.interactor.GetWiFiInteractor
 import com.dz.bmstu_trade.domain.interactor.GetWiFiInteractorImpl
+import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.collect.ImmutableList
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
@@ -28,8 +30,8 @@ class WiFiPickerViewModel: ViewModel() {
     private val _permissionsGranted = MutableStateFlow(false)
     val permissionsGranted: StateFlow<Boolean> = _permissionsGranted
 
-    private val _networks = MutableStateFlow<List<ScanResult>>(mutableListOf())
-    val networks: StateFlow<List<ScanResult>> = _networks
+    private val _networks = MutableStateFlow<ImmutableList<ScanResult>>(ImmutableList.of())
+    val networks: StateFlow<ImmutableList<ScanResult>> = _networks
 
     private val _wiFiIsEnabled = MutableStateFlow(false)
     val wiFiIsEnabled: StateFlow<Boolean> = _wiFiIsEnabled
@@ -60,7 +62,9 @@ class WiFiPickerViewModel: ViewModel() {
             _permissionsGranted.value = true
             getWiFiInteractor.subscribeToWiFiList(
                 onUpdate = { it ->
-                    _networks.value = it.sortedByDescending { it.level }
+                    _networks.value = ImmutableList.copyOf(
+                        it.sortedByDescending { it.level }
+                    )
                 },
                 onFailure = {
 
