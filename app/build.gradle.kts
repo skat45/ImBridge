@@ -52,6 +52,12 @@ android {
 dependencies {
     implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
     val nav_version = "2.7.7"
+    val ktor_version = "2.3.9"
+
+    //ktor
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-websockets:$ktor_version")
 
     implementation("androidx.navigation:navigation-runtime-ktx:$nav_version")
     implementation("androidx.navigation:navigation-compose:$nav_version")
