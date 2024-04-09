@@ -10,6 +10,7 @@ import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
 import android.net.wifi.WifiNetworkSpecifier
 import android.os.Build
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import com.dz.bmstu_trade.app_context_holder.AppContextHolder
@@ -24,6 +25,7 @@ fun connectToDeviceWiFi(
     val password = "012345666"
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        Log.d("connectToDeviceWiFi", "WiFi connection new function started")
         val specifier = WifiNetworkSpecifier.Builder()
             .setSsid(ssid)
             .setWpa2Passphrase(password)
@@ -44,7 +46,7 @@ fun connectToDeviceWiFi(
         connectivityManager.requestNetwork(request, networkCallback)
     }
     else {
-
+        Log.d("connectToDeviceWiFi", "WiFi connection old function started")
         if(isConnectedTo(ssid, wifiManager)){ //see if we are already connected to the given ssid
             onConnected()
         }

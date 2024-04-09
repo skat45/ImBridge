@@ -52,7 +52,7 @@ import com.dz.bmstu_trade.ui.main.connect.permission_dialog.PermissionAlertDialo
 import com.germainkevin.collapsingtopbar.CollapsingTopBar
 import com.germainkevin.collapsingtopbar.CollapsingTopBarDefaults
 import com.germainkevin.collapsingtopbar.rememberCollapsingTopBarScrollBehavior
-import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.collect.ImmutableList
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
