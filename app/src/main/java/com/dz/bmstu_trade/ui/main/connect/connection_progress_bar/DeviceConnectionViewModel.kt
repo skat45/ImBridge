@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 @OptIn(DelicateCoroutinesApi::class)
 class WifiViewModel(private val codeViewModel: AddDeviceViewModel) : ViewModel() {
 
-    private val wifiManager = AppContextHolder.context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    private val wifiManager = AppContextHolder.getContext()?.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
     private val _connectedToDevice = MutableStateFlow(false)
     val connectedToDevice: StateFlow<Boolean> = _connectedToDevice

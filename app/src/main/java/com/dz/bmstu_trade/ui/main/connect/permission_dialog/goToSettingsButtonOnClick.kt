@@ -6,12 +6,12 @@ import android.provider.Settings
 import com.dz.bmstu_trade.app_context_holder.AppContextHolder
 
 fun GoToSettingsButtonOnClick() {
-    AppContextHolder.context.startActivity(
+    AppContextHolder.getContext()?.startActivity(
         Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             .setData(
                 Uri.fromParts(
                     "package",
-                    AppContextHolder.context.packageName.toString(),
+                    AppContextHolder.getContext()?.packageName.toString(),
                     null
                 )
             )

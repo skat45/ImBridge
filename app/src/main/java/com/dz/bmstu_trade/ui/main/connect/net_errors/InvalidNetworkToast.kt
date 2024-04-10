@@ -6,7 +6,7 @@ import com.dz.bmstu_trade.app_context_holder.AppContextHolder
 fun InvalidNetworkToast() {
     Toast
         .makeText(
-            AppContextHolder.context,
+            AppContextHolder.getContext(),
             "Вы не можете выбрать эту сеть",
             Toast.LENGTH_SHORT
         )

@@ -20,7 +20,7 @@ fun connectToDeviceWiFi(
     codeViewModel: AddDeviceViewModel,
     onConnected: () -> Unit
 ) {
-    val wifiManager = AppContextHolder.context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    val wifiManager = AppContextHolder.getContext()?.getSystemService(Context.WIFI_SERVICE) as WifiManager
     val ssid = "IMBRIDGE-" + codeViewModel.code.value.value
     val password = "012345666"
 
@@ -36,7 +36,7 @@ fun connectToDeviceWiFi(
             .setNetworkSpecifier(specifier)
             .build()
 
-        val connectivityManager = AppContextHolder.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager = AppContextHolder.getContext()?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
@@ -74,10 +74,12 @@ fun connectToDeviceWiFi(
 
 
 fun getWiFiConfig(ssid: String, wifiManager: WifiManager): WifiConfiguration? {
-    val wifiList= if (ActivityCompat.checkSelfPermission(
-            AppContextHolder.context,
-            ACCESS_FINE_LOCATION
-        ) == PERMISSION_GRANTED
+    val wifiList= if (AppContextHolder.getContext()?.let {
+            ActivityCompat.checkSelfPermission(
+                it,
+                ACCESS_FINE_LOCATION
+            )
+        } == PERMISSION_GRANTED
     ) {
         wifiManager.configuredNetworks
     } else {
