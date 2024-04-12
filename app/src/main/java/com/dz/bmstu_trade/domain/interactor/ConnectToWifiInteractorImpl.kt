@@ -108,7 +108,7 @@ class ConnectToWifiInteractorImpl(override val code: String) : ConnectToWifiInte
         return wifiManager.connectionInfo.ssid == "\"" + ssid + "\""
     }
 
-    private fun createWPAProfile(ssid: String,pass: String, wifiManager: WifiManager){
+    private fun createWPAProfile(ssid: String, pass: String, wifiManager: WifiManager) {
         val conf = WifiConfiguration()
         conf.SSID = "\"" + ssid + "\""
         conf.preSharedKey = "\"" + pass + "\""
