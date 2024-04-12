@@ -4,7 +4,8 @@ import android.content.Context
 import android.net.wifi.WifiManager
 import androidx.lifecycle.ViewModel
 import com.dz.bmstu_trade.app_context_holder.AppContextHolder
-import com.dz.bmstu_trade.net.connect_device_wifi.connectToDeviceWiFi
+import com.dz.bmstu_trade.domain.interactor.ConnectToWifiInteractor
+import com.dz.bmstu_trade.domain.interactor.ConnectToWifiInteractorImpl
 import com.dz.bmstu_trade.ui.main.connect.device_code.AddDeviceViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -14,7 +15,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @OptIn(DelicateCoroutinesApi::class)
-class WifiViewModel(private val codeViewModel: AddDeviceViewModel) : ViewModel() {
+class WifiViewModel(codeViewModel: AddDeviceViewModel) : ViewModel() {
+
+    private val connectToWifiInteractor: ConnectToWifiInteractor = ConnectToWifiInteractorImpl(codeViewModel.code.value.value)
 
     private val wifiManager = AppContextHolder.getContext()?.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
@@ -36,7 +39,7 @@ class WifiViewModel(private val codeViewModel: AddDeviceViewModel) : ViewModel()
                 checkWifiEnabled()
                 if (!lastWiFiState && _wiFiIsEnabled.value) { // Если WiFi был выключен и сейчас включили
                     lastWiFiState = true // Фиксируем включение
-                    connectToDeviceWiFi(codeViewModel) { // И пытаемся подключиться к сети
+                    connectToWifiInteractor.connect { // И пытаемся подключиться к сети
                         _connectedToDevice.value = true
                     }
                 }
@@ -50,7 +53,7 @@ class WifiViewModel(private val codeViewModel: AddDeviceViewModel) : ViewModel()
             while (true) {
                 delay(5000)
                 if (_wiFiIsEnabled.value && !_connectedToDevice.value)
-                    connectToDeviceWiFi(codeViewModel) {
+                    connectToWifiInteractor.connect {
                         _connectedToDevice.value = true
                     }
             }
