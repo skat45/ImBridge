@@ -26,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -49,6 +50,7 @@ fun ConnectionProgressScreen(
     if (connectedToDevice) {
         onConnectedToDevice()
     }
+    val context = LocalContext.current
 
     Column (
         modifier = Modifier
@@ -102,12 +104,12 @@ fun ConnectionProgressScreen(
                         textAlign = TextAlign.Center,
                     )
                     Button(onClick = {
-                        AppContextHolder.getContext()?.startActivity(
+                        context.startActivity(
                             Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                                 .setData(
                                     Uri.fromParts(
                                         "package",
-                                        AppContextHolder.getContext()?.packageName.toString(),
+                                        context.packageName.toString(),
                                         null
                                     )
                                 )
