@@ -1,7 +1,10 @@
 package com.dz.bmstu_trade.ui.main.connect.connection_progress_bar
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,9 +31,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
+import com.dz.bmstu_trade.app_context_holder.AppContextHolder
 import com.dz.bmstu_trade.ui.main.connect.net_errors.NoWiFiConnectionLabel
 import com.dz.bmstu_trade.ui.main.connect.device_code.AddDeviceViewModel
-import com.dz.bmstu_trade.ui.main.connect.permission_dialog.GoToSettingsButtonOnClick
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,7 +101,18 @@ fun ConnectionProgressScreen(
                         text = stringResource(R.string.required_access_to_location_old_device_label),
                         textAlign = TextAlign.Center,
                     )
-                    Button(onClick = { GoToSettingsButtonOnClick() }) {
+                    Button(onClick = {
+                        AppContextHolder.getContext()?.startActivity(
+                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                .setData(
+                                    Uri.fromParts(
+                                        "package",
+                                        AppContextHolder.getContext()?.packageName.toString(),
+                                        null
+                                    )
+                                )
+                        )
+                    }) {
                         Text(text = stringResource(R.string.to_settings_label))
                     }
                 }

@@ -46,7 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
-import com.dz.bmstu_trade.ui.main.connect.net_errors.InvalidNetworkToast
+import com.dz.bmstu_trade.ui.main.connect.net_errors.invalidNetworkToast
 import com.dz.bmstu_trade.ui.main.connect.net_errors.NoWiFiConnectionLabel
 import com.dz.bmstu_trade.ui.main.connect.permission_dialog.PermissionAlertDialog
 import com.germainkevin.collapsingtopbar.CollapsingTopBar
@@ -255,7 +255,7 @@ private fun WiFiItem(network: ScanResult) {
                     { /*TODO()*/ }
                 } else {
                     {
-                        InvalidNetworkToast()
+                        invalidNetworkToast()
                     }
                 },
                 interactionSource = remember { MutableInteractionSource() },
