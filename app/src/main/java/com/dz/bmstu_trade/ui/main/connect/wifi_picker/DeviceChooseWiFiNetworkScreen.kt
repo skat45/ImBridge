@@ -2,6 +2,7 @@ package com.dz.bmstu_trade.ui.main.connect.wifi_picker
 
 import android.net.wifi.ScanResult
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -46,7 +47,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
-import com.dz.bmstu_trade.ui.main.connect.net_errors.invalidNetworkToast
+import com.dz.bmstu_trade.app_context_holder.AppContextHolder
 import com.dz.bmstu_trade.ui.main.connect.net_errors.NoWiFiConnectionLabel
 import com.dz.bmstu_trade.ui.main.connect.permission_dialog.PermissionAlertDialog
 import com.germainkevin.collapsingtopbar.CollapsingTopBar
@@ -255,7 +256,13 @@ private fun WiFiItem(network: ScanResult) {
                     { /*TODO()*/ }
                 } else {
                     {
-                        invalidNetworkToast()
+                        Toast
+                            .makeText(
+                                AppContextHolder.getContext(),
+                                "Вы не можете выбрать эту сеть",
+                                Toast.LENGTH_SHORT
+                            )
+                            .show()
                     }
                 },
                 interactionSource = remember { MutableInteractionSource() },
