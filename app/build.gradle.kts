@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
     val nav_version = "2.7.7"
 
     implementation("androidx.navigation:navigation-runtime-ktx:$nav_version")
@@ -71,4 +72,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("com.github.germainkevinbusiness:CollapsingTopBarCompose:1.2.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
 }

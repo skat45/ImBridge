@@ -27,7 +27,7 @@ class AddDeviceViewModel : ViewModel() {
 }
 
 data class TextFieldState(
-    val value: String,
+    val value: String = "",
     val error: Error? = Error.TOO_SHORT,
 ) {
     enum class Error(
