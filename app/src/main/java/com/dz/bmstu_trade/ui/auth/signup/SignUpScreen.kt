@@ -1,5 +1,6 @@
 package com.dz.bmstu_trade.ui.auth.signup
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,13 +40,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
 import com.dz.bmstu_trade.navigation.Routes
+import com.dz.bmstu_trade.ui.auth.signin.SignInViewModel
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen(navController: NavHostController) {
+fun SignUpScreen(
+    navController: NavHostController,
+    viewModel: SignUpViewModel = viewModel(),
+    onSignIn: () -> Unit,
+
+    ) {
     var email by remember { mutableStateOf(TextFieldValue()) }
     var password by remember { mutableStateOf("") }
     var submit_password by remember { mutableStateOf("") }
@@ -101,7 +110,10 @@ fun SignUpScreen(navController: NavHostController) {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = {
+                    password = it
+                    viewModel.onPasswordUpdated(it)
+                },
                 label = { Text(text = stringResource(R.string.Password)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -121,14 +133,26 @@ fun SignUpScreen(navController: NavHostController) {
                     }
                 },
                 visualTransformation = if (passwordVisibility) VisualTransformation.None
-                else PasswordVisualTransformation()
+                else PasswordVisualTransformation(),
+                isError = viewModel.password1.value.error != null
             )
+
+            if (viewModel.password1.value.error != null) {
+                Text(
+                    text = stringResource(viewModel.password1.value.error!!.messageResId),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.titleSmall,
+                )
+            }
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = submit_password,
-                onValueChange = { submit_password = it },
-                label = { Text(text = stringResource(R.string.subbmit_Password)) },
+                onValueChange = {
+                    submit_password = it
+                    viewModel.onConfirmPasswordUpdated(it)
+                },
+                label = { Text(text = stringResource(R.string.submit_Password)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done,
@@ -137,18 +161,21 @@ fun SignUpScreen(navController: NavHostController) {
                 keyboardActions = KeyboardActions(
                     onDone = { /* Handle done action if needed */ }
                 ),
-                trailingIcon = {
-                    IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
-                        Icon(
-                            painter = if (passwordVisibility) painterResource(R.drawable.password_shown)
-                            else painterResource(R.drawable.password_not_shown),
-                            contentDescription = stringResource(R.string.show_password_icon_description)
-                        )
-                    }
-                },
-                visualTransformation = if (passwordVisibility) VisualTransformation.None
-                else PasswordVisualTransformation()
+                visualTransformation =
+                if (passwordVisibility) VisualTransformation.None
+                else PasswordVisualTransformation(),
+                isError =
+                viewModel.password2.value.error != null ||
+                        viewModel.password2.value.error == PasswordFieldState.Error.PASSWORDS_MISMATCH
             )
+
+            if (viewModel.password2.value.error != null) {
+                Text(
+                    text = stringResource(viewModel.password2.value.error!!.messageResId),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.titleSmall,
+                )
+            }
 
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.submit_register)))
 
