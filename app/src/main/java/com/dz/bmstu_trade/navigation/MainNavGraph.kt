@@ -63,7 +63,7 @@ fun MainNavHost(
             composable(Routes.CHOOSE_WIFI.value) {
                 DeviceChooseWiFiNetworkScreen(navController = mainNavController)
             }
-            composable(Routes.DEV_MAN_CONNECT.value) { DeviceManualConnectScreen(mainNavController) }
+            //composable(Routes.DEV_MAN_CONNECT.value) { DeviceManualConnectScreen(mainNavController) }
             composable(Routes.CANVAS.value) { CanvasScreen(mainNavController) }
         }
         navigation(startDestination = Routes.SETTINGS_ROOT.value, route = Routes.SETTINGS.value) {

@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +48,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -60,14 +62,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dz.bmstu_trade.navigation.Routes
-
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun GalleryScreen(
     navController: NavHostController,
     viewModel: GalleryScreenViewModel = remember { GalleryScreenViewModel() },
 ) {
-    val screenState by viewModel.screenState.collectAsState()
+    val screenState by viewModel.screenState.observeAsState()
+
+    //val images by viewModel.imageList.observeAsState()
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -75,33 +79,38 @@ fun GalleryScreen(
         verticalArrangement = Arrangement.Top
     ) {
         var selectedTab by remember { mutableStateOf(Tab.COMMUNITY) }
-        val tabs = screenState.keys.map { stringResource(id = it.titleResId) }
+        val tabs = screenState?.keys?.map { stringResource(id = it.titleResId) }
 
         TabRow(
             selectedTabIndex = selectedTab.ordinal,
             containerColor = MaterialTheme.colorScheme.surface
         ) {
-            tabs.forEachIndexed { index, title ->
-                Tab(
-                    text = { Text(title) },
-                    selected = selectedTab.ordinal == index,
-                    onClick = { selectedTab = Tab.values()[index] },
-                    selectedContentColor = MaterialTheme.colorScheme.primary,
-                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            tabs?.let {
+                it.forEachIndexed { index, title ->
+                    Tab(
+                        text = { Text(title) },
+                        selected = selectedTab.ordinal == index,
+                        onClick = { selectedTab = Tab.values()[index] },
+                        selectedContentColor = MaterialTheme.colorScheme.primary,
+                        unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
 
-                )
+                    )
+                }
             }
         }
         Box()
         {
-            screenState[selectedTab]?.let {
-                SelectedTab(
-                    navController = navController,
-                    state = it,
-                    onAction = { viewModel.applyAction(it) },
-                    selectedTab = selectedTab
-                )
+            screenState?.let {
+               it[selectedTab]?.let {
+                    SelectedTab(
+                        navController = navController,
+                        state = it,
+                        onAction = { viewModel.applyAction(it) },
+                        selectedTab = selectedTab
+                    )
+                }
             }
+
         }
 
 
@@ -135,20 +144,19 @@ fun SelectedTab(
                 columns = GridCells.Adaptive(minSize = 150.dp),
                 modifier = Modifier.padding(horizontal = 10.dp)
             ) {
-                itemsIndexed(state.imageCards) { index, card ->
+                items(state.imageCards.value ?: emptyList()) { card ->
                     ImageCard(
+
                         modifier = Modifier
                             .padding(horizontal = 8.dp)
                             .fillMaxWidth()
                             .height(205.dp),
                         state = state,
-                        cardIndex = index,
+                        cardIndex = card.id!!,
                         onAction = onAction,
                         selectedTab = selectedTab
                     )
-
                 }
-
             }
             Button(
                 modifier = Modifier
@@ -252,7 +260,7 @@ fun ImageCard(
                         )
                         {
                             IconFavorite(
-                                isLiked = state.imageCards[cardIndex].isLiked,
+                                isLiked = true,
                                 onAction = onAction,
                                 selectedTab = selectedTab,
                                 cardIndex = cardIndex
@@ -265,7 +273,7 @@ fun ImageCard(
             }
             Row {
                 Text(
-                    text = state.imageCards[cardIndex].title,
+                    text = state.imageCards.value?.get(cardIndex)!!.title,
                     modifier = Modifier
                         .padding(4.dp)
                         .weight(1f),
@@ -352,8 +360,7 @@ fun IconFavorite(
             onAction(
                 GalleryAction.LikeStateChanged(
                     it,
-                    cardIndex,
-                    selectedTab
+                    cardIndex
                 )
             )
         }) {

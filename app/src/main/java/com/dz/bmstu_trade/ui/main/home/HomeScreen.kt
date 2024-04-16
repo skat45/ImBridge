@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -67,7 +68,7 @@ fun HomeScreen(navController: NavHostController) {
     ){
         Button(
             onClick = { navController.navigate(Routes.ENTER_DEV_CODE.value) },
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 16.dp)){}}
 
     var sliderPosition by remember { mutableFloatStateOf(0f) }
     var isDisplayOnSwitchChecked by remember { mutableStateOf(false) }
@@ -129,7 +130,7 @@ fun HomeScreen(navController: NavHostController) {
                 showBottomSheet = it
             },
             onManualConnectClick = {
-                navController.navigate(Routes.DEV_MAN_CONNECT.value)
+                //navController.navigate(Routes.DEV_MAN_CONNECT.value)
             },
             onQrConnectClick = {
                 // Todo: перейти на экран подключения по qr-коду

@@ -1,0 +1,13 @@
+package com.dz.bmstu_trade.data.model.galleryModel
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class ImageEntity (
+    @PrimaryKey(autoGenerate = true)
+    val id: Int ?= null,
+    val title: String = "",
+    val isLiked: Boolean = true,
+    val imageUrl: String =""
+)
