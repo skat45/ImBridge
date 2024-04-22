@@ -74,7 +74,7 @@ fun GalleryScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        var selectedTab by remember { mutableStateOf(Tab.COMMUNITY) }
+        var selectedTab by remember { mutableStateOf(Tab.MY_PICTURES) }
         val tabs = screenState.keys.map { stringResource(id = it.titleResId) }
 
         TabRow(
@@ -112,10 +112,11 @@ fun GalleryScreen(
 @Composable
 fun SelectedTab(
     navController: NavHostController,
-    state: GalleryState,
+    state: GalleryTabState,
     onAction: (GalleryAction) -> Unit,
     selectedTab: Tab
 ) {
+    println(state)
     Column {
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.GalleryScreenHorizontalPadding)))
         SearchLine(
@@ -136,6 +137,7 @@ fun SelectedTab(
                 modifier = Modifier.padding(horizontal = 10.dp)
             ) {
                 itemsIndexed(state.imageCards) { index, card ->
+                    println(index)
                     ImageCard(
                         modifier = Modifier
                             .padding(horizontal = 8.dp)
@@ -216,7 +218,7 @@ fun SearchLine(
 @Composable
 fun ImageCard(
     modifier: Modifier,
-    state: GalleryState,
+    state: GalleryTabState,
     cardIndex: Int,
     onAction: (GalleryAction) -> Unit,
     selectedTab: Tab
