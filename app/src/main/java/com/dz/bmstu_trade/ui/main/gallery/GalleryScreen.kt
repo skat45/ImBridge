@@ -74,18 +74,18 @@ fun GalleryScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        var selectedTab by remember { mutableStateOf(Tab.COMMUNITY) }
-        val tabs = screenState.keys.map { stringResource(id = it.titleResId) }
+        //var selectedTab by remember { mutableStateOf(Tab.FAVOURITES) }
+        val tabs = screenState.tabsState.keys.map { stringResource(id = it.titleResId) }
 
         TabRow(
-            selectedTabIndex = selectedTab.ordinal,
+            selectedTabIndex = screenState.selectedTab.value.ordinal,
             containerColor = MaterialTheme.colorScheme.surface
         ) {
             tabs.forEachIndexed { index, title ->
                 Tab(
                     text = { Text(title) },
-                    selected = selectedTab.ordinal == index,
-                    onClick = { selectedTab = Tab.values()[index] },
+                    selected = screenState.selectedTab.value.ordinal == index,
+                    onClick = { screenState.selectedTab.value = Tab.values()[index]},
                     selectedContentColor = MaterialTheme.colorScheme.primary,
                     unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
 
@@ -94,12 +94,12 @@ fun GalleryScreen(
         }
         Box()
         {
-            screenState[selectedTab]?.let {
+            screenState.tabsState[screenState.selectedTab.value]?.let {
                 SelectedTab(
                     navController = navController,
                     state = it,
                     onAction = { viewModel.applyAction(it) },
-                    selectedTab = selectedTab
+                    selectedTab = screenState.selectedTab.value
                 )
             }
         }
@@ -112,10 +112,11 @@ fun GalleryScreen(
 @Composable
 fun SelectedTab(
     navController: NavHostController,
-    state: GalleryState,
+    state: GalleryTabState,
     onAction: (GalleryAction) -> Unit,
     selectedTab: Tab
 ) {
+    println(state)
     Column {
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.GalleryScreenHorizontalPadding)))
         SearchLine(
@@ -136,6 +137,7 @@ fun SelectedTab(
                 modifier = Modifier.padding(horizontal = 10.dp)
             ) {
                 itemsIndexed(state.imageCards) { index, card ->
+                    println(index)
                     ImageCard(
                         modifier = Modifier
                             .padding(horizontal = 8.dp)
@@ -216,7 +218,7 @@ fun SearchLine(
 @Composable
 fun ImageCard(
     modifier: Modifier,
-    state: GalleryState,
+    state: GalleryTabState,
     cardIndex: Int,
     onAction: (GalleryAction) -> Unit,
     selectedTab: Tab
@@ -242,8 +244,7 @@ fun ImageCard(
 
                 ) {}//на этом месте картинка
                 Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.End) {
-                    if (selectedTab.ordinal != Tab.MY_PICTURES.ordinal) {
-                        Box(
+                    Box(
                             modifier = Modifier
                                 .padding(end = 4.dp, top = 6.dp)
                                 .size(32.dp)
@@ -258,7 +259,7 @@ fun ImageCard(
                                 cardIndex = cardIndex
                             )
                         }
-                    }
+
                 }
 
 

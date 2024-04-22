@@ -7,7 +7,7 @@ enum class Tab(
     @StringRes
     val titleResId: Int,
 ) {
-    COMMUNITY(R.string.community),
+    //COMMUNITY(R.string.community),
     FAVOURITES(R.string.favorite),
     MY_PICTURES(R.string.my_pic),
 }
