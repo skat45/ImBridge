@@ -43,11 +43,8 @@ fun MainNavHost(
                 DeviceManualConnectScreen(
                     mainNavController,
                     onEnterCode = {
-                        mainNavController.navigate("home/connectingProgress")
-//                        mainNavController.navigate("home/chooseWiFi")
-                        // Комментируем для того, чтобы иметь возможность перескочить через экан в отсутствии девайса с wifi
+                        mainNavController.navigate(Routes.CONNECTING_PROGRESS.value)
                     },
-                    codeViewModel
                 )
             }
             composable(Routes.CONNECTING_PROGRESS.value) {
@@ -56,14 +53,13 @@ fun MainNavHost(
                     codeViewModel,
                     wifiViewModel = WifiViewModel(codeViewModel = codeViewModel),
                     onConnectedToDevice = {
-                        mainNavController.navigate("home/chooseWiFi")
+                        mainNavController.navigate(Routes.CHOOSE_WIFI.value)
                     },
                 )
             }
             composable(Routes.CHOOSE_WIFI.value) {
                 DeviceChooseWiFiNetworkScreen(navController = mainNavController)
             }
-            composable(Routes.DEV_MAN_CONNECT.value) { DeviceManualConnectScreen(mainNavController) }
             composable(Routes.CANVAS.value) { CanvasScreen(mainNavController) }
         }
         navigation(startDestination = Routes.SETTINGS_ROOT.value, route = Routes.SETTINGS.value) {
