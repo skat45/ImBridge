@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +48,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -137,17 +139,20 @@ fun SelectedTab(
                 modifier = Modifier.padding(horizontal = 10.dp)
             ) {
                 itemsIndexed(state.imageCards) { index, card ->
-                    println(index)
-                    ImageCard(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .fillMaxWidth()
-                            .height(205.dp),
-                        state = state,
-                        cardIndex = index,
-                        onAction = onAction,
-                        selectedTab = selectedTab
-                    )
+                    key(card.id){
+                        ImageCard(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .fillMaxWidth()
+                                .height(205.dp),
+                            state = state,
+                            cardIndex = index,
+                            onAction = onAction,
+                            selectedTab = selectedTab
+                        )
+                    }
+                    //println(index)
+
 
                 }
 

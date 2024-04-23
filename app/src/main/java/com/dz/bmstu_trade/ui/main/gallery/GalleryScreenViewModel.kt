@@ -57,21 +57,11 @@ class GalleryScreenViewModel : ViewModel() {
     }
 
     private fun convertToImageEntity(imageCard: ImageCard, isLikeChange: Boolean): ImageEntity {
-        if (isLikeChange) {
-            return ImageEntity(
+        return ImageEntity(
                 id = imageCard.id,
                 title = imageCard.title,
                 imageUrl = imageCard.image,
-                isLiked = !imageCard.isLiked
-            )
-        } else {
-            return ImageEntity(
-                id = imageCard.id,
-                title = imageCard.title,
-                imageUrl = imageCard.image,
-                isLiked = imageCard.isLiked
-            )
-        }
+                isLiked = isLikeChange)
     }
 
     private fun insertImageDB(imageCard: ImageCard, isLikeChange: Boolean) {
@@ -79,7 +69,7 @@ class GalleryScreenViewModel : ViewModel() {
         viewModelScope.launch {
             list.insertImage(convertToImageEntity(imageCard, isLikeChange))
         }
-        loadImages()
+
     }
 
     private fun deleteImageDB(imageCard: ImageCard) {
@@ -124,15 +114,95 @@ class GalleryScreenViewModel : ViewModel() {
 
         }
     }
-
     private fun changeStateOfLikedCard(isLiked: Boolean, index: Int, selectedTab: Tab) {
+
         insertImageDB(
             _screenState.value.tabsState[selectedTab]!!.imageCards[index],
-            isLikeChange = true
+            isLikeChange = isLiked
         )
+        if (isLiked) {
+            changeLikeIconState(isLiked, index, selectedTab)
+            addCardToFav(index)
+        } else {
+            if (selectedTab == Tab.FAVOURITES) {
+                changeLikeStateInCommunityFromFav(selectedTab, index)
+                deleteCardFromFav(selectedTab, index)
+
+            } else {
+                deleteCardFromFav(selectedTab, index)
+                changeLikeIconState(false, index, selectedTab)
+
+            }
+
+        }
 
 
     }
+
+    private fun changeLikeStateInCommunityFromFav(selectedTab: Tab, index: Int) {
+        val community = _screenState.value.tabsState[Tab.MY_PICTURES]?.imageCards ?: return
+        val deletedCardFavorite = _screenState.value.tabsState[selectedTab]?.imageCards ?: return
+
+        community.indexOf(deletedCardFavorite[index]).let {
+            if (it == NOT_FOUND) return
+            changeLikeIconState(
+                isLiked = false,
+                index = it,
+                selectedTab = Tab.MY_PICTURES
+            )
+        }
+    }
+
+    private fun changeLikeIconState(isLiked: Boolean, index: Int, selectedTab: Tab) {
+        _screenState.value=_screenState.value.copy(
+            tabsState = _screenState.value.tabsState.put(
+                selectedTab,
+                _screenState.value.tabsState[selectedTab].let { galleryState ->
+                    galleryState?.copy(imageCards = galleryState.imageCards.set(index) {
+                        it.copy(
+                            isLiked = isLiked
+                        )
+                    }) ?: GalleryTabState()
+                }
+            )
+        )
+    }
+
+
+    private fun addCardToFav(index: Int) {
+        val newImageCard = _screenState.value.tabsState[Tab.MY_PICTURES]
+        if (newImageCard != null) {
+            _screenState.value = _screenState.value.copy(
+                tabsState = _screenState.value.tabsState.put(
+                    Tab.FAVOURITES,
+                    _screenState.value.tabsState[Tab.FAVOURITES].let { galleryState ->
+                        galleryState?.copy(imageCards = galleryState.imageCards.add(newImageCard.imageCards[index]))
+                            ?: GalleryTabState()
+                    }
+                )
+            )
+        }
+
+
+
+    }
+
+    private fun deleteCardFromFav(selectedTab: Tab, index: Int) {
+        val deletedImageCard = _screenState.value.tabsState[Tab.FAVOURITES]
+        if (deletedImageCard != null) {
+            _screenState.value = _screenState.value.copy(
+                    tabsState = _screenState.value.tabsState.put(
+                        Tab.FAVOURITES,
+                        _screenState.value.tabsState[Tab.FAVOURITES].let { galleryState ->
+                            galleryState?.copy(imageCards = galleryState.imageCards.remove(deletedImageCard.imageCards[index]))
+                                ?: GalleryTabState()
+                        }
+                    )
+                )
+            }
+        }
+
+
 
 
     companion object {
