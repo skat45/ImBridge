@@ -60,15 +60,6 @@ import kotlinx.collections.immutable.persistentListOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavHostController) {
-    Column (
-        modifier = Modifier.padding(16.dp).fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ){
-        Button(
-            onClick = { navController.navigate(Routes.ENTER_DEV_CODE.value) },
-            modifier = Modifier.padding(top = 16.dp)
-
     var sliderPosition by remember { mutableFloatStateOf(0f) }
     var isDisplayOnSwitchChecked by remember { mutableStateOf(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -129,7 +120,7 @@ fun HomeScreen(navController: NavHostController) {
                 showBottomSheet = it
             },
             onManualConnectClick = {
-                navController.navigate(Routes.DEV_MAN_CONNECT.value)
+                navController.navigate(Routes.ENTER_DEV_CODE.value)
             },
             onQrConnectClick = {
                 // Todo: перейти на экран подключения по qr-коду
@@ -310,6 +301,7 @@ fun ImageItem(modifier: Modifier = Modifier) {
     ) {
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
