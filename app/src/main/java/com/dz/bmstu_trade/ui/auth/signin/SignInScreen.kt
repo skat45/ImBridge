@@ -106,7 +106,7 @@ fun SignInScreen(navController: NavHostController, onSignIn: () -> Unit) {
             ) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { /* Handle login button click */ },
+                    onClick = { onSignIn() },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
                     Text(

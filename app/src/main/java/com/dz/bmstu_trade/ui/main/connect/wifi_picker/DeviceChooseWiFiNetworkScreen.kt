@@ -2,6 +2,7 @@ package com.dz.bmstu_trade.ui.main.connect.wifi_picker
 
 import android.net.wifi.ScanResult
 import android.os.Build
+import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -173,8 +174,7 @@ private fun WiFContent(
                                 )
                             }
                         }
-                    }
-                    else {
+                    } else {
                         items(networks) {
                             val ssid = if (Build.VERSION.SDK_INT >= 33)
                                 it.wifiSsid
@@ -192,7 +192,10 @@ private fun WiFContent(
                                         .padding(bottom = dimensionResource(R.dimen.general_padding_start_end))
                                         .padding(horizontal = dimensionResource(R.dimen.general_padding_start_end))
                                 ) {
-                                    WiFiItem(it)
+                                    WiFiItem(
+                                        it,
+                                        navController
+                                    )
                                 }
                             }
                         }
@@ -213,7 +216,7 @@ private fun WiFContent(
                         .fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Column (
+                    Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
@@ -240,8 +243,20 @@ private fun WiFContent(
 
 
 @Composable
-private fun WiFiItem(network: ScanResult) {
+private fun WiFiItem(
+    network: ScanResult,
+    navController: NavHostController,
+) {
     val isInvalidFrequency5G = network.frequency in 5000..5825
+    val ssid =
+        if (Build.VERSION.SDK_INT >= 33)
+            network.wifiSsid
+                .toString()
+                .removePrefix("\"")
+                .removeSuffix("\"")
+        else
+            network.SSID
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -253,7 +268,9 @@ private fun WiFiItem(network: ScanResult) {
             .clickable(
                 onClick =
                 if (!isInvalidFrequency5G) {
-                    { /*TODO()*/ }
+                    {
+                        navController.navigate("home/enterWiFiPassword$ssid")
+                    }
                 } else {
                     {
                         Toast
@@ -283,22 +300,13 @@ private fun WiFiItem(network: ScanResult) {
             modifier = Modifier
                 .padding(vertical = dimensionResource(R.dimen.wi_fi_network_space))
         )
-        Column (
+        Column(
             modifier = Modifier
                 .padding(vertical = dimensionResource(R.dimen.wi_fi_network_space))
                 .padding(start = dimensionResource(R.dimen.wi_fi_network_space))
         ) {
             Text(
-                text = run {
-                    if (Build.VERSION.SDK_INT >= 33)
-                        network.wifiSsid
-                            .toString()
-                            .removePrefix("\"")
-                            .removeSuffix("\"")
-                    else
-                        network.SSID
-                },
-
+                text = ssid,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
             )

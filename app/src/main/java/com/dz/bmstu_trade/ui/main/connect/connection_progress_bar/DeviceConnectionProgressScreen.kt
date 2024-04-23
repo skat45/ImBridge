@@ -32,9 +32,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
-import com.dz.bmstu_trade.app_context_holder.AppContextHolder
-import com.dz.bmstu_trade.ui.main.connect.net_errors.NoWiFiConnectionLabel
 import com.dz.bmstu_trade.ui.main.connect.device_code.AddDeviceViewModel
+import com.dz.bmstu_trade.ui.main.connect.net_errors.NoWiFiConnectionLabel
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)

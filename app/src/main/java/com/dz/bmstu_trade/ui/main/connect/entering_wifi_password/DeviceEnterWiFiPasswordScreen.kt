@@ -20,7 +20,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -29,13 +28,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnterWiFiPasswordScreen(
-    viewModel: WiFiPasswordInputViewModel = remember { WiFiPasswordInputViewModel() }
+    navController: NavHostController,
+    viewModel: WiFiPasswordInputViewModel = viewModel(),
 ) {
     val passwordFieldState by viewModel.state.collectAsState()
 
@@ -53,7 +54,9 @@ fun EnterWiFiPasswordScreen(
                 titleContentColor = MaterialTheme.colorScheme.onSurface,
             ),
             navigationIcon = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = {
+                    navController.navigate("home/chooseWiFi")
+                }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = stringResource(R.string.arrow_back_icon_description)
@@ -117,17 +120,13 @@ fun EnterWiFiPasswordScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                    onClick = { /* TODO */ }
+                    onClick = {
+                        viewModel.onClickSendButton()
+                    }
                 ) {
                     Text(text = stringResource(id = R.string.connect_by_code_button_title))
                 }
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun EnterWiFiPasswordPreview() {
-    EnterWiFiPasswordScreen()
 }
