@@ -33,7 +33,7 @@ fun SignInScreen(
     viewModel: SignInViewModel = viewModel(),
     onSignIn: () -> Unit,
     ) {
-    val signinFieldState by viewModel.signin.collectAsState()
+    val signInPasswordFieldState by viewModel.signin.collectAsState()
 
     var email by remember { mutableStateOf(TextFieldValue()) }
     var passwordVisibility by remember { mutableStateOf(false) }
@@ -79,10 +79,10 @@ fun SignInScreen(
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = signinFieldState.value,
+                value = signInPasswordFieldState.value,
                 onValueChange = { viewModel.onPasswordUpdated(it) },
-                isError = signinFieldState.error != null
-                        && signinFieldState.error != PasswordFieldState.Error.TOO_SHORT,
+                isError = signInPasswordFieldState.error != null
+                        && signInPasswordFieldState.error != PasswordFieldState.Error.TOO_SHORT,
                 label = { Text(text = stringResource(R.string.Password)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -104,12 +104,12 @@ fun SignInScreen(
                 visualTransformation = if (passwordVisibility) VisualTransformation.None
                 else PasswordVisualTransformation()
             )
-            if (signinFieldState.error != null) {
+            signInPasswordFieldState.error?.let {
                 Text(
-                    text = stringResource(signinFieldState.error!!.messageResId),
+                    text = stringResource(it.messageResId),
                     modifier = Modifier
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                    color = when (signinFieldState.error) {
+                    color = when (signInPasswordFieldState.error) {
                         PasswordFieldState.Error.TOO_LONG -> {
                             MaterialTheme.colorScheme.error
                         }

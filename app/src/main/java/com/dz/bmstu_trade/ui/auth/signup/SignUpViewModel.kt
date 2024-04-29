@@ -8,51 +8,47 @@ import kotlinx.coroutines.flow.StateFlow
 
 class SignUpViewModel : ViewModel() {
 
-    private val _password1 = MutableStateFlow(PasswordFieldState(""))
-    val password1: StateFlow<PasswordFieldState> = _password1
+    private val _enterPassword = MutableStateFlow(PasswordFieldState(""))
+    val enterPassword: StateFlow<PasswordFieldState> = _enterPassword
 
-    private val _password2 = MutableStateFlow(PasswordFieldState(""))
-    val password2: StateFlow<PasswordFieldState> = _password2
+    private val _repeatPassword = MutableStateFlow(PasswordFieldState(""))
+    val repeatPassword: StateFlow<PasswordFieldState> = _repeatPassword
 
-    fun onPasswordUpdated(password1: String) {
-        this._password1.value = PasswordFieldState(
-            value = password1,
+    fun onPasswordUpdated(enterPassword: String) {
+        this._enterPassword.value = PasswordFieldState(
+            value = enterPassword,
             error = when {
-                password1.length > 63 ->
+                enterPassword.length > 63 ->
                     PasswordFieldState.Error.TOO_LONG
-                password1.length < 8 ->
+                enterPassword.length < 8 ->
                     PasswordFieldState.Error.TOO_SHORT
                 else -> null
             },
         )
-
-        // Check if passwords match
         checkPasswordsMatch()
     }
 
-    fun onConfirmPasswordUpdated(password2: String) {
-        this._password2.value = PasswordFieldState(
-            value = password2,
+    fun onConfirmPasswordUpdated(repeatPassword: String) {
+        this._repeatPassword.value = PasswordFieldState(
+            value = repeatPassword,
             error = when {
-                password2.length > 63 ->
+                repeatPassword.length > 63 ->
                     PasswordFieldState.Error.TOO_LONG
-                password2.length < 8 ->
+                repeatPassword.length < 8 ->
                     PasswordFieldState.Error.TOO_SHORT
                 else -> null
             },
         )
-
-        // Check if passwords match
         checkPasswordsMatch()
     }
 
     private fun checkPasswordsMatch() {
-        val password1Value = _password1.value.value
-        val password2Value = _password2.value.value
+        val enterPasswordValue = _enterPassword.value.value
+        val repeatPasswordValue = _repeatPassword.value.value
 
-        if (password1Value != password2Value) {
-            _password2.value = PasswordFieldState(
-                value = password2Value,
+        if (enterPasswordValue != repeatPasswordValue) {
+            _repeatPassword.value = PasswordFieldState(
+                value = repeatPasswordValue,
                 error = PasswordFieldState.Error.PASSWORDS_MISMATCH
             )
         }

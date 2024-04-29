@@ -52,12 +52,11 @@ import com.dz.bmstu_trade.ui.auth.signin.SignInViewModel
 fun SignUpScreen(
     navController: NavHostController,
     viewModel: SignUpViewModel = viewModel(),
-    onSignIn: () -> Unit,
-
+    onSignUp: () -> Unit,
     ) {
     var email by remember { mutableStateOf(TextFieldValue()) }
     var password by remember { mutableStateOf("") }
-    var submit_password by remember { mutableStateOf("") }
+    var submitPassword by remember { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
 
     Box(
@@ -134,12 +133,12 @@ fun SignUpScreen(
                 },
                 visualTransformation = if (passwordVisibility) VisualTransformation.None
                 else PasswordVisualTransformation(),
-                isError = viewModel.password1.value.error != null
+                isError = viewModel.enterPassword.value.error != null
             )
 
-            if (viewModel.password1.value.error != null) {
+            if (viewModel.enterPassword.value.error != null) {
                 Text(
-                    text = stringResource(viewModel.password1.value.error!!.messageResId),
+                    text = stringResource(viewModel.enterPassword.value.error!!.messageResId),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.titleSmall,
                 )
@@ -147,12 +146,12 @@ fun SignUpScreen(
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = submit_password,
+                value = submitPassword,
                 onValueChange = {
-                    submit_password = it
+                    submitPassword = it
                     viewModel.onConfirmPasswordUpdated(it)
                 },
-                label = { Text(text = stringResource(R.string.submit_Password)) },
+                label = { Text(text = stringResource(R.string.submitPassword)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done,
@@ -165,13 +164,13 @@ fun SignUpScreen(
                 if (passwordVisibility) VisualTransformation.None
                 else PasswordVisualTransformation(),
                 isError =
-                viewModel.password2.value.error != null ||
-                        viewModel.password2.value.error == PasswordFieldState.Error.PASSWORDS_MISMATCH
+                viewModel.repeatPassword.value.error != null ||
+                        viewModel.repeatPassword.value.error == PasswordFieldState.Error.PASSWORDS_MISMATCH
             )
 
-            if (viewModel.password2.value.error != null) {
+            if (viewModel.repeatPassword.value.error != null) {
                 Text(
-                    text = stringResource(viewModel.password2.value.error!!.messageResId),
+                    text = stringResource(viewModel.repeatPassword.value.error!!.messageResId),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.titleSmall,
                 )
