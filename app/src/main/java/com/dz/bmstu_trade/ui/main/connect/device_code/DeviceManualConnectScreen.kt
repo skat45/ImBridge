@@ -19,27 +19,24 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeviceManualConnectScreen(
     navController: NavHostController,
-    codeViewModel: AddDeviceViewModel = remember {
-        AddDeviceViewModel()
-    },
-    onEnterCode: () -> Unit,
+    codeViewModel: AddDeviceViewModel = viewModel(),
+    onEnterCode: (code: String) -> Unit,
 ) {
     val codeFieldState by codeViewModel.code.collectAsState()
 
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
@@ -78,7 +75,7 @@ fun DeviceManualConnectScreen(
                     onValueChange = { codeViewModel.onCodeUpdated(it) },
                     isError = codeFieldState.error != null
                             && codeFieldState.error != TextFieldState.Error.TOO_SHORT,
-                    label = { Text(text = stringResource(R.string.input_device_code_label))}
+                    label = { Text(text = stringResource(R.string.input_device_code_label)) }
                 )
                 if (codeFieldState.error != null) {
                     Text(
@@ -89,19 +86,21 @@ fun DeviceManualConnectScreen(
                             TextFieldState.Error.TOO_LARGE -> {
                                 MaterialTheme.colorScheme.error
                             }
+
                             TextFieldState.Error.TOO_SHORT -> {
                                 MaterialTheme.colorScheme.inverseSurface
                             }
+
                             else -> MaterialTheme.colorScheme.onSurface
                         },
                     )
                 }
                 Button(
-                    enabled =  codeFieldState.error == null,
+                    enabled = codeFieldState.error == null,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
-                    onClick = { onEnterCode() }
+                    onClick = { onEnterCode(codeViewModel.code.value.value) }
                 ) {
                     Text(text = stringResource(R.string.connect_by_code_button_title))
                 }

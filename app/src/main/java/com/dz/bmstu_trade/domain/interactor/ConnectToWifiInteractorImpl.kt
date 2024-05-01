@@ -14,11 +14,17 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.PermissionChecker
-import com.dz.bmstu_trade.app_context_holder.AppContextHolder
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
 
-class ConnectToWifiInteractorImpl(override val code: String) : ConnectToWifiInteractor {
+class ConnectToWifiInteractorImpl @AssistedInject constructor(
+    @Assisted override val code: String,
+    @ApplicationContext val context: Context
+) : ConnectToWifiInteractor {
 
-    val wifiManager = AppContextHolder.getContext()?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
     private val ssid = "IMBRIDGE-$code"
     private val password = "012345666"
 
@@ -27,8 +33,7 @@ class ConnectToWifiInteractorImpl(override val code: String) : ConnectToWifiInte
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             connectMoreOrEqualsQAndroids(onConnected)
-        }
-        else {
+        } else {
             connectLessQAndroids(onConnected)
         }
     }
@@ -46,7 +51,8 @@ class ConnectToWifiInteractorImpl(override val code: String) : ConnectToWifiInte
             .setNetworkSpecifier(specifier)
             .build()
 
-        val connectivityManager = AppContextHolder.getContext()?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
@@ -58,32 +64,31 @@ class ConnectToWifiInteractorImpl(override val code: String) : ConnectToWifiInte
 
     private fun connectLessQAndroids(onConnected: () -> Unit) {
         Log.d("connectToDeviceWiFi", "WiFi connection old function started")
-        if(isConnectedTo(ssid, wifiManager)){ //see if we are already connected to the given ssid
+        if (isConnectedTo(ssid, wifiManager)) { //see if we are already connected to the given ssid
             onConnected()
         }
 
         var wifiConfig = getWiFiConfig(ssid, wifiManager)
-        if(wifiConfig == null){ //if the given ssid is not present in the WiFiConfig, create a config for it
+        if (wifiConfig == null) { //if the given ssid is not present in the WiFiConfig, create a config for it
             createWPAProfile(ssid, password, wifiManager)
             wifiConfig = getWiFiConfig(ssid, wifiManager)
         }
 
         wifiManager.disconnect()
         if (wifiConfig != null) {
-            wifiManager.enableNetwork(wifiConfig.networkId,true)
+            wifiManager.enableNetwork(wifiConfig.networkId, true)
             wifiManager.reconnect()
-        }
-        else {
+        } else {
             TODO()
         }
 
-        if(isConnectedTo(ssid, wifiManager)) {
+        if (isConnectedTo(ssid, wifiManager)) {
             onConnected()
         }
     }
 
     private fun getWiFiConfig(ssid: String, wifiManager: WifiManager): WifiConfiguration? {
-        val wifiList= if (AppContextHolder.getContext()?.let {
+        val wifiList = if (context.let {
                 ActivityCompat.checkSelfPermission(
                     it,
                     Manifest.permission.ACCESS_FINE_LOCATION
@@ -96,15 +101,15 @@ class ConnectToWifiInteractorImpl(override val code: String) : ConnectToWifiInte
             emptyList<WifiConfiguration>()
         }
 
-        for (item in wifiList){
-            if(item.SSID != null && item.SSID == "\"" + ssid + "\""){
+        for (item in wifiList) {
+            if (item.SSID != null && item.SSID == "\"" + ssid + "\"") {
                 return item
             }
         }
         return null
     }
 
-    private fun isConnectedTo(ssid: String, wifiManager: WifiManager):Boolean{
+    private fun isConnectedTo(ssid: String, wifiManager: WifiManager): Boolean {
         return wifiManager.connectionInfo.ssid == "\"" + ssid + "\""
     }
 
@@ -114,4 +119,13 @@ class ConnectToWifiInteractorImpl(override val code: String) : ConnectToWifiInte
         conf.preSharedKey = "\"" + pass + "\""
         wifiManager.addNetwork(conf)
     }
+
+    override fun checkWifiEnabled(): Boolean {
+        return wifiManager.isWifiEnabled
+    }
+}
+
+@AssistedFactory
+interface ConnectToWifiInteractorFactory {
+    fun create(code: String): ConnectToWifiInteractorImpl
 }
