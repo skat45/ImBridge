@@ -30,21 +30,24 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
-import com.dz.bmstu_trade.app_context_holder.AppContextHolder
 import com.dz.bmstu_trade.ui.main.connect.net_errors.NoWiFiConnectionLabel
-import com.dz.bmstu_trade.ui.main.connect.device_code.AddDeviceViewModel
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConnectionProgressScreen(
     navController: NavHostController,
-    codeViewModel: AddDeviceViewModel,
-    wifiViewModel: WifiViewModel,
+    code: String,
     onConnectedToDevice: () -> Unit,
 ) {
+    val wifiViewModel = hiltViewModel(
+        creationCallback = { factory: WifiViewModelFactory ->
+            factory.create(code)
+        }
+    )
     val isWifiEnabled by wifiViewModel.wiFiIsEnabled.collectAsState()
     val connectedToDevice by wifiViewModel.connectedToDevice.collectAsState()
     if (connectedToDevice) {
@@ -52,7 +55,7 @@ fun ConnectionProgressScreen(
     }
     val context = LocalContext.current
 
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxSize(),
     ) {
@@ -77,7 +80,7 @@ fun ConnectionProgressScreen(
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Column (
+            Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -88,14 +91,13 @@ fun ConnectionProgressScreen(
                     )
                     Text(
                         text = stringResource(R.string.connection_to_progress_label) +
-                                " " + codeViewModel.code.value.value,
+                                " " + code,
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
                             .padding(top = dimensionResource(R.dimen.spinner_description_label_padding)),
                         textAlign = TextAlign.Center
                     )
-                }
-                else {
+                } else {
                     NoWiFiConnectionLabel()
                 }
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {

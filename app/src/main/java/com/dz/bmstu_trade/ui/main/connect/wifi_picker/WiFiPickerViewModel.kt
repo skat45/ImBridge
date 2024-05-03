@@ -4,8 +4,8 @@ import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dz.bmstu_trade.domain.interactor.GetWiFiInteractor
 import com.dz.bmstu_trade.domain.interactor.GetWiFiInteractorImpl
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -16,11 +16,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @OptIn(DelicateCoroutinesApi::class)
-class WiFiPickerViewModel: ViewModel() {
-    private val getWiFiInteractor: GetWiFiInteractor = GetWiFiInteractorImpl()
+@HiltViewModel
+class WiFiPickerViewModel @Inject constructor(
+    val getWiFiInteractor: GetWiFiInteractorImpl
+): ViewModel() {
     private val wifiManager: WifiManager = getWiFiInteractor.getWiFiManager()
 
     private val _requiredPermissions = MutableStateFlow<Array<String>>(emptyArray())

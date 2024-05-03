@@ -3,15 +3,14 @@ package com.dz.bmstu_trade.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.dz.bmstu_trade.ui.main.canvas.CanvasScreen
 import com.dz.bmstu_trade.ui.main.connect.connection_progress_bar.ConnectionProgressScreen
-import com.dz.bmstu_trade.ui.main.connect.connection_progress_bar.WifiViewModel
 import com.dz.bmstu_trade.ui.main.connect.device_code.AddDeviceViewModel
 import com.dz.bmstu_trade.ui.main.connect.device_code.DeviceManualConnectScreen
 import com.dz.bmstu_trade.ui.main.connect.wifi_picker.DeviceChooseWiFiNetworkScreen
@@ -32,7 +31,6 @@ fun MainNavHost(
     mainNavController: NavHostController,
     innerPadding: PaddingValues,
 ) {
-    val codeViewModel = remember { AddDeviceViewModel() }
 
     NavHost(
         mainNavController, startDestination = Routes.HOME.value, Modifier.padding(innerPadding)
@@ -42,16 +40,16 @@ fun MainNavHost(
             composable(Routes.ENTER_DEV_CODE.value) {
                 DeviceManualConnectScreen(
                     mainNavController,
+                    codeViewModel = hiltViewModel<AddDeviceViewModel>(),
                     onEnterCode = {
-                        mainNavController.navigate(Routes.CONNECTING_PROGRESS.value)
+                        mainNavController.navigate(Routes.CONNECTING_PROGRESS.value + "/$it")
                     },
                 )
             }
-            composable(Routes.CONNECTING_PROGRESS.value) {
+            composable(Routes.CONNECTING_PROGRESS.value + "/{code}") {
                 ConnectionProgressScreen(
                     mainNavController,
-                    codeViewModel,
-                    wifiViewModel = WifiViewModel(codeViewModel = codeViewModel),
+                    it.arguments?.getString("code")!!,
                     onConnectedToDevice = {
                         mainNavController.navigate(Routes.CHOOSE_WIFI.value)
                     },
