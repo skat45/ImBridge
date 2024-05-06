@@ -36,6 +36,11 @@ class GalleryScreenViewModel : ViewModel() {
 
     init {
         loadImages()
+        var i=4
+        while(i<20){
+            insertImageDB(ImageCard(id = i, image="pow", title = "pow", isLiked = false), isLikeChange = false)
+            i++
+        }
     }
 
     fun loadImages() {
