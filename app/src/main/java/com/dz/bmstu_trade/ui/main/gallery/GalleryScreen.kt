@@ -17,8 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -76,7 +76,6 @@ fun GalleryScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        //var selectedTab by remember { mutableStateOf(Tab.FAVOURITES) }
         val tabs = screenState.tabsState.keys.map { stringResource(id = it.titleResId) }
 
         TabRow(
@@ -87,7 +86,10 @@ fun GalleryScreen(
                 Tab(
                     text = { Text(title) },
                     selected = screenState.selectedTab.value.ordinal == index,
-                    onClick = { screenState.selectedTab.value = Tab.values()[index]},
+                    onClick = {
+                        screenState.selectedTab.value = Tab.values()[index]
+                        viewModel.loadImages()
+                    },
                     selectedContentColor = MaterialTheme.colorScheme.primary,
                     unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
 
@@ -130,16 +132,19 @@ fun SelectedTab(
                 .padding(horizontal = dimensionResource(R.dimen.GalleryScreenHorizontalPadding))
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Box(modifier = Modifier
-            .weight(1f)
-            .fillMaxSize())
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxSize()
+        )
         {
             LazyVerticalGrid(
+                state = state.scrollState.value,
                 columns = GridCells.Adaptive(minSize = 150.dp),
                 modifier = Modifier.padding(horizontal = 10.dp)
             ) {
                 itemsIndexed(state.imageCards) { index, card ->
-                    key(card.id){
+                    key(card.id) {
                         ImageCard(
                             modifier = Modifier
                                 .padding(horizontal = 8.dp)
@@ -151,10 +156,10 @@ fun SelectedTab(
                             selectedTab = selectedTab
                         )
                     }
-                    //println(index)
 
 
                 }
+
 
             }
             Button(
@@ -206,7 +211,8 @@ fun SearchLine(
                 contentDescription = stringResource(R.string.clear_search_line),
                 modifier = Modifier.clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(bounded = false), onClick = clear)
+                    indication = rememberRipple(bounded = false), onClick = clear
+                )
             )
         },
         placeholder = { Text(text = stringResource(R.string.enter_name_of_pic)) },
@@ -250,20 +256,20 @@ fun ImageCard(
                 ) {}//на этом месте картинка
                 Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.End) {
                     Box(
-                            modifier = Modifier
-                                .padding(end = 4.dp, top = 6.dp)
-                                .size(32.dp)
-                                .clip(RoundedCornerShape(8.dp))
-                                .background(Color.Black.copy(0.5f))
+                        modifier = Modifier
+                            .padding(end = 4.dp, top = 6.dp)
+                            .size(32.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color.Black.copy(0.5f))
+                    )
+                    {
+                        IconFavorite(
+                            isLiked = state.imageCards[cardIndex].isLiked,
+                            onAction = onAction,
+                            selectedTab = selectedTab,
+                            cardIndex = cardIndex
                         )
-                        {
-                            IconFavorite(
-                                isLiked = state.imageCards[cardIndex].isLiked,
-                                onAction = onAction,
-                                selectedTab = selectedTab,
-                                cardIndex = cardIndex
-                            )
-                        }
+                    }
 
                 }
 
@@ -277,7 +283,11 @@ fun ImageCard(
                         .weight(1f),
                     style = MaterialTheme.typography.bodyMedium
                 )
-                DropDownMenuImage(selectedTab = selectedTab)
+                DropDownMenuImage(
+                    selectedTab = selectedTab,
+                    onAction = onAction,
+                    index = cardIndex
+                )
 
             }
 
@@ -290,7 +300,9 @@ fun ImageCard(
 @Composable
 fun DropDownMenuImage(
     modifier: Modifier = Modifier,
-    selectedTab: Tab
+    selectedTab: Tab,
+    onAction: (GalleryAction) -> Unit,
+    index: Int
 ) {
     var buttonState by remember {
         mutableStateOf(false)
@@ -334,7 +346,13 @@ fun DropDownMenuImage(
                         stringResource(R.string.delete_pic),
                         fontSize = 10.sp,
                         modifier = Modifier
-                            .clickable(onClick = {})
+                            .clickable(onClick = {
+                                onAction(
+                                    GalleryAction.DeleteImageCard(
+                                        index = index
+                                    )
+                                )
+                            })
                             .padding(horizontal = 10.dp)
                     )
                 }
@@ -382,12 +400,3 @@ fun IconFavorite(
     }
 }
 
-@Composable
-fun FloatingButton(onClick: () -> Unit) {
-    FloatingActionButton(
-        modifier = Modifier.size(60.dp),
-        onClick = { onClick() }
-    ) {
-        Icon(Icons.Filled.Add, stringResource(R.string.create_new_pic))
-    }
-}
