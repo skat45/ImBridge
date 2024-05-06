@@ -8,11 +8,9 @@ import com.dz.bmstu_trade.domain.interactor.gallery.GalleryInteractorImpl
 
 class IMApp: Application() {
     lateinit var galleryDatabase: GalleryDb
-    //lateinit var galleryInteractor: GalleryInteractor
     override fun onCreate() {
         super.onCreate()
         galleryDatabase = GalleryDb.createDataBase(applicationContext)
-        //galleryInteractor = GalleryInteractorImpl()
         AppContextHolder.setContext(this)
     }
 }

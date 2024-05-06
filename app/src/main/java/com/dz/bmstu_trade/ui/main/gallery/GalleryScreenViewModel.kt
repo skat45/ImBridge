@@ -1,8 +1,11 @@
 package com.dz.bmstu_trade.ui.main.gallery
 
 import android.app.ActionBar
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.rememberScrollState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.util.query
 import com.dz.bmstu_trade.data.model.ImageCard
 import com.dz.bmstu_trade.data.model.gallery.ImageEntity
 import com.dz.bmstu_trade.domain.interactor.gallery.GalleryInteractor
@@ -27,55 +30,57 @@ class GalleryScreenViewModel : ViewModel() {
             )
         )
     )
+
+    private var _copyScreenState:List<ImageCard>  = listOf()
     val screenState: StateFlow<GalleryScreenState> = _screenState
 
     init {
         loadImages()
+        var i=4
+        while(i<20){
+            insertImageDB(ImageCard(id = i, image="pow", title = "pow", isLiked = false), isLikeChange = false)
+            i++
+        }
     }
 
-    private fun loadImages() {
-
+    fun loadImages() {
         viewModelScope.launch {
             val imageList = list.getAllImages()
-                .map { it -> ImageCard(it.id, it.imageUrl, it.title, it.isLiked) }
+            _copyScreenState = imageList
             val favImageList = imageList.filter { it.isLiked }
             _screenState.value = GalleryScreenState(
                 selectedTab = _screenState.value.selectedTab,
-                persistentMapOf(
+                tabsState = persistentMapOf(
                     Tab.FAVOURITES to GalleryTabState(
                         imageCards = favImageList.toPersistentList()
                     ),
                     Tab.MY_PICTURES to GalleryTabState(
                         imageCards = imageList.toPersistentList()
                     ),
-
-                    )
+                )
             )
+
 
         }
 
+
     }
 
-    private fun convertToImageEntity(imageCard: ImageCard, isLikeChange: Boolean): ImageEntity {
-        return ImageEntity(
-                id = imageCard.id,
-                title = imageCard.title,
-                imageUrl = imageCard.image,
-                isLiked = isLikeChange)
-    }
 
     private fun insertImageDB(imageCard: ImageCard, isLikeChange: Boolean) {
 
         viewModelScope.launch {
-            list.insertImage(convertToImageEntity(imageCard, isLikeChange))
+            list.insertImage(imageCard, isLikeChange)
         }
+
 
     }
 
     private fun deleteImageDB(imageCard: ImageCard) {
         viewModelScope.launch {
-            list.deleteImage(convertToImageEntity(imageCard, false))
+            list.deleteImage(imageCard)
         }
+
     }
 
 
@@ -92,28 +97,50 @@ class GalleryScreenViewModel : ViewModel() {
             )
 
             is GalleryAction.SearchedCleared -> clearSearchLine(action.selectedTab)
+            is GalleryAction.DeleteImageCard -> deleteImageCard(action.index)
         }
     }
 
     private fun onChangeSearch(text: String, selectedTab: Tab) {
-        val updatedState = _screenState.value.tabsState[selectedTab]?.copy(query = text)
+
+        var updatedState = _screenState.value.tabsState[selectedTab]?.copy(query = text)
+        if (text.isEmpty()) {
+            if(selectedTab == Tab.FAVOURITES){
+                updatedState = _screenState.value.tabsState[selectedTab]?.copy(
+                    query = text,
+                    imageCards = _copyScreenState.filter { it.isLiked }.toPersistentList()
+                )
+            }
+            else{
+                updatedState = _screenState.value.tabsState[selectedTab]?.copy(
+                    query = text,
+                    imageCards = _copyScreenState.toPersistentList()
+                )
+            }
+
+
+        } else {
+            updatedState = updatedState?.copy(imageCards = updatedState.imageCards.filter {
+                it.title.contains(
+                    text,
+                    ignoreCase = true
+                )
+            }.sortedBy { it.title }.toPersistentList())
+        }
+
+
         if (updatedState != null) {
             this._screenState.value = this._screenState.value.copy(
                 tabsState = this._screenState.value.tabsState.put(selectedTab, updatedState)
             )
-
         }
     }
 
     private fun clearSearchLine(selectedTab: Tab) {
-        val updatedState = _screenState.value.tabsState[selectedTab]?.copy(query = "")
-        if (updatedState != null) {
-            this._screenState.value = this._screenState.value.copy(
-                tabsState = this._screenState.value.tabsState.put(selectedTab, updatedState)
-            )
+        onChangeSearch("", selectedTab)
 
-        }
     }
+
     private fun changeStateOfLikedCard(isLiked: Boolean, index: Int, selectedTab: Tab) {
 
         insertImageDB(
@@ -126,15 +153,17 @@ class GalleryScreenViewModel : ViewModel() {
         } else {
             if (selectedTab == Tab.FAVOURITES) {
                 changeLikeStateInCommunityFromFav(selectedTab, index)
-                deleteCardFromFav(selectedTab, index)
+                deleteCardFromFav(index)
 
             } else {
-                deleteCardFromFav(selectedTab, index)
+                deleteCardFromFav(index)
                 changeLikeIconState(false, index, selectedTab)
 
             }
 
         }
+
+
 
 
     }
@@ -187,23 +216,43 @@ class GalleryScreenViewModel : ViewModel() {
 
     }
 
-    private fun deleteCardFromFav(selectedTab: Tab, index: Int) {
+    private fun deleteCardFromFav(index: Int) {
         val deletedImageCard = _screenState.value.tabsState[Tab.FAVOURITES]
         if (deletedImageCard != null) {
             _screenState.value = _screenState.value.copy(
-                    tabsState = _screenState.value.tabsState.put(
-                        Tab.FAVOURITES,
-                        _screenState.value.tabsState[Tab.FAVOURITES].let { galleryState ->
-                            galleryState?.copy(imageCards = galleryState.imageCards.remove(deletedImageCard.imageCards[index]))
-                                ?: GalleryTabState()
-                        }
-                    )
+                tabsState = _screenState.value.tabsState.put(
+                    Tab.FAVOURITES,
+                    _screenState.value.tabsState[Tab.FAVOURITES].let { galleryState ->
+                        galleryState?.copy(imageCards = galleryState.imageCards.remove(deletedImageCard.imageCards[index]))
+                            ?: GalleryTabState()
+                    }
                 )
+            )
+        }
+    }
+    private fun deleteImageCard(index: Int){
+        val deletedImageCard = _screenState.value.tabsState[Tab.MY_PICTURES]
+        val deleteImageCardFav =_screenState.value.tabsState[Tab.FAVOURITES]
+        if (deletedImageCard != null) {
+            deleteImageDB(deletedImageCard.imageCards[index])
+            if(deleteImageCardFav!=null && deleteImageCardFav.imageCards.contains(deletedImageCard.imageCards[index])){
+                deleteCardFromFav(deleteImageCardFav.imageCards.indexOf(deletedImageCard.imageCards[index]))
             }
+            _screenState.value = _screenState.value.copy(
+                tabsState = _screenState.value.tabsState.put(
+                    Tab.MY_PICTURES,
+                    _screenState.value.tabsState[Tab.MY_PICTURES].let { galleryState ->
+                        galleryState?.copy(imageCards = galleryState.imageCards.remove(deletedImageCard.imageCards[index]))
+                            ?: GalleryTabState()
+
+                    }
+
+                )
+            )
+
         }
 
-
-
+    }
 
     companion object {
         private const val NOT_FOUND = -1
