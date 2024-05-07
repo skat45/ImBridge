@@ -13,13 +13,25 @@ import com.dz.bmstu_trade.ui.auth.signup.SignUpScreen
 @Composable
 fun AuthNavHost(outerNavHostController: NavHostController, authNavController: NavHostController) {
     NavHost(authNavController, startDestination = Routes.SIGN_IN.value) {
-        composable(Routes.SIGN_UP.value) { SignUpScreen(authNavController) }
-        composable(Routes.SIGN_IN.value) {
-            SignInScreen(authNavController) {
-                outerNavHostController.navigate(Routes.MAIN.value) {
-                    popUpTo(Routes.AUTH.value) { inclusive = true }
+        composable(Routes.SIGN_UP.value) {
+            SignUpScreen(
+                navController = authNavController,
+                onSignUp = {
+                    outerNavHostController.navigate(Routes.MAIN.value) {
+                        popUpTo(Routes.AUTH.value) { inclusive = true }
+                    }
                 }
-            }
+            )
+        }
+        composable(Routes.SIGN_IN.value) {
+            SignInScreen(
+                navController = authNavController,
+                onSignIn = {
+                    outerNavHostController.navigate(Routes.MAIN.value) {
+                        popUpTo(Routes.AUTH.value) { inclusive = true }
+                    }
+                }
+            )
         }
     }
 }

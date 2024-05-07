@@ -87,7 +87,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("com.github.germainkevinbusiness:CollapsingTopBarCompose:1.2.3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
 }
 
 kapt {

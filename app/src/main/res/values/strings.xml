@@ -81,6 +81,7 @@
     <string name="also_you_can">Также можно</string>
     <string name="Log_in_with_VK_ID">Войти через VK ID</string>
     <string name="naming_top_bar_register">Регистрация</string>
-    <string name="subbmit_Password">Подтвердите пароль</string>
+    <string name="submitPassword">Подтвердите пароль</string>
     <string name="clear_text">Очистить текстовое поле</string>
+    <string name="passwords_mismatch">Пароли не совпадают</string>
 </resources>
