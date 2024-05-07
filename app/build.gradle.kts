@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "1.6.10"
 }
 
 android {
@@ -56,9 +57,9 @@ dependencies {
     implementation ("com.vk:android-sdk-api:4.1.0")// generated models and api methods
 
     implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
+    val nav_version = "2.7.7"
     val ktor_version = "2.3.9"
     val hilt_version = "2.49"
-    val nav_version = "2.7.7"
     val room_version = "2.6.1"
     val coroutines_version = "1.7.1"
 
@@ -69,6 +70,9 @@ dependencies {
     // Coroutines
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
+
+    implementation("io.ktor:ktor-client-serialization-jvm:1.6.7")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
     // Ktor
     implementation("io.ktor:ktor-client-core:$ktor_version")
