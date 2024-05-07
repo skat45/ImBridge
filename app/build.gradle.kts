@@ -50,12 +50,20 @@ android {
 }
 
 dependencies {
-    implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
+    implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.0")
     val nav_version = "2.7.7"
+    val ktor_version = "2.3.9"
+
+    //ktor
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-websockets:$ktor_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    implementation("io.ktor:ktor-client-serialization:1.6.4")
 
     implementation("androidx.navigation:navigation-runtime-ktx:$nav_version")
     implementation("androidx.navigation:navigation-compose:$nav_version")
-    implementation("androidx.core:core-ktx:1.13.0")
+    implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
     implementation("androidx.activity:activity-compose:1.9.0")
@@ -74,6 +82,4 @@ dependencies {
     implementation("com.github.germainkevinbusiness:CollapsingTopBarCompose:1.2.3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 }

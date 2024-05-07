@@ -17,6 +17,7 @@ import com.dz.bmstu_trade.ui.main.connect.connection_progress_bar.WifiViewModel
 import com.dz.bmstu_trade.ui.main.connect.device_code.AddDeviceViewModel
 import com.dz.bmstu_trade.ui.main.connect.device_code.DeviceManualConnectScreen
 import com.dz.bmstu_trade.ui.main.connect.entering_wifi_password.EnterWiFiPasswordScreen
+import com.dz.bmstu_trade.ui.main.connect.entering_wifi_password.WiFiPasswordInputViewModel
 import com.dz.bmstu_trade.ui.main.connect.wifi_picker.DeviceChooseWiFiNetworkScreen
 import com.dz.bmstu_trade.ui.main.gallery.GalleryScreen
 import com.dz.bmstu_trade.ui.main.home.HomeScreen
@@ -46,8 +47,8 @@ fun MainNavHost(
                 DeviceManualConnectScreen(
                     mainNavController,
                     onEnterCode = {
-//                        mainNavController.navigate("home/connectingProgress")
-                        mainNavController.navigate("home/chooseWiFi")
+                        mainNavController.navigate("home/connectingProgress")
+//                        mainNavController.navigate("home/chooseWiFi")
                         // Комментируем для того, чтобы иметь возможность перескочить через экан в отсутствии девайса с wifi
                     },
                     codeViewModel
@@ -73,7 +74,11 @@ fun MainNavHost(
                 Routes.ENTER_WIFI_PASSWORD.value + "{ssid}",
                 arguments = listOf(navArgument("ssid") {type = NavType.StringType})
             ) {
-                EnterWiFiPasswordScreen(navController = mainNavController)
+                val ssid = it.arguments?.getString("ssid")
+                EnterWiFiPasswordScreen(
+                    navController = mainNavController,
+                    viewModel = WiFiPasswordInputViewModel(ssid.toString())
+                )
             }
 
             composable(Routes.CANVAS.value) { CanvasScreen(mainNavController) }

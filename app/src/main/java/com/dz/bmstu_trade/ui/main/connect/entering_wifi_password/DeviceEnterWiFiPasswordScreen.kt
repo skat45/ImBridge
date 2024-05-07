@@ -36,9 +36,10 @@ import com.dz.bmstu_trade.R
 @Composable
 fun EnterWiFiPasswordScreen(
     navController: NavHostController,
-    viewModel: WiFiPasswordInputViewModel = viewModel(),
+    viewModel: WiFiPasswordInputViewModel,
 ) {
     val passwordFieldState by viewModel.state.collectAsState()
+
 
     Column (
         modifier = Modifier

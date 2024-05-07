@@ -74,7 +74,7 @@ class ConnectToWifiInteractorImpl(override val code: String) : ConnectToWifiInte
             wifiManager.reconnect()
         }
         else {
-            TODO()
+            // TODO()
         }
 
         if(isConnectedTo(ssid, wifiManager)) {

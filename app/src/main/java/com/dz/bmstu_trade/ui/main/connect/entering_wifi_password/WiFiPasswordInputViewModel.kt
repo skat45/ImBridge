@@ -7,13 +7,15 @@ import androidx.lifecycle.ViewModel
 import com.dz.bmstu_trade.R
 import com.dz.bmstu_trade.domain.interactor.ConnectDeviceToHomeNetworkInteractor
 import com.dz.bmstu_trade.domain.interactor.ConnectDeviceToHomeNetworkInteractorImpl
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class WiFiPasswordInputViewModel(
-    savedStateHandle: SavedStateHandle,
+    val ssid: String,
 ): ViewModel() {
-    private val ssid = checkNotNull(savedStateHandle["ssid"])
     private val _state = MutableStateFlow(PasswordFieldState("", false, ssid))
     val state: StateFlow<PasswordFieldState> = _state
 
@@ -44,9 +46,12 @@ class WiFiPasswordInputViewModel(
         )
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun onClickSendButton() {
-        if (connectDeviceToNetworkInteractor.isConnectedToDevice()) {
-            Log.d("onClickSendButton", "connected to device")
+        GlobalScope.launch {
+            if (connectDeviceToNetworkInteractor.isConnectedToDevice()) {
+                Log.d("onClickSendButton", "connected to device")
+            }
         }
     }
 }
