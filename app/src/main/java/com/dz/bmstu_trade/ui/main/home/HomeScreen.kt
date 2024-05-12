@@ -1,6 +1,5 @@
 package com.dz.bmstu_trade.ui.main.home
 
-import android.widget.Button
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +18,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -62,83 +60,72 @@ import kotlinx.collections.immutable.persistentListOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavHostController) {
+    var sliderPosition by remember { mutableFloatStateOf(0f) }
+    var isDisplayOnSwitchChecked by remember { mutableStateOf(false) }
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
+
+    val devices = persistentListOf("Device 1", "Device 2", "Device 3")
+
     Column(
-        modifier = Modifier.padding(16.dp).fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(
-            onClick = { navController.navigate(Routes.ENTER_DEV_CODE.value) },
-            modifier = Modifier.padding(top = 16.dp)
-        ){}
 
-        var sliderPosition by remember { mutableFloatStateOf(0f) }
-        var isDisplayOnSwitchChecked by remember { mutableStateOf(false) }
-        var showBottomSheet by remember { mutableStateOf(false) }
-        val sheetState = rememberModalBottomSheetState()
+        AddDeviceButton {
+            showBottomSheet = true
+        }
 
-        val devices = persistentListOf("Device 1", "Device 2", "Device 3")
+        DeviceNameTextField(devices = devices)
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Spacer(modifier = Modifier.height(16.dp))
 
-            AddDeviceButton {
-                showBottomSheet = true
+        DeviceImage(
+            onEditButtonClick = {
+                navController.navigate(Routes.CANVAS.value)
             }
+        )
 
-            DeviceNameTextField(devices = devices)
+        Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+        MoreImages(
+            onMoreButtonClick = {
+                /* Todo: Перейти в галлерею? */
+            },
+        )
 
-            DeviceImage(
-                onEditButtonClick = {
-                    navController.navigate(Routes.CANVAS.value)
-                }
-            )
+        Spacer(modifier = Modifier.height(24.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+        BrightnessSlider(
+            sliderPosition = sliderPosition,
+            onValueChange = { newValue ->
+                sliderPosition = newValue
+            },
+        )
 
-            MoreImages(
-                onMoreButtonClick = {
-                    /* Todo: Перейти в галлерею? */
-                },
-            )
+        DisplayTurnOnSwitch(
+            isDisplayOnSwitchChecked = isDisplayOnSwitchChecked,
+            onValueChange = { newValue ->
+                isDisplayOnSwitchChecked = newValue
+            },
+        )
+    }
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            BrightnessSlider(
-                sliderPosition = sliderPosition,
-                onValueChange = { newValue ->
-                    sliderPosition = newValue
-                },
-            )
-
-            DisplayTurnOnSwitch(
-                isDisplayOnSwitchChecked = isDisplayOnSwitchChecked,
-                onValueChange = { newValue ->
-                    isDisplayOnSwitchChecked = newValue
-                },
-            )
-        }
-
-        if (showBottomSheet) {
-            HomeBottomSheet(
-                sheetState,
-                onValueChange = {
-                    showBottomSheet = it
-                },
-                onManualConnectClick = {
-                    //navController.navigate(Routes.DEV_MAN_CONNECT.value)
-                },
-                onQrConnectClick = {
-                    // Todo: перейти на экран подключения по qr-коду
-                },
-            )
-        }
+    if (showBottomSheet) {
+        HomeBottomSheet(
+            sheetState,
+            onValueChange = {
+                showBottomSheet = it
+            },
+            onManualConnectClick = {
+                navController.navigate(Routes.ENTER_DEV_CODE.value)
+            },
+            onQrConnectClick = {
+                // Todo: перейти на экран подключения по qr-коду
+            },
+        )
     }
 }
 
@@ -314,6 +301,7 @@ fun ImageItem(modifier: Modifier = Modifier) {
     ) {
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

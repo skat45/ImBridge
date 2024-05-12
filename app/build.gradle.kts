@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -60,6 +61,18 @@ dependencies {
     val coroutines_version = "1.7.1"
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
+    val ktor_version = "2.3.9"
+    val hilt_version = "2.49"
+
+    //ktor
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-websockets:$ktor_version")
+
+    //Dagger Hilt
+    implementation("com.google.dagger:hilt-android:$hilt_version")
+    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     implementation("androidx.navigation:navigation-runtime-ktx:$nav_version")
     implementation("androidx.navigation:navigation-compose:$nav_version")
