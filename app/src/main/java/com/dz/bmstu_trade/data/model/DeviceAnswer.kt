@@ -3,7 +3,7 @@ package com.dz.bmstu_trade.data.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TestDeviceAnswer(
+data class DeviceAnswer(
     val error: Int,
-    val deviceCode: String,
+    val device_code: String,
 )

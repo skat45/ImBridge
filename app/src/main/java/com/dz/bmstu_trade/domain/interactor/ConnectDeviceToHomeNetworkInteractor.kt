@@ -4,7 +4,7 @@ import android.net.wifi.WifiManager
 
 interface ConnectDeviceToHomeNetworkInteractor {
     fun isWiFiTurnOn(): Boolean
-    suspend fun isConnectedToDevice(): Boolean
-    fun sendSSIDInfoJsonToDevice()
+    suspend fun connectToDevice(ssid: String, password: String): Boolean
     fun getWiFiManager(): WifiManager
+    fun getCode(): String?
 }

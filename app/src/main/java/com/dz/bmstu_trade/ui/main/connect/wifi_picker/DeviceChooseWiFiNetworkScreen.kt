@@ -3,6 +3,7 @@ package com.dz.bmstu_trade.ui.main.connect.wifi_picker
 import android.net.wifi.ScanResult
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts

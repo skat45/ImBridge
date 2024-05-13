@@ -1,8 +1,6 @@
 package com.dz.bmstu_trade.ui.main.connect.entering_wifi_password
 
-import android.util.Log
 import androidx.annotation.StringRes
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.dz.bmstu_trade.R
 import com.dz.bmstu_trade.domain.interactor.ConnectDeviceToHomeNetworkInteractor
@@ -34,6 +32,7 @@ class WiFiPasswordInputViewModel(
                     PasswordFieldState.Error.TOO_SHORT
                 else -> null
             },
+            connectionStatus = _state.value.connectionStatus,
         )
     }
 
@@ -42,17 +41,34 @@ class WiFiPasswordInputViewModel(
             password = _state.value.password,
             shown = !_state.value.shown,
             ssid = ssid,
-            error =  _state.value.error
+            error =  _state.value.error,
+            connectionStatus = _state.value.connectionStatus,
         )
     }
 
     @OptIn(DelicateCoroutinesApi::class)
     fun onClickSendButton() {
         GlobalScope.launch {
-            if (connectDeviceToNetworkInteractor.isConnectedToDevice()) {
-                Log.d("onClickSendButton", "connected to device")
+            if (connectDeviceToNetworkInteractor.connectToDevice(
+                ssid = ssid, password = _state.value.password
+            )) {
+                val deviceCode = connectDeviceToNetworkInteractor.getCode()
+                if (!deviceCode.isNullOrEmpty()) {
+                    onConnected()
+                }
             }
         }
+    }
+
+    private fun onConnected() {
+        // TODO Сюда можно пихать логику того, что должно произойти после подключения девайса
+        this._state.value =  PasswordFieldState(
+            password = _state.value.password,
+            shown = _state.value.shown,
+            ssid = ssid,
+            error =  _state.value.error,
+            connectionStatus = PasswordFieldState.Status.CONNECTED,
+        )
     }
 }
 
@@ -61,7 +77,7 @@ data class PasswordFieldState(
     val shown: Boolean = false,
     val ssid: Any,
     val error: Error? = Error.TOO_SHORT,
-    val connectionStatus: Status? = null
+    val connectionStatus: Status = Status.CONNECTING
 ) {
     enum class Error(
         @StringRes
@@ -71,6 +87,7 @@ data class PasswordFieldState(
         TOO_SHORT(R.string.too_short_wi_fi_password),
     }
     enum class Status(
+        @StringRes
         val messageResId: Int,
     ) {
         CONNECTING(1),

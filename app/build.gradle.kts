@@ -58,8 +58,10 @@ dependencies {
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
     implementation("io.ktor:ktor-client-websockets:$ktor_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
-    implementation("io.ktor:ktor-client-serialization:1.6.4")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+
+    // JSON parse
+    implementation ("com.google.code.gson:gson:2.8.8")
 
     implementation("androidx.navigation:navigation-runtime-ktx:$nav_version")
     implementation("androidx.navigation:navigation-compose:$nav_version")

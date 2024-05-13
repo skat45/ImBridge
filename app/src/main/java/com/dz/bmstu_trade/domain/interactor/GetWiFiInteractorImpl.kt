@@ -33,6 +33,7 @@ class GetWiFiInteractorImpl : GetWiFiInteractor {
         onUpdate: (List<ScanResult>) -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
+        Log.d("WiFiWatch", "subscribeToWiFiList")
         if (AppContextHolder.getContext()?.let {
                 checkSelfPermission(
                     it,
