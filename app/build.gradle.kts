@@ -54,6 +54,13 @@ android {
 dependencies {
     implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
     val nav_version = "2.7.7"
+    val room_version = "2.6.1"
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
+    val coroutines_version = "1.7.1"
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
     val ktor_version = "2.3.9"
     val hilt_version = "2.49"
 
@@ -87,8 +94,5 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("com.github.germainkevinbusiness:CollapsingTopBarCompose:1.2.3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-}
-
-kapt {
-    correctErrorTypes = true
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
 }
