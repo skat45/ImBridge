@@ -120,7 +120,7 @@ fun HomeScreen(navController: NavHostController) {
                 showBottomSheet = it
             },
             onManualConnectClick = {
-                navController.navigate(Routes.DEV_MAN_CONNECT.value)
+                navController.navigate(Routes.ENTER_DEV_CODE.value)
             },
             onQrConnectClick = {
                 // Todo: перейти на экран подключения по qr-коду
@@ -301,6 +301,7 @@ fun ImageItem(modifier: Modifier = Modifier) {
     ) {
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

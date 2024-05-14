@@ -24,12 +24,18 @@ import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
 import androidx.compose.ui.text.input.TextFieldValue
 import com.dz.bmstu_trade.navigation.Routes
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @Composable
-fun SignInScreen(navController: NavHostController, onSignIn: () -> Unit) {
+fun SignInScreen(
+    navController: NavHostController,
+    viewModel: SignInViewModel = viewModel(),
+    onSignIn: () -> Unit,
+    ) {
+    val signInPasswordFieldState by viewModel.signin.collectAsState()
+
     var email by remember { mutableStateOf(TextFieldValue()) }
-    var password by remember { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
@@ -73,8 +79,10 @@ fun SignInScreen(navController: NavHostController, onSignIn: () -> Unit) {
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = password,
-                onValueChange = { password = it },
+                value = signInPasswordFieldState.value,
+                onValueChange = { viewModel.onPasswordUpdated(it) },
+                isError = signInPasswordFieldState.error != null
+                        && signInPasswordFieldState.error != PasswordFieldState.Error.TOO_SHORT,
                 label = { Text(text = stringResource(R.string.Password)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -96,6 +104,22 @@ fun SignInScreen(navController: NavHostController, onSignIn: () -> Unit) {
                 visualTransformation = if (passwordVisibility) VisualTransformation.None
                 else PasswordVisualTransformation()
             )
+            signInPasswordFieldState.error?.let {
+                Text(
+                    text = stringResource(it.messageResId),
+                    modifier = Modifier
+                        .padding(top = dimensionResource(R.dimen.space_between_inputs_texts_buttons)),
+                    color = when (signInPasswordFieldState.error) {
+                        PasswordFieldState.Error.TOO_LONG -> {
+                            MaterialTheme.colorScheme.error
+                        }
+                        PasswordFieldState.Error.TOO_SHORT -> {
+                            MaterialTheme.colorScheme.inverseSurface
+                        }
+                        else -> MaterialTheme.colorScheme.onSurface
+                    },
+                )
+            }
         }
 
             Column(

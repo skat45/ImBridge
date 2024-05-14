@@ -10,13 +10,16 @@ import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
-import com.dz.bmstu_trade.app_context_holder.AppContextHolder
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class GetWiFiInteractorImpl : GetWiFiInteractor {
+class GetWiFiInteractorImpl @Inject constructor(
+    @ApplicationContext val context: Context
+) : GetWiFiInteractor {
 
     private var wifiScanReceiver: BroadcastReceiver? = null
     private val wifiManager =
-        AppContextHolder.getContext()?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        context.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
     override fun getRequiredPermissions(): Array<String> {
         return arrayOf(
@@ -29,12 +32,10 @@ class GetWiFiInteractorImpl : GetWiFiInteractor {
         onUpdate: (List<ScanResult>) -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
-        if (AppContextHolder.getContext()?.let {
-                checkSelfPermission(
-                    it,
-                    ACCESS_FINE_LOCATION
-                )
-            } == PERMISSION_GRANTED
+        if (checkSelfPermission(
+                context,
+            ACCESS_FINE_LOCATION
+        ) == PERMISSION_GRANTED
         ) {
             wifiManager.startScan()
         }
@@ -55,11 +56,11 @@ class GetWiFiInteractorImpl : GetWiFiInteractor {
         }
         val intentFilter = IntentFilter()
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        AppContextHolder.getContext()?.registerReceiver(wifiScanReceiver, intentFilter)
+        context.registerReceiver(wifiScanReceiver, intentFilter)
     }
 
     override fun unsubscribeFromWiFiList() {
-        AppContextHolder.getContext()?.unregisterReceiver(wifiScanReceiver)
+        context.unregisterReceiver(wifiScanReceiver)
     }
 
     override fun getWiFiManager(): WifiManager {

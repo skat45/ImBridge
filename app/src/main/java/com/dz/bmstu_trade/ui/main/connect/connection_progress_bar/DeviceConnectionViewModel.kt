@@ -4,37 +4,38 @@ import android.content.Context
 import android.net.wifi.WifiManager
 import android.provider.Settings
 import androidx.lifecycle.ViewModel
-import com.dz.bmstu_trade.app_context_holder.AppContextHolder
+import androidx.lifecycle.viewModelScope
 import com.dz.bmstu_trade.domain.interactor.ConnectToWifiInteractor
-import com.dz.bmstu_trade.domain.interactor.ConnectToWifiInteractorImpl
-import com.dz.bmstu_trade.ui.main.connect.device_code.AddDeviceViewModel
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import com.dz.bmstu_trade.domain.interactor.ConnectToWifiInteractorFactory
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-@OptIn(DelicateCoroutinesApi::class)
-class WifiViewModel(codeViewModel: AddDeviceViewModel) : ViewModel() {
+@HiltViewModel(assistedFactory = WifiViewModelFactory::class)
+class WifiViewModel @AssistedInject constructor(
+    @Assisted val code: String,
+    connectToWifiInteractorFactory: ConnectToWifiInteractorFactory
+) : ViewModel() {
 
-    private val connectToWifiInteractor: ConnectToWifiInteractor = ConnectToWifiInteractorImpl(codeViewModel.code.value.value)
-
-    private val wifiManager = AppContextHolder.getContext()?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    private val connectToWifiInteractor: ConnectToWifiInteractor = connectToWifiInteractorFactory.create(code)
 
     private val _connectedToDevice = MutableStateFlow(false)
     val connectedToDevice: StateFlow<Boolean> = _connectedToDevice
-
 
     private val _wiFiIsEnabled = MutableStateFlow(false)
     val wiFiIsEnabled: StateFlow<Boolean> = _wiFiIsEnabled
 
     private fun checkWifiEnabled() {
-        this._wiFiIsEnabled.value = wifiManager.isWifiEnabled
+        this._wiFiIsEnabled.value = connectToWifiInteractor.checkWifiEnabled()
     }
 
     init {
-        GlobalScope.launch {
+        viewModelScope.launch {
             var lastWiFiState = false
             while (true) {
                 checkWifiEnabled()
@@ -50,7 +51,7 @@ class WifiViewModel(codeViewModel: AddDeviceViewModel) : ViewModel() {
                 delay(100L)
             }
         }
-        GlobalScope.launch {
+        viewModelScope.launch {
             while (true) {
                 delay(5000)
                 if (_wiFiIsEnabled.value && !_connectedToDevice.value)
@@ -60,4 +61,9 @@ class WifiViewModel(codeViewModel: AddDeviceViewModel) : ViewModel() {
             }
         }
     }
+}
+
+@AssistedFactory
+interface WifiViewModelFactory {
+    fun create(code: String): WifiViewModel
 }

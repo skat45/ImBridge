@@ -4,10 +4,13 @@ package com.dz.bmstu_trade.ui.main.connect.device_code
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import com.dz.bmstu_trade.R
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
-class AddDeviceViewModel : ViewModel() {
+@HiltViewModel
+class AddDeviceViewModel @Inject constructor() : ViewModel() {
 
     private val _code = MutableStateFlow(TextFieldState(""))
     val code: StateFlow<TextFieldState> = _code
@@ -18,8 +21,10 @@ class AddDeviceViewModel : ViewModel() {
             error = when {
                 code.length > 4 ->
                     TextFieldState.Error.TOO_LARGE
+
                 code.length < 4 ->
                     TextFieldState.Error.TOO_SHORT
+
                 else -> null
             },
         )

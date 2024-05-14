@@ -3,8 +3,8 @@ package com.dz.bmstu_trade.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -13,7 +13,6 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.dz.bmstu_trade.ui.main.canvas.CanvasScreen
 import com.dz.bmstu_trade.ui.main.connect.connection_progress_bar.ConnectionProgressScreen
-import com.dz.bmstu_trade.ui.main.connect.connection_progress_bar.WifiViewModel
 import com.dz.bmstu_trade.ui.main.connect.device_code.AddDeviceViewModel
 import com.dz.bmstu_trade.ui.main.connect.device_code.DeviceManualConnectScreen
 import com.dz.bmstu_trade.ui.main.connect.entering_wifi_password.EnterWiFiPasswordScreen
@@ -36,7 +35,6 @@ fun MainNavHost(
     mainNavController: NavHostController,
     innerPadding: PaddingValues,
 ) {
-    val codeViewModel = remember { AddDeviceViewModel() }
 
     NavHost(
         mainNavController, startDestination = Routes.HOME.value, Modifier.padding(innerPadding)
@@ -46,22 +44,19 @@ fun MainNavHost(
             composable(Routes.DEV_MAN_CONNECT.value) {
                 DeviceManualConnectScreen(
                     mainNavController,
+                    codeViewModel = hiltViewModel<AddDeviceViewModel>(),
                     onEnterCode = {
-                        mainNavController.navigate("home/connectingProgress")
-//                        mainNavController.navigate("home/chooseWiFi")
-                        // Комментируем для того, чтобы иметь возможность перескочить через экан в отсутствии девайса с wifi
+                        mainNavController.navigate(Routes.CONNECTING_PROGRESS.value + "/$it")
                     },
-                    codeViewModel
                 )
             }
 
             composable(Routes.CONNECTING_PROGRESS.value) {
                 ConnectionProgressScreen(
                     mainNavController,
-                    codeViewModel,
-                    wifiViewModel = WifiViewModel(codeViewModel = codeViewModel),
+                    it.arguments?.getString("code")!!,
                     onConnectedToDevice = {
-                        mainNavController.navigate("home/chooseWiFi")
+                        mainNavController.navigate(Routes.CHOOSE_WIFI.value)
                     },
                 )
             }
@@ -70,7 +65,7 @@ fun MainNavHost(
                 DeviceChooseWiFiNetworkScreen(navController = mainNavController)
             }
 
-            composable(
+          composable(
                 Routes.ENTER_WIFI_PASSWORD.value + "{ssid}",
                 arguments = listOf(navArgument("ssid") {type = NavType.StringType})
             ) {
@@ -80,7 +75,7 @@ fun MainNavHost(
                     viewModel = WiFiPasswordInputViewModel(ssid.toString())
                 )
             }
-
+          
             composable(Routes.CANVAS.value) { CanvasScreen(mainNavController) }
         }
         navigation(startDestination = Routes.SETTINGS_ROOT.value, route = Routes.SETTINGS.value) {
