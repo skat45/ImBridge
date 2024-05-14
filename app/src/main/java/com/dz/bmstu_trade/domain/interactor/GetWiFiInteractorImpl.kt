@@ -6,12 +6,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
-import android.provider.Settings
-import android.util.Log
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import com.dz.bmstu_trade.app_context_holder.AppContextHolder
@@ -33,7 +29,6 @@ class GetWiFiInteractorImpl : GetWiFiInteractor {
         onUpdate: (List<ScanResult>) -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
-        Log.d("WiFiWatch", "subscribeToWiFiList")
         if (AppContextHolder.getContext()?.let {
                 checkSelfPermission(
                     it,

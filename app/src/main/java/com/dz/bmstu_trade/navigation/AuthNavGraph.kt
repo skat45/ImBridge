@@ -15,7 +15,7 @@ fun AuthNavHost(outerNavHostController: NavHostController, authNavController: Na
     NavHost(authNavController, startDestination = Routes.SIGN_IN.value) {
         composable(Routes.SIGN_UP.value) { SignUpScreen(authNavController) }
         composable(Routes.SIGN_IN.value) {
-                SignInScreen(authNavController) {
+            SignInScreen(authNavController) {
                 outerNavHostController.navigate(Routes.MAIN.value) {
                     popUpTo(Routes.AUTH.value) { inclusive = true }
                 }

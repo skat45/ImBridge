@@ -2,6 +2,7 @@ package com.dz.bmstu_trade.ui.main.connect.entering_wifi_password
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.dz.bmstu_trade.R
 import com.dz.bmstu_trade.domain.interactor.ConnectDeviceToHomeNetworkInteractor
 import com.dz.bmstu_trade.domain.interactor.ConnectDeviceToHomeNetworkInteractorImpl
@@ -46,9 +47,8 @@ class WiFiPasswordInputViewModel(
         )
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     fun onClickSendButton() {
-        GlobalScope.launch {
+        viewModelScope.launch {
             if (connectDeviceToNetworkInteractor.connectToDevice(
                 ssid = ssid, password = _state.value.password
             )) {
@@ -87,8 +87,7 @@ data class PasswordFieldState(
         TOO_SHORT(R.string.too_short_wi_fi_password),
     }
     enum class Status(
-        @StringRes
-        val messageResId: Int,
+        val id: Int,
     ) {
         CONNECTING(1),
         CONNECTED(2),
