@@ -21,4 +21,5 @@
     <dimen name="email_password_padding">16dp</dimen>
     <dimen name="enter_register_padding">16dp</dimen>
     <dimen name="submit_register">36dp</dimen>
+    <dimen name="vk_auth_error_padding">16dp</dimen>
 </resources>

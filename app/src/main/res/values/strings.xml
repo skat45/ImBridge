@@ -1,4 +1,6 @@
 <resources>
+    <integer name="com_vk_sdk_AppId">51923527</integer>
+
     <string name="app_name">ImBridge</string>
     <string name="home_label">Главная</string>
     <string name="gallery_label">Галлерея</string>
@@ -84,4 +86,7 @@
     <string name="submitPassword">Подтвердите пароль</string>
     <string name="clear_text">Очистить текстовое поле</string>
     <string name="passwords_mismatch">Пароли не совпадают</string>
+    <string name="vk_auth_failed">Не удалось войти</string>
+    <string name="vk_auth_failed_subtitle">Проверьте интернет и повторите попытку</string>
+    <string name="vk_auth_retry">Повторить</string>
 </resources>

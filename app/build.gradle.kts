@@ -52,12 +52,16 @@ android {
 }
 
 dependencies {
+    implementation ("com.vk:android-sdk-core:4.1.0")
+    implementation ("com.vk:android-sdk-api:4.1.0")// generated models and api methods
+
+    implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
     val ktor_version = "2.3.9"
     val hilt_version = "2.49"
     val nav_version = "2.7.7"
     val room_version = "2.6.1"
     val coroutines_version = "1.7.1"
-    
+
     implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.0")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
