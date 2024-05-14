@@ -6,8 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.dz.bmstu_trade.R
 import com.dz.bmstu_trade.domain.interactor.ConnectDeviceToHomeNetworkInteractor
 import com.dz.bmstu_trade.domain.interactor.ConnectDeviceToHomeNetworkInteractorImpl
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
