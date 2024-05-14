@@ -12,7 +12,7 @@ enum class Routes(val value: String) {
     AUTH("auth"),
     SIGN_IN("signIn"),
     SIGN_UP("signUp"),
-    DEV_MAN_CONNECT("home/deviceManual"),
+    ENTER_DEV_CODE("home/deviceManual"),
     CONNECTING_PROGRESS("home/connectingProgress"),
     CHOOSE_WIFI("home/chooseWiFi"),
     ENTER_WIFI_PASSWORD("home/enterWiFiPassword"),
