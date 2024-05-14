@@ -73,6 +73,7 @@ dependencies {
 
     // JSON parse
     implementation ("com.google.code.gson:gson:2.8.8")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     //Dagger Hilt
     implementation("com.google.dagger:hilt-android:$hilt_version")

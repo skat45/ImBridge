@@ -41,7 +41,7 @@ fun MainNavHost(
     ) {
         navigation(startDestination = Routes.HOME_ROOT.value, route = Routes.HOME.value) {
             composable(Routes.HOME_ROOT.value) { HomeScreen(mainNavController) }
-            composable(Routes.DEV_MAN_CONNECT.value) {
+            composable(Routes.ENTER_DEV_CODE.value) {
                 DeviceManualConnectScreen(
                     mainNavController,
                     codeViewModel = hiltViewModel<AddDeviceViewModel>(),
