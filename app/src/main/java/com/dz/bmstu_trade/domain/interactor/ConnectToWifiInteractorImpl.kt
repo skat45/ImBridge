@@ -79,7 +79,7 @@ class ConnectToWifiInteractorImpl @AssistedInject constructor(
             wifiManager.enableNetwork(wifiConfig.networkId, true)
             wifiManager.reconnect()
         } else {
-            TODO()
+            // TODO()
         }
 
         if (isConnectedTo(ssid, wifiManager)) {

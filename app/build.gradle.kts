@@ -52,22 +52,27 @@ android {
 }
 
 dependencies {
-    implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
+    val ktor_version = "2.3.9"
+    val hilt_version = "2.49"
     val nav_version = "2.7.7"
     val room_version = "2.6.1"
+    val coroutines_version = "1.7.1"
+    
+    implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.0")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
-    val coroutines_version = "1.7.1"
+    // Coroutines
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
-    val ktor_version = "2.3.9"
-    val hilt_version = "2.49"
 
-    //ktor
+    // Ktor
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
     implementation("io.ktor:ktor-client-websockets:$ktor_version")
+
+    // JSON parse
+    implementation ("com.google.code.gson:gson:2.8.8")
 
     //Dagger Hilt
     implementation("com.google.dagger:hilt-android:$hilt_version")
@@ -76,10 +81,10 @@ dependencies {
 
     implementation("androidx.navigation:navigation-runtime-ktx:$nav_version")
     implementation("androidx.navigation:navigation-compose:$nav_version")
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
-    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.activity:activity-compose:1.9.0")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")

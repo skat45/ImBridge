@@ -1,5 +1,8 @@
 package com.dz.bmstu_trade.ui.main.connect.connection_progress_bar
 
+import android.content.Context
+import android.net.wifi.WifiManager
+import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dz.bmstu_trade.domain.interactor.ConnectToWifiInteractor
