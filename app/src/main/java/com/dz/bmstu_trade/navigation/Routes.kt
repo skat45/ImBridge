@@ -18,5 +18,6 @@ enum class Routes(val value: String) {
     ENTER_WIFI_PASSWORD("home/enterWiFiPassword"),
     HOME_ROOT("home/root"),
     CANVAS("canvas"),
-    MAIN("main")
+    MAIN("main"),
+    VK_AUTH("vkAuth")
 }
