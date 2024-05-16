@@ -51,7 +51,7 @@ fun MainNavHost(
                 )
             }
 
-            composable(Routes.CONNECTING_PROGRESS.value) {
+            composable(Routes.CONNECTING_PROGRESS.value + "/{code}") {
                 ConnectionProgressScreen(
                     mainNavController,
                     it.arguments?.getString("code")!!,
