@@ -46,6 +46,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
@@ -64,7 +65,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun DeviceChooseWiFiNetworkScreen(
     navController: NavHostController,
-    viewModel: WiFiPickerViewModel = viewModel()
+    viewModel: WiFiPickerViewModel = hiltViewModel()
 ) {
     val networks by viewModel.networks.collectAsState()
     val requiredPermissions by viewModel.requiredPermissions.collectAsState()
