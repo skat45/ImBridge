@@ -1,6 +1,7 @@
 package com.dz.bmstu_trade.ui.main.canvas
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 
 data class Picture(
     val rows: Int = 16,
@@ -21,5 +22,13 @@ data class Picture(
         }
     }
 
+    fun getArgbList(): List<List<Int>> {
+        return List(rows) { y ->
+            List(columns) { x ->
+                val index = y * columns + x
+                pixelColors[index].toArgb()
+            }
+        }
+    }
 }
 

@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "1.6.10"
 }
 
 android {
@@ -56,9 +57,9 @@ dependencies {
     implementation ("com.vk:android-sdk-api:4.1.0")// generated models and api methods
 
     implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
+    val nav_version = "2.7.7"
     val ktor_version = "2.3.9"
     val hilt_version = "2.49"
-    val nav_version = "2.7.7"
     val room_version = "2.6.1"
     val coroutines_version = "1.7.1"
 
@@ -70,10 +71,16 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
 
+    implementation("io.ktor:ktor-client-serialization-jvm:1.6.7")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+
     // Ktor
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-android:$ktor_version")
     implementation("io.ktor:ktor-client-websockets:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
 
     // JSON parse
     implementation ("com.google.code.gson:gson:2.8.8")
@@ -89,7 +96,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
-    implementation("androidx.activity:activity-compose:1.9.0")
+    implementation("androidx.activity:activity-compose:1.8.2")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")

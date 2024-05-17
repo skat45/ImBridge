@@ -89,4 +89,11 @@
     <string name="vk_auth_failed">Не удалось войти</string>
     <string name="vk_auth_failed_subtitle">Проверьте интернет и повторите попытку</string>
     <string name="vk_auth_retry">Повторить</string>
+    <string name="drawing_edit_button">Drawing edit button</string>
+    <string name="device_connected">В сети</string>
+    <string name="device_not_connected">Вне сети</string>
+    <string name="change_device">Выбрать другое устройство</string>
+    <string name="empty_state_home_text">Нет связанных устройств</string>
+    <string name="select_device">Выбрать устройство</string>
+    <string name="undefined_state_text">Выберите устройство</string>
 </resources>
