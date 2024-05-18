@@ -9,5 +9,5 @@ data class ImageEntity(
     val id: Int? = null,
     val title: String = "",
     val isLiked: Boolean = true,
-    val imageUrl: String = ""
+    val image: String = ""
 )

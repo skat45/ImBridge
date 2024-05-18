@@ -13,7 +13,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 object WebSocketClient {
-    val url: String = "ws://10.0.2.2:8000/ws/device"
+    val url: String = "ws://s256850.hostiman.com:8000/ws/device"
     private val client = HttpClient {
         install(WebSockets)
     }
