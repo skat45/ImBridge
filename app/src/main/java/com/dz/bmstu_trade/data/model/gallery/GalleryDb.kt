@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
-@Database(entities = [ImageEntity::class], version = 1)
+@Database(entities = [ImageEntity::class], version = 2)
+@TypeConverters(Converters::class)
 abstract class GalleryDb : RoomDatabase() {
     abstract fun imageDao(): ImageDao
 

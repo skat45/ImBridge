@@ -8,6 +8,6 @@ data class ImageEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
     val title: String = "",
-    val isLiked: Boolean = true,
-    val image: String = ""
+    val isLiked: Boolean = false,
+    val image: List<List<Int>>,
 )
