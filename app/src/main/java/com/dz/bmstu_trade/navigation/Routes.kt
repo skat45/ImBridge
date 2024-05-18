@@ -19,5 +19,6 @@ enum class Routes(val value: String) {
     HOME_ROOT("home/root"),
     CANVAS("canvas"),
     MAIN("main"),
-    VK_AUTH("vkAuth")
+    VK_AUTH("vkAuth"),
+    GET_PHOTOS_FROM_ALBUM("getPhotosFromAlbum")
 }
