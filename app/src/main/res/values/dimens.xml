@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="home_screen_horizontal_padding">16dp</dimen>
+    <dimen name="general_padding_start_end">16dp</dimen>
+    <dimen name="padding_top_code_connection_screen">128dp</dimen>
+    <dimen name="space_between_spinner_and_label">40dp</dimen>
+    <dimen name="spinner_loader_label_font_size">16dp</dimen>
+    <dimen name="choose_wi_fi_network_label_font_size">16dp</dimen>
+    <dimen name="space_between_inputs_texts_buttons">8dp</dimen>
+    <dimen name="spinner_stroke_width">4dp</dimen>
+    <dimen name="spinner_description_label_padding">24dp</dimen>
+    <dimen name="connecting_to_router_top_bar_title">24dp</dimen>
+    <dimen name="wi_fi_item_border_width">1dp</dimen>
+    <dimen name="wi_fi_network_name_font_size">16dp</dimen>
+    <dimen name="wi_fi_network_space">24dp</dimen>
+    <dimen name="wi_fi_ssid_name_padding_top">32dp</dimen>
+    <dimen name="wi_fi_card_height">80dp</dimen>
+    <dimen name="wi_fi_card_border_radius">16dp</dimen>
+    <dimen name = "GalleryScreenHorizontalPadding">16dp</dimen>
+    <dimen name="logo_padding">128dp</dimen>
+    <dimen name="email_password_padding">16dp</dimen>
+    <dimen name="enter_register_padding">16dp</dimen>
+    <dimen name="submit_register">36dp</dimen>
+    <dimen name="vk_auth_error_padding">16dp</dimen>
+</resources>
