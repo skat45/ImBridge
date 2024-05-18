@@ -186,6 +186,24 @@ fun SelectedTab(
                         horizontal = dimensionResource(R.dimen.GalleryScreenHorizontalPadding),
                         vertical = dimensionResource(R.dimen.GalleryScreenHorizontalPadding)
                     )
+                    .align(Alignment.BottomStart)
+                    .size(64.dp),
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    contentColor = MaterialTheme.colorScheme.primary,
+                ),
+                shape = RoundedCornerShape(16.dp),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Text(text = "VK")
+            }
+            Button(
+                modifier = Modifier
+                    .padding(
+                        horizontal = dimensionResource(R.dimen.GalleryScreenHorizontalPadding),
+                        vertical = dimensionResource(R.dimen.GalleryScreenHorizontalPadding)
+                    )
                     .align(Alignment.BottomEnd)
                     .size(64.dp),
                 onClick = {
