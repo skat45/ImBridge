@@ -18,6 +18,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.dz.bmstu_trade.R
+import com.vk.api.sdk.auth.VKScope
 
 @Composable
 fun VkAuthScreen(
@@ -28,11 +29,13 @@ fun VkAuthScreen(
     val authActivityLauncher = rememberLauncherForActivityResult(
         contract = VK.getVKAuthActivityResultContract(),
         onResult = {
-            when (it) {
+            val vkResult = it
+            when (vkResult) {
                 is VKAuthenticationResult.Failed -> {
-                    viewModel.onFailure(it.exception)
+                    viewModel.onFailure(vkResult.exception)
                 }
                 is VKAuthenticationResult.Success -> {
+                    val token = vkResult.token
                     onSignIn()
                 }
             }
@@ -53,7 +56,7 @@ fun VkAuthScreen(
         viewModel.eventsFlow.collectLatest {
             when (it) {
                 is VkAuthEvent.StartAuth -> {
-                    authActivityLauncher.launch(emptyList())
+                    authActivityLauncher.launch(listOf(VKScope.WALL,VKScope.PHOTOS))
                 }
             }
         }
