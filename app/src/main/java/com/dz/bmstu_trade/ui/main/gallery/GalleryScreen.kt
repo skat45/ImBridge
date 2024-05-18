@@ -63,6 +63,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.dz.bmstu_trade.navigation.Routes
+import com.dz.bmstu_trade.ui.main.canvas.DrawMode
+import com.dz.bmstu_trade.ui.main.canvas.DrawingGrid
+import com.dz.bmstu_trade.ui.main.canvas.InteractMode
 
 
 @Composable
@@ -104,7 +107,17 @@ fun GalleryScreen(
                     navController = navController,
                     state = it,
                     onAction = { viewModel.applyAction(it) },
-                    selectedTab = screenState.selectedTab.value
+                    selectedTab = screenState.selectedTab.value,
+                    onImageClick = {
+                        navController.navigate(
+                            Routes.CANVAS.value + "?withConnection=false&pictureId=$it"
+                        )
+                    },
+                    onDeviceLoad = {
+                        navController.navigate(
+                            Routes.CANVAS.value + "?withConnection=true&pictureId=$it"
+                        )
+                    }
                 )
             }
         }
@@ -118,8 +131,10 @@ fun GalleryScreen(
 fun SelectedTab(
     navController: NavHostController,
     state: GalleryTabState,
+    selectedTab: Tab,
     onAction: (GalleryAction) -> Unit,
-    selectedTab: Tab
+    onImageClick: (Int) -> Unit,
+    onDeviceLoad: (Int) -> Unit
 ) {
     println(state)
     Column {
@@ -154,7 +169,9 @@ fun SelectedTab(
                             state = state,
                             cardIndex = index,
                             onAction = onAction,
-                            selectedTab = selectedTab
+                            selectedTab = selectedTab,
+                            onImageClick = onImageClick,
+                            onDeviceLoad = onDeviceLoad,
                         )
                     }
 
@@ -173,7 +190,7 @@ fun SelectedTab(
                     .size(64.dp),
                 onClick = {
                     navController.navigate(
-                        Routes.CANVAS.value
+                        Routes.CANVAS.value + "?withConnection=false"
                     )
                 },
                 colors = ButtonDefaults.buttonColors(
@@ -232,8 +249,10 @@ fun ImageCard(
     modifier: Modifier,
     state: GalleryTabState,
     cardIndex: Int,
+    selectedTab: Tab,
     onAction: (GalleryAction) -> Unit,
-    selectedTab: Tab
+    onImageClick: (Int) -> Unit,
+    onDeviceLoad: (Int) -> Unit,
 ) {
     Card(
         modifier = modifier,
@@ -252,9 +271,20 @@ fun ImageCard(
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(8.dp))
-                        .background(colorResource(R.color.canvas_color))
+                        .clickable {
+                            onImageClick(cardIndex)
+                        }
 
-                ) {}//на этом месте картинка
+                ) {
+                    DrawingGrid(
+                        picture = remember {
+                            mutableStateOf(state.imageCards[cardIndex].image)
+                        },
+                        interactMode = remember {
+                            mutableStateOf(InteractMode.ShowState)
+                        }
+                    )
+                }
                 Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.End) {
                     Box(
                         modifier = Modifier
@@ -287,7 +317,10 @@ fun ImageCard(
                 DropDownMenuImage(
                     selectedTab = selectedTab,
                     onAction = onAction,
-                    index = cardIndex
+                    index = cardIndex,
+                    onDeviceLoad = {
+                        onDeviceLoad(cardIndex)
+                    }
                 )
 
             }
@@ -302,8 +335,9 @@ fun ImageCard(
 fun DropDownMenuImage(
     modifier: Modifier = Modifier,
     selectedTab: Tab,
+    index: Int,
     onAction: (GalleryAction) -> Unit,
-    index: Int
+    onDeviceLoad: (Int) -> Unit
 ) {
     var buttonState by remember {
         mutableStateOf(false)
@@ -332,17 +366,10 @@ fun DropDownMenuImage(
                     stringResource(R.string.load_pic_to_device),
                     fontSize = 10.sp,
                     modifier = Modifier
-                        .clickable(onClick = {})
+                        .clickable(onClick = { onDeviceLoad(index) })
                         .padding(horizontal = 10.dp)
                 )
                 if (selectedTab.ordinal == Tab.MY_PICTURES.ordinal) {
-                    Text(
-                        stringResource(R.string.publish_pic),
-                        fontSize = 10.sp,
-                        modifier = Modifier
-                            .clickable(onClick = {})
-                            .padding(horizontal = 10.dp)
-                    )
                     Text(
                         stringResource(R.string.delete_pic),
                         fontSize = 10.sp,

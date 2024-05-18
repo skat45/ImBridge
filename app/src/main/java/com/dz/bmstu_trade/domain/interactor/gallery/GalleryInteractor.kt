@@ -8,5 +8,6 @@ interface GalleryInteractor {
     suspend fun insertImage(imageCard: ImageCard, isLikeChange: Boolean)
     suspend fun deleteImage(imageCard: ImageCard)
     suspend fun getAllImages():List<ImageCard>
+    suspend fun getImageById(id: Int): ImageEntity
 
 }

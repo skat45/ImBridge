@@ -48,8 +48,11 @@ private const val MIN_SCALE = 1f
 fun CanvasPanel(
     paddingValues: PaddingValues,
     pictureState: MutableState<Picture>,
-    onPictureUpdate:(Picture) -> Unit
-){
+    title: MutableState<String>,
+    withConnection: Boolean,
+    onPictureUpdate: (Picture) -> Unit,
+    onTitleUpdate: (String) -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -95,11 +98,11 @@ fun CanvasPanel(
             interactMode = interactMode.value,
             onBackDrawingButtonClick = {
                 onPictureUpdate(drawingHistory.undo() ?: picture.value)
-               // picture.value = drawingHistory.undo() ?: picture.value
+                // picture.value = drawingHistory.undo() ?: picture.value
             },
             onFurtherDrawingButtonClick = {
                 onPictureUpdate(drawingHistory.redo() ?: picture.value)
-               // picture.value = drawingHistory.redo() ?: picture.value
+                // picture.value = drawingHistory.redo() ?: picture.value
             },
             onDrawButtonClick = {
                 interactMode.value = InteractMode.DrawState
@@ -109,7 +112,7 @@ fun CanvasPanel(
             },
             onClearAllButtonClick = {
                 onPictureUpdate(Picture.clear(16, 16, Color.Black))
-              //  picture.value = Picture.clear(16, 16, Color.Black)
+                //  picture.value = Picture.clear(16, 16, Color.Black)
             },
         )
 
@@ -153,20 +156,23 @@ fun CanvasPanel(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
-            value = text,
-            onValueChange = { text = it },
-            singleLine = true,
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.input_pic_name),
-                    style = TextStyle(color = Color.LightGray, fontSize = 18.sp)
-                )
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
-        )
+        if (!withConnection)
+            OutlinedTextField(
+                value = title.value,
+                onValueChange = {
+                    onTitleUpdate(it)
+                },
+                singleLine = true,
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.input_pic_name),
+                        style = TextStyle(color = Color.LightGray, fontSize = 18.sp)
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+            )
     }
 }
 

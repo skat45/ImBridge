@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dz.bmstu_trade.data.model.ImageCard
 import com.dz.bmstu_trade.domain.interactor.gallery.GalleryInteractorImpl
+import com.dz.bmstu_trade.ui.main.canvas.Picture
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentMapOf
@@ -30,11 +31,6 @@ class GalleryScreenViewModel @Inject constructor(
     private var _copyScreenState:List<ImageCard>  = listOf()
 
     init {
-        var i=4
-        while(i<20){
-            insertImageDB(ImageCard(image="pow", title = "pow", isLiked = false), isLikeChange = false)
-            i++
-        }
         loadImages()
     }
 
