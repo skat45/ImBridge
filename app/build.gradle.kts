@@ -94,6 +94,9 @@ dependencies {
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    //Coil
+    implementation ("io.coil-kt:coil:2.2.2")
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
     implementation("androidx.navigation:navigation-runtime-ktx:$nav_version")
     implementation("androidx.navigation:navigation-compose:$nav_version")

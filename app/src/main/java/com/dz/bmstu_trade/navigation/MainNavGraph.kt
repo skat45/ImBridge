@@ -22,6 +22,7 @@ import com.dz.bmstu_trade.ui.main.gallery.GalleryScreen
 import com.dz.bmstu_trade.ui.main.home.HomeScreen
 import com.dz.bmstu_trade.ui.main.setlanguage.SettingsLanguage
 import com.dz.bmstu_trade.ui.main.settings.SettingsScreen
+import com.dz.bmstu_trade.ui.main.vk_album.ChooseImageFromAlbum
 
 /**
  * Основной внутренний граф с BottomNavBar'ом, `outerNavHostNavController`
@@ -37,7 +38,7 @@ fun MainNavHost(
 ) {
 
     NavHost(
-        mainNavController, startDestination = Routes.HOME.value, Modifier.padding(innerPadding)
+        mainNavController, startDestination = Routes.GET_PHOTOS_FROM_ALBUM.value, Modifier.padding(innerPadding)
     ) {
         navigation(startDestination = Routes.HOME_ROOT.value, route = Routes.HOME.value) {
             composable(Routes.HOME_ROOT.value) { HomeScreen(mainNavController) }
@@ -61,6 +62,7 @@ fun MainNavHost(
                 )
             }
 
+
             composable(Routes.CHOOSE_WIFI.value) {
                 DeviceChooseWiFiNetworkScreen(navController = mainNavController)
             }
@@ -83,5 +85,8 @@ fun MainNavHost(
             composable(Routes.SETTINGS_LANGUAGE.value) { SettingsLanguage(mainNavController) }
         }
         composable(Routes.GALLERY.value) { GalleryScreen(mainNavController) }
+        composable(Routes.GET_PHOTOS_FROM_ALBUM.value) {
+            ChooseImageFromAlbum(navController = mainNavController)
+        }
     }
 }
