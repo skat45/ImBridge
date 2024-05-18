@@ -44,9 +44,6 @@ class CanvasViewModel @AssistedInject constructor(
         {
             connectToDevice()
             Log.d("id", pictureId.toString())
-            if (pictureId != null){
-                getPicture()
-            }
         }
         else
             if (pictureId != null)
@@ -59,8 +56,8 @@ class CanvasViewModel @AssistedInject constructor(
         viewModelScope.launch {
             _canvasState.value = CanvasStateScreen.Loading
             try {
-                val image = galleryInteractor.getImageById(pictureId!!)
-                picture.value = image.toPicture()
+                val image = galleryInteractor.getImageById(pictureId!! + 1)
+                onPictureUpdate(image.toPicture())
                 title.value = image.title
                 _canvasState.value = CanvasStateScreen.Success
             } catch (e: Exception) {
@@ -98,7 +95,13 @@ class CanvasViewModel @AssistedInject constructor(
     override fun onConnected(deviceState: DeviceState) {
         viewModelScope.launch {
             device = deviceState
-            picture.value = deviceState.toPicture()
+            if (pictureId != null){
+                getPicture()
+            }
+            else
+            {
+                picture.value = deviceState.toPicture()
+            }
             _canvasState.value = CanvasStateScreen.Success
         }
     }

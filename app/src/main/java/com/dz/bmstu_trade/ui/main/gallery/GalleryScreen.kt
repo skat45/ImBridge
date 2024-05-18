@@ -272,7 +272,7 @@ fun ImageCard(
                         .fillMaxSize()
                         .clip(RoundedCornerShape(8.dp))
                         .clickable {
-                            onImageClick(cardIndex)
+                            onImageClick(state.imageCards[cardIndex].id!!)
                         }
 
                 ) {
@@ -318,6 +318,7 @@ fun ImageCard(
                     selectedTab = selectedTab,
                     onAction = onAction,
                     index = cardIndex,
+                    id = state.imageCards[cardIndex].id!!,
                     onDeviceLoad = {
                         onDeviceLoad(cardIndex)
                     }
@@ -336,6 +337,7 @@ fun DropDownMenuImage(
     modifier: Modifier = Modifier,
     selectedTab: Tab,
     index: Int,
+    id: Int,
     onAction: (GalleryAction) -> Unit,
     onDeviceLoad: (Int) -> Unit
 ) {
@@ -366,7 +368,7 @@ fun DropDownMenuImage(
                     stringResource(R.string.load_pic_to_device),
                     fontSize = 10.sp,
                     modifier = Modifier
-                        .clickable(onClick = { onDeviceLoad(index) })
+                        .clickable(onClick = { onDeviceLoad(id) })
                         .padding(horizontal = 10.dp)
                 )
                 if (selectedTab.ordinal == Tab.MY_PICTURES.ordinal) {
