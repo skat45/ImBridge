@@ -13,7 +13,7 @@ import com.dz.bmstu_trade.ui.auth.vk.VkAuthScreen
  */
 @Composable
 fun AuthNavHost(outerNavHostController: NavHostController, authNavController: NavHostController) {
-    NavHost(authNavController, startDestination = Routes.VK_AUTH.value) {
+    NavHost(authNavController, startDestination = Routes.SIGN_IN.value) {
         composable(Routes.SIGN_UP.value) {
             SignUpScreen(
                 navController = authNavController,

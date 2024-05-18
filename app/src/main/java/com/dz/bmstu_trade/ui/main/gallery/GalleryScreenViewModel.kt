@@ -1,27 +1,22 @@
 package com.dz.bmstu_trade.ui.main.gallery
 
-import android.app.ActionBar
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.rememberScrollState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.query
 import com.dz.bmstu_trade.data.model.ImageCard
-import com.dz.bmstu_trade.data.model.gallery.ImageEntity
-import com.dz.bmstu_trade.domain.interactor.gallery.GalleryInteractor
 import com.dz.bmstu_trade.domain.interactor.gallery.GalleryInteractorImpl
-import kotlinx.collections.immutable.ImmutableMap
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.PersistentMap
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GalleryScreenViewModel : ViewModel() {
-    private val list: GalleryInteractor = GalleryInteractorImpl()
+@HiltViewModel
+class GalleryScreenViewModel @Inject constructor(
+    val interactor: GalleryInteractorImpl
+) : ViewModel() {
     private val _screenState = MutableStateFlow(
         GalleryScreenState(
             tabsState = persistentMapOf(
@@ -31,21 +26,21 @@ class GalleryScreenViewModel : ViewModel() {
         )
     )
 
-    private var _copyScreenState:List<ImageCard>  = listOf()
     val screenState: StateFlow<GalleryScreenState> = _screenState
+    private var _copyScreenState:List<ImageCard>  = listOf()
 
     init {
-        loadImages()
         var i=4
         while(i<20){
-            insertImageDB(ImageCard(id = i, image="pow", title = "pow", isLiked = false), isLikeChange = false)
+            insertImageDB(ImageCard(image="pow", title = "pow", isLiked = false), isLikeChange = false)
             i++
         }
+        loadImages()
     }
 
     fun loadImages() {
         viewModelScope.launch {
-            val imageList = list.getAllImages()
+            val imageList = interactor.getAllImages()
             _copyScreenState = imageList
             val favImageList = imageList.filter { it.isLiked }
             _screenState.value = GalleryScreenState(
@@ -68,19 +63,15 @@ class GalleryScreenViewModel : ViewModel() {
 
 
     private fun insertImageDB(imageCard: ImageCard, isLikeChange: Boolean) {
-
         viewModelScope.launch {
-            list.insertImage(imageCard, isLikeChange)
+            interactor.insertImage(imageCard, isLikeChange)
         }
-
-
     }
 
     private fun deleteImageDB(imageCard: ImageCard) {
         viewModelScope.launch {
-            list.deleteImage(imageCard)
+            interactor.deleteImage(imageCard)
         }
-
     }
 
 
@@ -95,14 +86,12 @@ class GalleryScreenViewModel : ViewModel() {
                 action.index,
                 action.selectedTab
             )
-
             is GalleryAction.SearchedCleared -> clearSearchLine(action.selectedTab)
             is GalleryAction.DeleteImageCard -> deleteImageCard(action.index)
         }
     }
 
     private fun onChangeSearch(text: String, selectedTab: Tab) {
-
         var updatedState = _screenState.value.tabsState[selectedTab]?.copy(query = text)
         if (text.isEmpty()) {
             if(selectedTab == Tab.FAVOURITES){
@@ -117,8 +106,6 @@ class GalleryScreenViewModel : ViewModel() {
                     imageCards = _copyScreenState.toPersistentList()
                 )
             }
-
-
         } else {
             updatedState = updatedState?.copy(imageCards = updatedState.imageCards.filter {
                 it.title.contains(
@@ -127,8 +114,6 @@ class GalleryScreenViewModel : ViewModel() {
                 )
             }.sortedBy { it.title }.toPersistentList())
         }
-
-
         if (updatedState != null) {
             this._screenState.value = this._screenState.value.copy(
                 tabsState = this._screenState.value.tabsState.put(selectedTab, updatedState)
@@ -138,11 +123,9 @@ class GalleryScreenViewModel : ViewModel() {
 
     private fun clearSearchLine(selectedTab: Tab) {
         onChangeSearch("", selectedTab)
-
     }
 
     private fun changeStateOfLikedCard(isLiked: Boolean, index: Int, selectedTab: Tab) {
-
         insertImageDB(
             _screenState.value.tabsState[selectedTab]!!.imageCards[index],
             isLikeChange = isLiked
@@ -160,12 +143,7 @@ class GalleryScreenViewModel : ViewModel() {
                 changeLikeIconState(false, index, selectedTab)
 
             }
-
         }
-
-
-
-
     }
 
     private fun changeLikeStateInCommunityFromFav(selectedTab: Tab, index: Int) {
@@ -211,9 +189,6 @@ class GalleryScreenViewModel : ViewModel() {
                 )
             )
         }
-
-
-
     }
 
     private fun deleteCardFromFav(index: Int) {
@@ -249,14 +224,10 @@ class GalleryScreenViewModel : ViewModel() {
 
                 )
             )
-
         }
-
     }
 
     companion object {
         private const val NOT_FOUND = -1
     }
-
-
 }

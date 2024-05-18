@@ -61,13 +61,14 @@ import com.dz.bmstu_trade.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.dz.bmstu_trade.navigation.Routes
 
 
 @Composable
 fun GalleryScreen(
     navController: NavHostController,
-    viewModel: GalleryScreenViewModel = remember { GalleryScreenViewModel() },
+    viewModel: GalleryScreenViewModel = hiltViewModel(),
 ) {
     val screenState by viewModel.screenState.collectAsState()
     Column(

@@ -7,6 +7,6 @@ import io.ktor.client.request.get
 
 class DeviceRepositoryImpl : DeviceRepository {
     override suspend fun getDevices(): List<DeviceVO> {
-        return HttpClientKtor.client.get("http://10.0.2.2:8000/api/devices/").body()
+        return HttpClientKtor.client.get("http://s256850.hostiman.com:8000/api/devices/").body()
     }
 }

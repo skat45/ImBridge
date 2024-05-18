@@ -16,7 +16,7 @@ import com.dz.bmstu_trade.ui.main.MainScreen
 @Composable
 fun ImBridgeApp() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Routes.MAIN.value) {
+    NavHost(navController = navController, startDestination = Routes.AUTH.value) {
         composable(Routes.AUTH.value) { AuthScreen(navController) }
         composable(Routes.MAIN.value) { MainScreen(navController) }
     }
