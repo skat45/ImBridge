@@ -15,8 +15,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             BMSTU_TradeTheme {
                 ImBridgeApp()
-
-                //imageVkMapper("https://developer.alexanderklimov.ru/android/images/android_cat.jpg")
             }
         }
     }

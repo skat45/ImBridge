@@ -22,6 +22,7 @@ import com.dz.bmstu_trade.ui.main.gallery.GalleryScreen
 import com.dz.bmstu_trade.ui.main.home.HomeScreen
 import com.dz.bmstu_trade.ui.main.setlanguage.SettingsLanguage
 import com.dz.bmstu_trade.ui.main.settings.SettingsScreen
+import com.dz.bmstu_trade.ui.main.vk_album.ChooseImageFromAlbum
 
 /**
  * Основной внутренний граф с BottomNavBar'ом, `outerNavHostNavController`
@@ -103,6 +104,9 @@ fun MainNavHost(
         }
         composable(Routes.GALLERY.value) {
             GalleryScreen(mainNavController)
+        }
+        composable(Routes.GET_PHOTOS_FROM_ALBUM.value) {
+            ChooseImageFromAlbum(mainNavController)
         }
     }
 }

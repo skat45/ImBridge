@@ -188,7 +188,9 @@ fun SelectedTab(
                     )
                     .align(Alignment.BottomStart)
                     .size(64.dp),
-                onClick = {},
+                onClick = {
+                          navController.navigate(Routes.GET_PHOTOS_FROM_ALBUM.value)
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                     contentColor = MaterialTheme.colorScheme.primary,

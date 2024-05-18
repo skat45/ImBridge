@@ -5,6 +5,7 @@ import androidx.core.graphics.scale
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dz.bmstu_trade.data.mappers.imageVkMapper
+import com.dz.bmstu_trade.data.model.gallery.ImageEntity
 import com.dz.bmstu_trade.domain.interactor.gallery.GalleryInteractorImpl
 import com.dz.bmstu_trade.ui.main.gallery.ImageCard
 import com.vk.api.sdk.VK
@@ -55,7 +56,7 @@ class ChoosePictureViewModel@Inject constructor(
             for (index in pixels.indices){
                 imageColors.get(index/16).set(index%16, pixels[index])
             }
-
+            interactor.insertImageEntity(ImageEntity(image = imageColors) )
 
         }
     }

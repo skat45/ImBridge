@@ -36,4 +36,8 @@ class GalleryInteractorImpl @Inject constructor(db: GalleryDb) : GalleryInteract
     suspend fun insertFromCanvas(title: String, picture: Picture){
         imageDao.insertImage(picture.toImageEntity(title))
     }
+
+    override suspend fun insertImageEntity(imageEntity: ImageEntity) {
+        imageDao.insertImage(imageEntity)
+    }
 }

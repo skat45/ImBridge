@@ -28,6 +28,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.dz.bmstu_trade.R
 import com.dz.bmstu_trade.data.mappers.imageVkMapper
+import com.dz.bmstu_trade.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +49,7 @@ fun ChooseImageFromAlbum(
                 titleContentColor = MaterialTheme.colorScheme.onSurface,
             ),
             navigationIcon = {
-                IconButton(onClick = { /* TODO() */ }) {
+                IconButton(onClick = {navController.navigate(Routes.GALLERY.value) }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = stringResource(R.string.arrow_back_icon_description)
