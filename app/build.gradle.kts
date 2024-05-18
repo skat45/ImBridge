@@ -53,6 +53,7 @@ android {
 }
 
 dependencies {
+    // VK
     implementation ("com.vk:android-sdk-core:4.1.0")
     implementation ("com.vk:android-sdk-api:4.1.0")// generated models and api methods
 
@@ -62,6 +63,9 @@ dependencies {
     val hilt_version = "2.49"
     val room_version = "2.6.1"
     val coroutines_version = "1.7.1"
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
     implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.0")
     kapt("androidx.room:room-compiler:$room_version")
