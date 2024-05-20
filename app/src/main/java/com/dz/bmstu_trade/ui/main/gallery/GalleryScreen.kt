@@ -66,6 +66,7 @@ import com.dz.bmstu_trade.navigation.Routes
 import com.dz.bmstu_trade.ui.main.canvas.DrawMode
 import com.dz.bmstu_trade.ui.main.canvas.DrawingGrid
 import com.dz.bmstu_trade.ui.main.canvas.InteractMode
+import com.dz.bmstu_trade.ui.main.settings.SettingsViewModel
 
 
 @Composable
@@ -73,6 +74,7 @@ fun GalleryScreen(
     navController: NavHostController,
     viewModel: GalleryScreenViewModel = hiltViewModel(),
 ) {
+
     val screenState by viewModel.screenState.collectAsState()
     Column(
         modifier = Modifier

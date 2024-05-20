@@ -43,7 +43,7 @@ fun ChooseImageFromAlbum(
         val urlsFieldState by choosePictureViewModel.urls.collectAsState()
 
         TopAppBar(
-            title = { Text(text = "Выбор фото") },
+            title = { Text(text = stringResource(R.string.select_picture)) },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.onSurface,

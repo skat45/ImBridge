@@ -12,11 +12,11 @@ import com.dz.bmstu_trade.ui.main.settings.SettingsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(outerNavHostController: NavHostController,  themeViewModel:SettingsViewModel) {
+fun MainScreen(outerNavHostController: NavHostController) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
-    ) {innerPadding ->
-        MainNavHost(outerNavHostController, navController, innerPadding,  themeViewModel)
+    ) { innerPadding ->
+        MainNavHost(outerNavHostController, navController, innerPadding)
     }
 }

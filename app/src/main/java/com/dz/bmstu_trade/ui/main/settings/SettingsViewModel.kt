@@ -9,16 +9,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor()  : ViewModel() {
+class SettingsViewModel @Inject constructor(private  val themeState: MutableStateFlow<Boolean>)  : ViewModel() {
     private val _email = MutableStateFlow("first@inbox.ru")
-    private val _switch = MutableStateFlow(false)
+   // private val _switch = MutableStateFlow(false)
 
 
     val email: StateFlow<String> = _email
-    val switch: StateFlow<Boolean> = _switch
+    val switch: StateFlow<Boolean> = themeState
 
     fun onSwitchChanged() {
-        _switch.value = !switch.value
+        this.themeState.value = !this.themeState.value
     }
 
 }
