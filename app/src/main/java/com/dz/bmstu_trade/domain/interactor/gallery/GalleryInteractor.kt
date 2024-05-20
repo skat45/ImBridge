@@ -6,7 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface GalleryInteractor {
     suspend fun insertImage(imageCard: ImageCard, isLikeChange: Boolean)
+    suspend fun insertImageEntity(imageEntity: ImageEntity)
     suspend fun deleteImage(imageCard: ImageCard)
     suspend fun getAllImages():List<ImageCard>
+    suspend fun getImageById(id: Int): ImageEntity
 
 }

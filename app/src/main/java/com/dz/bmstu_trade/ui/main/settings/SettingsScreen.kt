@@ -38,12 +38,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @Composable
 fun SettingsScreen(
     navController: NavHostController,
-    viewModel: SettingsViewModel = remember { SettingsViewModel() }
+    viewModel: SettingsViewModel = viewModel()
 ) {
     val emailField by viewModel.email.collectAsState()
     val switchState by viewModel.switch.collectAsState()
@@ -64,7 +65,7 @@ fun SettingsScreen(
 
             ChangeThemeItem(
                 changed = switchState,
-                onClick = { viewModel.onSwitchChanged(!switchState) },
+                onClick = { viewModel.onSwitchChanged() },
                 modifier = Modifier.fillMaxWidth()
             )
         }

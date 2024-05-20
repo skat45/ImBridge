@@ -22,6 +22,8 @@ import com.dz.bmstu_trade.ui.main.gallery.GalleryScreen
 import com.dz.bmstu_trade.ui.main.home.HomeScreen
 import com.dz.bmstu_trade.ui.main.setlanguage.SettingsLanguage
 import com.dz.bmstu_trade.ui.main.settings.SettingsScreen
+import com.dz.bmstu_trade.ui.main.settings.SettingsViewModel
+import com.dz.bmstu_trade.ui.main.vk_album.ChooseImageFromAlbum
 
 /**
  * Основной внутренний граф с BottomNavBar'ом, `outerNavHostNavController`
@@ -34,6 +36,7 @@ fun MainNavHost(
     outerNavHostController: NavHostController,
     mainNavController: NavHostController,
     innerPadding: PaddingValues,
+    themeViewModel:SettingsViewModel
 ) {
 
     NavHost(
@@ -65,9 +68,9 @@ fun MainNavHost(
                 DeviceChooseWiFiNetworkScreen(navController = mainNavController)
             }
 
-          composable(
+            composable(
                 Routes.ENTER_WIFI_PASSWORD.value + "{ssid}",
-                arguments = listOf(navArgument("ssid") {type = NavType.StringType})
+                arguments = listOf(navArgument("ssid") { type = NavType.StringType })
             ) {
                 val ssid = it.arguments?.getString("ssid")
                 EnterWiFiPasswordScreen(
@@ -75,13 +78,37 @@ fun MainNavHost(
                     viewModel = WiFiPasswordInputViewModel(ssid.toString())
                 )
             }
-          
-            composable(Routes.CANVAS.value) { CanvasScreen(mainNavController) }
+
+            composable(
+                route = Routes.CANVAS.value
+                        + "?withConnection={withConnection}&pictureId={pictureId}",
+                arguments = listOf(
+                    navArgument("pictureId") {
+                        nullable = true
+                        defaultValue = null
+                    },
+                    navArgument("withConnection") {
+                        type = NavType.BoolType
+                        defaultValue = true
+                    },
+                )
+            ) {
+                CanvasScreen(
+                    mainNavController,
+                    pictureId = it.arguments?.getString("pictureId")?.toInt(),
+                    withConnection = it.arguments?.getBoolean("withConnection")!!
+                )
+            }
         }
         navigation(startDestination = Routes.SETTINGS_ROOT.value, route = Routes.SETTINGS.value) {
-            composable(Routes.SETTINGS_ROOT.value) { SettingsScreen(mainNavController) }
+            composable(Routes.SETTINGS_ROOT.value) { SettingsScreen(mainNavController,  themeViewModel) }
             composable(Routes.SETTINGS_LANGUAGE.value) { SettingsLanguage(mainNavController) }
         }
-        composable(Routes.GALLERY.value) { GalleryScreen(mainNavController) }
+        composable(Routes.GALLERY.value) {
+            GalleryScreen(mainNavController)
+        }
+        composable(Routes.GET_PHOTOS_FROM_ALBUM.value) {
+            ChooseImageFromAlbum(mainNavController)
+        }
     }
 }

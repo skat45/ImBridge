@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.dz.bmstu_trade.ui.auth.AuthScreen
 import com.dz.bmstu_trade.ui.main.MainScreen
+import com.dz.bmstu_trade.ui.main.settings.SettingsViewModel
 
 /**
  *  Внешний граф для того, чтобы отделить основные экраны с BottomNavBar от экранов авторизации
@@ -14,10 +15,10 @@ import com.dz.bmstu_trade.ui.main.MainScreen
  *  navController внешнего графа
  */
 @Composable
-fun ImBridgeApp() {
+fun ImBridgeApp(themeViewModel:SettingsViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Routes.AUTH.value) {
         composable(Routes.AUTH.value) { AuthScreen(navController) }
-        composable(Routes.MAIN.value) { MainScreen(navController) }
+        composable(Routes.MAIN.value) { MainScreen(navController,  themeViewModel) }
     }
 }

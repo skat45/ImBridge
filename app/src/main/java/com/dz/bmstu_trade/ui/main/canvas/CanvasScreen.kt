@@ -27,11 +27,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
+import com.dz.bmstu_trade.ui.main.connect.connection_progress_bar.WifiViewModelFactory
 
 @Composable
 fun CanvasScreen(
     navController: NavHostController,
-    viewModel: CanvasViewModel = hiltViewModel()
+    withConnection: Boolean,
+    pictureId: Int? = null,
+    viewModel: CanvasViewModel = hiltViewModel(
+        creationCallback = { factory: CanvasViewModelFactory ->
+            factory.create(pictureId, withConnection)
+        }
+    )
 ) {
     Scaffold(
         topBar = {
@@ -39,11 +46,9 @@ fun CanvasScreen(
                 onGoBack = {
                     navController.popBackStack()
                 },
-                onPost = {
-                    /* TODO: Публикация рисунка */
-                },
                 onSave = {
-                    /* TODO: Сохранение рисунка */
+                    viewModel.savePicture()
+                    navController.popBackStack()
                 },
             )
         }
@@ -53,9 +58,14 @@ fun CanvasScreen(
             is CanvasStateScreen.Success -> CanvasPanel(
                 paddingValues = paddingValues,
                 pictureState = viewModel.picture,
+                withConnection = withConnection,
+                title = viewModel.title,
                 onPictureUpdate = {
                     viewModel.onPictureUpdate(it)
-                }
+                },
+                onTitleUpdate = {
+                    viewModel.setTitle(it)
+                },
             )
             CanvasStateScreen.Error -> ErrorView(
                 message = "Ошибочка",
@@ -73,7 +83,6 @@ fun CanvasScreen(
 @Composable
 fun CanvasTopBar(
     onGoBack: () -> Unit,
-    onPost: () -> Unit,
     onSave: () -> Unit,
 ) {
     TopAppBar(
@@ -93,12 +102,6 @@ fun CanvasTopBar(
             }
         },
         actions = {
-            IconButton(onClick = onPost) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_post),
-                    contentDescription = stringResource(R.string.post_drawing_button_description)
-                )
-            }
             IconButton(onClick = onSave) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_save),
