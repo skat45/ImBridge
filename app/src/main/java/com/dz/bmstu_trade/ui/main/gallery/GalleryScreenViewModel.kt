@@ -135,7 +135,6 @@ class GalleryScreenViewModel @Inject constructor(
                 deleteCardFromFav(index)
 
             } else {
-                deleteCardFromFav(index)
                 changeLikeIconState(false, index, selectedTab)
 
             }

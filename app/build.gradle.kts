@@ -64,9 +64,6 @@ dependencies {
     val room_version = "2.6.1"
     val coroutines_version = "1.7.1"
 
-    // Coil
-    implementation("io.coil-kt:coil-compose:2.6.0")
-
     implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.0")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
@@ -96,7 +93,7 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     //Coil
     implementation ("io.coil-kt:coil:2.2.2")
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
     implementation("androidx.navigation:navigation-runtime-ktx:$nav_version")
     implementation("androidx.navigation:navigation-compose:$nav_version")

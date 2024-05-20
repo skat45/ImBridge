@@ -4,24 +4,18 @@ import android.util.Log
 import androidx.core.graphics.scale
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dz.bmstu_trade.data.mappers.imageVkMapper
 import com.dz.bmstu_trade.data.model.gallery.ImageEntity
 import com.dz.bmstu_trade.domain.interactor.gallery.GalleryInteractorImpl
-import com.dz.bmstu_trade.ui.main.gallery.ImageCard
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.VKApiCallback
 import com.vk.sdk.api.photos.PhotosService
 import com.vk.sdk.api.photos.dto.PhotosGetResponseDto
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
-import io.ktor.http.Url
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 import java.net.URL
-import java.util.Arrays
 import javax.inject.Inject
 @HiltViewModel
 class ChoosePictureViewModel@Inject constructor(
@@ -57,7 +51,6 @@ class ChoosePictureViewModel@Inject constructor(
                 imageColors.get(index/16).set(index%16, pixels[index])
             }
             interactor.insertImageEntity(ImageEntity(image = imageColors) )
-
         }
     }
 }

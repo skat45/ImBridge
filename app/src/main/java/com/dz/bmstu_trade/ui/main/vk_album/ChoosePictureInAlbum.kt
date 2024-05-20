@@ -49,7 +49,7 @@ fun ChooseImageFromAlbum(
                 titleContentColor = MaterialTheme.colorScheme.onSurface,
             ),
             navigationIcon = {
-                IconButton(onClick = {navController.navigate(Routes.GALLERY.value) }) {
+                IconButton(onClick = {navController.popBackStack() }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = stringResource(R.string.arrow_back_icon_description)

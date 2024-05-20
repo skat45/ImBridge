@@ -22,6 +22,7 @@ import com.dz.bmstu_trade.ui.main.gallery.GalleryScreen
 import com.dz.bmstu_trade.ui.main.home.HomeScreen
 import com.dz.bmstu_trade.ui.main.setlanguage.SettingsLanguage
 import com.dz.bmstu_trade.ui.main.settings.SettingsScreen
+import com.dz.bmstu_trade.ui.main.settings.SettingsViewModel
 import com.dz.bmstu_trade.ui.main.vk_album.ChooseImageFromAlbum
 
 /**
@@ -35,6 +36,7 @@ fun MainNavHost(
     outerNavHostController: NavHostController,
     mainNavController: NavHostController,
     innerPadding: PaddingValues,
+    themeViewModel:SettingsViewModel
 ) {
 
     NavHost(
@@ -99,7 +101,7 @@ fun MainNavHost(
             }
         }
         navigation(startDestination = Routes.SETTINGS_ROOT.value, route = Routes.SETTINGS.value) {
-            composable(Routes.SETTINGS_ROOT.value) { SettingsScreen(mainNavController) }
+            composable(Routes.SETTINGS_ROOT.value) { SettingsScreen(mainNavController,  themeViewModel) }
             composable(Routes.SETTINGS_LANGUAGE.value) { SettingsLanguage(mainNavController) }
         }
         composable(Routes.GALLERY.value) {
