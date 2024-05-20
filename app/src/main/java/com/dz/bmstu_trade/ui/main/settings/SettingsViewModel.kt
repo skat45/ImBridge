@@ -19,8 +19,6 @@ class SettingsViewModel @Inject constructor()  : ViewModel() {
 
     fun onSwitchChanged() {
         _switch.value = !switch.value
-
-
     }
 
 }
