@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.dz.bmstu_trade.R
-import com.dz.bmstu_trade.ui.main.connect.connection_progress_bar.WifiViewModelFactory
 
 @Composable
 fun CanvasScreen(
@@ -132,9 +131,6 @@ fun ErrorView(message: String, onRepeatConnection:() -> Unit) {
         Text("Произошла ошибка при подключении", modifier = Modifier.padding(bottom = 8.dp))
         Button(onClick = onRepeatConnection) {
             Text("Повторить попытку")
-        }
-        Button(onClick = {}) {
-            Text("Выбрать другой девайс")
         }
     }
 }
