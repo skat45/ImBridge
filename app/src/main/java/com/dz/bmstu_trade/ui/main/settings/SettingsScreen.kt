@@ -1,3 +1,4 @@
+
 package com.dz.bmstu_trade.ui.main.settings
 
 
@@ -37,15 +38,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dz.bmstu_trade.navigation.Routes
 
 
 @Composable
 fun SettingsScreen(
     navController: NavHostController,
-    viewModel: SettingsViewModel = viewModel()
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
+
     val emailField by viewModel.email.collectAsState()
     val switchState by viewModel.switch.collectAsState()
 
@@ -58,7 +62,7 @@ fun SettingsScreen(
         ) {
             Column {
                 SelectLanguageItem(
-                    onClick = { },
+                    onClick = { navController.navigate(Routes.SETTINGS_LANGUAGE.value) },
                     modifier = Modifier.fillMaxWidth()
                 )
             }

@@ -15,10 +15,10 @@ import com.dz.bmstu_trade.ui.main.settings.SettingsViewModel
  *  navController внешнего графа
  */
 @Composable
-fun ImBridgeApp(themeViewModel:SettingsViewModel) {
+fun ImBridgeApp() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Routes.AUTH.value) {
         composable(Routes.AUTH.value) { AuthScreen(navController) }
-        composable(Routes.MAIN.value) { MainScreen(navController,  themeViewModel) }
+        composable(Routes.MAIN.value) { MainScreen(navController) }
     }
 }

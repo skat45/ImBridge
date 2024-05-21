@@ -97,4 +97,9 @@
     <string name="empty_state_home_text">Нет связанных устройств</string>
     <string name="select_device">Выбрать устройство</string>
     <string name="undefined_state_text">Выберите устройство</string>
+    <string name="select_language">Выбор языка</string>
+    <string name="select_picture">Выбор фото</string>
+    <string name="russian">Русский</string>
+    <string name="english">Английский</string>
+    <string name="french">Французский</string>
 </resources>

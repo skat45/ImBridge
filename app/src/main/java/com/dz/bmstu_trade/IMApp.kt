@@ -6,6 +6,7 @@ import dagger.hilt.android.HiltAndroidApp
 import com.dz.bmstu_trade.data.model.gallery.GalleryDb
 import com.dz.bmstu_trade.domain.interactor.gallery.GalleryInteractor
 import com.dz.bmstu_trade.domain.interactor.gallery.GalleryInteractorImpl
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @HiltAndroidApp
 class IMApp: Application() {

@@ -36,7 +36,7 @@ fun MainNavHost(
     outerNavHostController: NavHostController,
     mainNavController: NavHostController,
     innerPadding: PaddingValues,
-    themeViewModel:SettingsViewModel
+   // themeViewModel: SettingsViewModel
 ) {
 
     NavHost(
@@ -101,7 +101,12 @@ fun MainNavHost(
             }
         }
         navigation(startDestination = Routes.SETTINGS_ROOT.value, route = Routes.SETTINGS.value) {
-            composable(Routes.SETTINGS_ROOT.value) { SettingsScreen(mainNavController,  themeViewModel) }
+            composable(Routes.SETTINGS_ROOT.value) {
+                SettingsScreen(
+                    mainNavController,
+                   // themeViewModel
+                )
+            }
             composable(Routes.SETTINGS_LANGUAGE.value) { SettingsLanguage(mainNavController) }
         }
         composable(Routes.GALLERY.value) {
