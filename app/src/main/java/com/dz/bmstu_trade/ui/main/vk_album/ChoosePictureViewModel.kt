@@ -1,4 +1,5 @@
 package com.dz.bmstu_trade.ui.main.vk_album
+
 import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.core.graphics.scale
@@ -15,42 +16,57 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.URL
 import javax.inject.Inject
+
 @HiltViewModel
-class ChoosePictureViewModel@Inject constructor(
+class ChoosePictureViewModel @Inject constructor(
     val interactor: GalleryInteractorImpl
 ) : ViewModel() {
 
-    private val _urls = MutableStateFlow(emptyList<String>())
-    val urls: StateFlow<List<String>> = _urls
+    private val _state =
+        MutableStateFlow<ChoosePictureScreenState>(ChoosePictureScreenState.Loading)
+    val state: StateFlow<ChoosePictureScreenState> = _state
 
     init {
-        VK.execute(PhotosService().photosGet(VK.getUserId(), "profile"), object : VKApiCallback<PhotosGetResponseDto> {
-            override fun success(result: PhotosGetResponseDto) {
-                _urls.value = result.items.map{
-                    it.sizes?.last()?.url.toString()
-                }
-            }
-
-            override fun fail(error: Exception) {
-                Log.d("Album error", "error: $error")
-            }
-        })
-
+        loadImages()
     }
 
-    fun selectImage(url:String){
+    fun loadImages() {
+        _state.value = ChoosePictureScreenState.Loading
+        VK.execute(
+            PhotosService().photosGet(VK.getUserId(), "profile"),
+            object : VKApiCallback<PhotosGetResponseDto> {
+                override fun success(result: PhotosGetResponseDto) {
+                    val urls = result.items.map {
+                        it.sizes?.last()?.url.toString()
+                    }
+                    _state.value = ChoosePictureScreenState.Success(urls)
+                }
 
-        viewModelScope.launch(Dispatchers.IO)  {
+                override fun fail(error: Exception) {
+                    _state.value = ChoosePictureScreenState.Error
+                    Log.d("Album error", "error: $error")
+                }
+            }
+        )
+    }
+
+    fun selectImage(url: String, callback: () -> Unit) {
+
+        viewModelScope.launch(Dispatchers.IO) {
             val pixels = IntArray(256)
             val bitmap = BitmapFactory.decodeStream(URL(url).openStream()).scale(16, 16)
             bitmap.getPixels(pixels, 0, 16, 0, 0, 16, 16)
-            val imageColors = MutableList<MutableList<Int>>(16) { MutableList<Int>(16) { 0 } }
-            for (index in pixels.indices){
-                imageColors.get(index/16).set(index%16, pixels[index])
+            val imageColors = MutableList(16) { MutableList(16) { 0 } }
+            for (index in pixels.indices) {
+                imageColors[index / 16][index % 16] = pixels[index]
             }
-            interactor.insertImageEntity(ImageEntity(image = imageColors) )
+            interactor.insertImageEntity(ImageEntity(image = imageColors))
+            withContext(Dispatchers.Main) {
+                callback()
+            }
         }
     }
 }

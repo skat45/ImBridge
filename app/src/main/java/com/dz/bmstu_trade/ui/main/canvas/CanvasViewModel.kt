@@ -56,7 +56,7 @@ class CanvasViewModel @AssistedInject constructor(
         viewModelScope.launch {
             _canvasState.value = CanvasStateScreen.Loading
             try {
-                val image = galleryInteractor.getImageById(pictureId!! + 1)
+                val image = galleryInteractor.getImageById(pictureId!!)
                 onPictureUpdate(image.toPicture())
                 title.value = image.title
                 _canvasState.value = CanvasStateScreen.Success

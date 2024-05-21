@@ -342,7 +342,7 @@ fun ImageCard(
                     index = cardIndex,
                     id = state.imageCards[cardIndex].id!!,
                     onDeviceLoad = {
-                        onDeviceLoad(cardIndex)
+                        onDeviceLoad(it)
                     }
                 )
 
