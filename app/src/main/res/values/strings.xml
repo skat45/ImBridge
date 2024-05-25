@@ -41,6 +41,8 @@
     <string name="cancel_label">Отмена</string>
     <string name="required_access_to_fine_location_wifi_list_label">Для просмотра списка WiFi сетей нужен доступ к точной геолокации</string>
     <string name="access_permission_title">Разрешение доступа</string>
+    <string name="retry_btn_label">Повторить попытку</string>
+    <string name="connect_new_device_btn_label">Подключить новое устройство</string>
 
 
     <string name="arrow_back_icon_description">Кнопка вернуться на предыдущий экран</string>
