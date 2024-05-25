@@ -83,6 +83,9 @@ fun HomeScreen(
             },
             onChangeDevice = {
                 showDeviceListBottomSheet = true
+            },
+            onManualConnectClick = {
+                navController.navigate(Routes.ENTER_DEV_CODE.value)
             }
         )
         DeviceStateScreen.Loading -> LoadingView()
@@ -133,7 +136,8 @@ fun LoadingView() {
 @Composable
 fun ErrorView(message: String,
               onRepeatConnection:() -> Unit,
-              onChangeDevice: () -> Unit
+              onChangeDevice: () -> Unit,
+              onManualConnectClick: () -> Unit
               ) {
     Column(
         modifier = Modifier
@@ -148,6 +152,9 @@ fun ErrorView(message: String,
         }
         Button(onClick = onChangeDevice) {
             Text(stringResource(R.string.change_device))
+        }
+        Button(onClick = onManualConnectClick) {
+            Text("Подключить новое устройство")
         }
     }
 }
