@@ -21,6 +21,4 @@ enum class Routes(val value: String) {
     MAIN("main"),
     VK_AUTH("vkAuth"),
     GET_PHOTOS_FROM_ALBUM("getPhotosFromAlbum"),
-
-
 }

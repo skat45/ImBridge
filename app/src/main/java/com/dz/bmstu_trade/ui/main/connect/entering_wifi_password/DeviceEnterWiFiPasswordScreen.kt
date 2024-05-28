@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -39,6 +40,11 @@ fun EnterWiFiPasswordScreen(
     viewModel: WiFiPasswordInputViewModel,
 ) {
     val passwordFieldState by viewModel.state.collectAsState()
+    LaunchedEffect (passwordFieldState) {
+        if (passwordFieldState.connectionStatus == PasswordFieldState.Status.CONNECTED) {
+            navController.navigate("home")
+        }
+    }
 
 
     Column (

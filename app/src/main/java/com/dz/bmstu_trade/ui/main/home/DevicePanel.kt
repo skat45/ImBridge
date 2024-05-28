@@ -88,13 +88,13 @@ fun DevicePanel(
             }
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        MoreImages(
-            onMoreButtonClick = {
-                /* Todo: Перейти в галлерею? */
-            },
-        )
+//        Spacer(modifier = Modifier.height(12.dp))
+//
+//        MoreImages(
+//            onMoreButtonClick = {
+//                /* Todo: Перейти в галлерею? */
+//            },
+//        )
 
         Spacer(modifier = Modifier.height(24.dp))
 
