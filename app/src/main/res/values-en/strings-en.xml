@@ -41,6 +41,8 @@
     <string name="cancel_label">Cancel</string>
     <string name="required_access_to_fine_location_wifi_list_label">To view the list of WiFi networks, you need access to accurate geolocation</string>
     <string name="access_permission_title">Access permission</string>
+    <string name="retry_btn_label">Retry</string>
+    <string name="connect_new_device_btn_label">Connect new device</string>
 
 
     <string name="arrow_back_icon_description">The button to return to the previous screen</string>

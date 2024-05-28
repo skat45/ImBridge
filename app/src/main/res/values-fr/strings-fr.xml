@@ -41,6 +41,8 @@
     <string name="cancel_label">Annuler </string>
     <string name="required_access_to_fine_location_wifi_list_label" >pour afficher la liste des réseaux WiFi, vous devez avoir accès à une Géolocalisation précise</string>
     <string name="access_permission_title">Autorisation d\'accès </string>
+    <string name="retry_btn_label">Réessayer</string>
+    <string name="connect_new_device_btn_label">Connecter un nouvel appareil</string>
 
 
     <string name="arrow_back_icon_description">bouton revenir à l\'écran précédent </string>
